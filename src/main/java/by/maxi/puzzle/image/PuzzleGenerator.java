@@ -42,7 +42,6 @@ public class PuzzleGenerator {
 
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bi.createGraphics();
-        g2d.setColor(Color.BLACK);
 
         Random rand = new Random();
         Supplier<Color> colorSupplier = () -> {
@@ -55,7 +54,9 @@ public class PuzzleGenerator {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 Tile tile = layout.tiles[row][col];
-                System.out.println(tile);
+                if (tile == null) {
+                    continue;
+                }
 
                 double x0 = col * layout.tileSize;
                 double y0 = row * layout.tileSize;
@@ -106,7 +107,7 @@ public class PuzzleGenerator {
         ImageIO.write(bi, "PNG", new File(outputPath));
     }
 
-    public Layout generateLayout(int tileSize, int rows, int cols) {
+    public Layout generateLayout(int tileSize, int rows, int cols, int[][] empty) {
         int[] tabs = {1, -1};
         Random rand = new Random();
         IntSupplier tabSupplier = () -> tabs[rand.nextInt(2)];
@@ -130,6 +131,14 @@ public class PuzzleGenerator {
                 }
 
                 tiles[row][col] = new Tile(top, right, left, bottom);
+            }
+        }
+
+        if (empty != null) {
+            for (int i = 0; i < empty.length; i++) {
+                int row = empty[i][0];
+                int col = empty[i][1];
+                tiles[row][col] = null;
             }
         }
 

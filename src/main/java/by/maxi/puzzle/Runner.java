@@ -14,7 +14,14 @@ public class Runner {
 
     public static void main(String[] args) throws IOException {
         PuzzleGenerator generator = new PuzzleGenerator();
-        Layout layout = generator.generateLayout(200, 4, 6);
+
+        int[][] empty = {
+                {0, 2}, {0, 3},
+                {1, 1}, {1, 2}, {1, 3},
+                {2, 1}, {2, 2}, {2, 3}, {2, 4},
+                {3, 2}, {3, 3}
+        };
+        Layout layout = generator.generateLayout(200, 4, 6, empty);
         generator.render(layout, "output.png");
     }
 }
