@@ -29,9 +29,6 @@ public class PuzzleGenerator {
         int rows = layout.tiles.length;
         int cols = layout.tiles[0].length;
 
-        int width = layout.tileSize * cols;
-        int height = layout.tileSize * rows;
-
         double scale = (double) layout.tileSize / BASE_SIZE;
         double[][] coords = new double[6][6];
         for (int i = 0; i < 6; i++) {
@@ -40,7 +37,7 @@ public class PuzzleGenerator {
             }
         }
 
-        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bi = ImageIO.read(getClass().getResourceAsStream("/background.png"));
         Graphics2D g2d = bi.createGraphics();
 
         Random rand = new Random();
