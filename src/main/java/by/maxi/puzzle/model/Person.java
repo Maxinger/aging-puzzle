@@ -2,10 +2,7 @@ package by.maxi.puzzle.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -13,10 +10,14 @@ import java.util.List;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String name;
+
     private String description;
-    private List<String> urls;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Link> links;
 
 }
