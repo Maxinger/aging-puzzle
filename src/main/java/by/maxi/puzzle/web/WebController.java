@@ -22,4 +22,10 @@ public class WebController {
         model.addAttribute("areas", puzzleService.getAreas());
         return "index";
     }
+
+    @GetMapping("/organizations")
+    public String organizations(Model model) {
+        model.addAttribute("updates", updatesService.getLastUpdates(3));
+        return "organizations";
+    }
 }

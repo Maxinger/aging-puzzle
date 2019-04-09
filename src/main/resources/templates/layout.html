@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Aging Puzzle</title>
+    <link rel="stylesheet" th:href="@{/css/foundation.css}" />
+    <link rel="stylesheet" th:href="@{/css/index.css}" />
+    <script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/imageMapResizer.min.js}"></script>
+</head>
+<body>
+    <!--https://foundation.zurb.com/sites/docs/xy-grid.html-->
+    <div class="grid-y medium-grid-frame">
+        <div class="cell shrink header medium-cell-block-container">
+            <img src="https://placehold.it/1200x150/ffebcd&amp;text=Aging Puzzle">
+        </div>
+        <div class="cell medium-auto medium-cell-block-container">
+            <div class="grid-x grid-padding-x">
+                <div class="cell medium-3 medium-cell-block-y">
+                    <img src="https://placehold.it/250x450/90ee90&amp;text=Menu" class="float-right">
+                </div>
+                <!-- https://ultraq.github.io/thymeleaf-layout-dialect -->
+                <div class="cell medium-6 medium-cell-block-y" layout:fragment="content">
+                    Main content is here
+                </div>
+                <div class="cell medium-3 medium-cell-block-y">
+                    <div th:each="update : ${updates}" class="card update">
+                        <div class="card-divider">
+                            <span th:text="${update.title}"/>
+                        </div>
+                        <div class="card-section update-image">
+                            <img th:src="@{${'/img/projects/' + update.image}}">
+                        </div>
+                        <div class="card-section">
+                            <span th:text="${update.preview}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cell shrink footer medium-cell-block-container">
+            <img src="https://placehold.it/1200x100/e0ffff&amp;text=Footer">
+        </div>
+        <script type="text/javascript">
+                $('map').imageMapResize();
+        </script>
+    </div>
+</body>
+</html>
