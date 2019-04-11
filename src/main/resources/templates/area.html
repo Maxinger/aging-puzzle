@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Organizations</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3 th:text="${area.id == null ? 'Add Area' : 'Edit Area'}"/>
+        <form action="#" th:action="@{/areas/save}" th:object="${area}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+
+            <label>Name
+                <input type="text" name="name" th:field="*{name}"/>
+                <span th:if="${#fields.hasErrors('name')}" class="form-error is-visible" th:errors="*{name}"/>
+            </label>
+
+            <label>Description
+                <textarea rows="5" name="description" th:field="*{description}"/>
+                <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
+            </label>
+            <input type="submit" class="button" value="Save">
+        </form>
+    </div>
+</body>
+</html>

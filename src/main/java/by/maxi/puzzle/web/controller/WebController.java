@@ -1,4 +1,4 @@
-package by.maxi.puzzle.web;
+package by.maxi.puzzle.web.controller;
 
 import by.maxi.puzzle.service.PuzzleService;
 import by.maxi.puzzle.service.UpdatesService;

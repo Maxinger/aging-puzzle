@@ -7,7 +7,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h2>Content</h2>
+        <h3>Content</h3>
         <img th:src="@{/img/puzzle.png}" usemap="#puzzle"/>
         <map name="puzzle">
             <area th:each="area, iter : ${areas}" th:coords="${area.coords}" th:href="${iter.index}">
