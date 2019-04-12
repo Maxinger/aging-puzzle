@@ -12,6 +12,9 @@
         <map name="puzzle">
             <area th:each="area, iter : ${areas}" th:coords="${area.coords}" th:href="${iter.index}">
         </map>
+        <script type="text/javascript">
+            $('map').imageMapResize();
+        </script>
     </div>
 </body>
 </html>

@@ -5,3 +5,8 @@
 .card.update .update-image {
     text-align: center;
 }
+
+#deleteModal input {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}

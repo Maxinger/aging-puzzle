@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body layout:fragment="modal(action)">
+    <script type="text/javascript">
+        function openDeleteModal(trigger) {
+            $('#deleteModal strong').text(trigger.getAttribute('data-name'));
+            $('#deleteModal form input[name="id"]').val(trigger.getAttribute('data-id'));
+            $('#deleteModal').foundation('open');
+        }
+    </script>
+    <div class="reveal tiny" id="deleteModal" data-reveal>
+        <form action="#" th:action="@{${action}}" method="post">
+            Do you want to remove <strong></strong>?
+            <input type="hidden" name="id"/>
+            <input type="submit" class="button alert float-center" value="Delete">
+        </form>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</body>
+</html>

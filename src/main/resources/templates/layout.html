@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/foundation.css}" />
     <link rel="stylesheet" th:href="@{/css/index.css}" />
     <script type="text/javascript" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/foundation.js}"></script>
 </head>
 <body>
     <!--https://foundation.zurb.com/sites/docs/xy-grid.html-->
@@ -42,9 +43,9 @@
         <div class="cell shrink footer medium-cell-block-container">
             <img src="https://placehold.it/1200x100/e0ffff&amp;text=Footer">
         </div>
-        <script type="text/javascript">
-                $('map').imageMapResize();
-        </script>
     </div>
+    <script type="text/javascript">
+        $(document).foundation();
+    </script>
 </body>
 </html>

@@ -2,10 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Organizations</title>
+    <title>Areas</title>
 </head>
 <body>
     <div layout:fragment="content">
+
+        <div layout:insert="~{deleteModal::modal(action='/areas/delete')}" th:remove="tag"/>
+
         <h3>Areas List</h3>
         <a th:href="@{/areas/new}">New Area</a><br/>
         <table>
@@ -13,12 +16,14 @@
                 <th>ID</th>
                 <th>Area</th>
                 <th>Description</th>
+                <th>&nbsp;</th>
             </thead>
             <tbody>
-                <tr th:each="area : ${areas}">
-                    <td><a th:href="@{'/areas/{id}/edit'(${area.id})}" th:text="${area.id}"/></td>
-                    <td th:text="${area.name}"/>
-                    <td th:text="${area.description}"/>
+                <tr th:each="area : ${areas}" th:object="${area}">
+                    <td><a th:href="@{|/areas/*{id}/edit|}" th:text="*{id}"/></td>
+                    <td th:text="*{name}"/>
+                    <td th:text="*{description}"/>
+                    <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
                 </tr>
             </tbody>
         </table>

@@ -36,13 +36,13 @@ public class AreaController {
     }
 
     @GetMapping("/new")
-    public String newAreaPage(Model model) {
+    public String newPage(Model model) {
         model.addAttribute("area", new Area());
         return "area";
     }
 
     @GetMapping("/{id}/edit")
-    public String editAreaPage(@PathVariable Long id, Model model) {
+    public String editPage(@PathVariable Long id, Model model) {
         Area area = areaRepository.findById(id).orElseThrow(notFound());
 
         model.addAttribute("area", area);
@@ -57,6 +57,14 @@ public class AreaController {
 
         areaRepository.save(area);
         log.info("Saved area {} with id={}", area.getName(), area.getId());
+
+        return "redirect:/areas";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam Long id) {
+        log.info("Deleted area with id={}", id);
+        areaRepository.deleteById(id);
 
         return "redirect:/areas";
     }
