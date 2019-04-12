@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 <tr th:each="area : ${areas}">
-                    <td><a th:href="@{${'/areas/' + area.id + '/edit'}}" th:text="${area.id}"/></td>
+                    <td><a th:href="@{'/areas/{id}/edit'(${area.id})}" th:text="${area.id}"/></td>
                     <td th:text="${area.name}"/>
                     <td th:text="${area.description}"/>
                 </tr>
