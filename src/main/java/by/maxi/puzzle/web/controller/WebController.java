@@ -19,7 +19,7 @@ public class WebController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("updates", updatesService.getLastUpdates(3));
-        model.addAttribute("areas", puzzleService.getAreas());
+        model.addAttribute("tiles", puzzleService.getPuzzleView());
         return "index";
     }
 

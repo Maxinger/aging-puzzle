@@ -27,6 +27,15 @@
                 </tr>
             </tbody>
         </table>
+
+        <h3>Puzzle Layout</h3>
+        <form action="#" th:action="@{/areas/config/new}" th:object="${config}" method="post">
+            <label>Layout
+                <textarea rows="5" name="description" th:field="*{layout}"/>
+                <span th:if="${#fields.hasErrors('layout')}" class="form-error is-visible" th:errors="*{layout}"/>
+            </label>
+            <input type="submit" class="button" value="Save">
+        </form>
     </div>
 </body>
 </html>

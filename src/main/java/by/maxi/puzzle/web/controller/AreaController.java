@@ -1,7 +1,9 @@
 package by.maxi.puzzle.web.controller;
 
 import by.maxi.puzzle.model.Area;
+import by.maxi.puzzle.model.PuzzleConfig;
 import by.maxi.puzzle.repo.AreaRepository;
+import by.maxi.puzzle.service.PuzzleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -24,6 +26,9 @@ public class AreaController {
     @Autowired
     private AreaRepository areaRepository;
 
+    @Autowired
+    private PuzzleService puzzleService;
+
     @InitBinder
     private void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
@@ -32,6 +37,7 @@ public class AreaController {
     @GetMapping
     public String listPage(Model model) {
         model.addAttribute("areas", areaRepository.findAll());
+        model.addAttribute("config", puzzleService.getConfig());
         return "areas";
     }
 
@@ -67,6 +73,18 @@ public class AreaController {
         areaRepository.deleteById(id);
 
         return "redirect:/areas";
+    }
+
+    @PostMapping("/config/new")
+    public String newPuzzleConfig(@ModelAttribute PuzzleConfig config) {
+        log.info("Saved puzzleConfig with id={}", 0L);
+        try {
+            puzzleService.newPuzzleConfig(config);
+            return "redirect:/";
+        } catch (Exception e) {
+            log.error("Failed to update puzzle config", e);
+            return "redirect:/areas";
+        }
     }
 
     private Supplier<ResponseStatusException> notFound() {

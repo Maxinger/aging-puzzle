@@ -1,15 +1,22 @@
 package by.maxi.puzzle.image;
 
-import lombok.AllArgsConstructor;
+import by.maxi.puzzle.model.Area;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
 public class Tile {
 
-    int topTab;
-    int rightTab;
-    int leftTab;
-    int bottomTab;
+    final Area area;
+    final int topTab;
+    final int rightTab;
+    final int leftTab;
+    final int bottomTab;
+
+    public String getCode() {
+        return area.getName().substring(0, 2);
+    }
 
     @Override
     public String toString() {

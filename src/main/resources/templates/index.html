@@ -10,7 +10,7 @@
         <h3>Content</h3>
         <img th:src="@{/img/puzzle.png}" usemap="#puzzle"/>
         <map name="puzzle">
-            <area th:each="area, iter : ${areas}" th:coords="${area.coords}" th:href="${iter.index}">
+            <area th:each="tile, iter : ${tiles}" th:coords="${tile.coords}" th:href="${iter.index}">
         </map>
         <script type="text/javascript">
             $('map').imageMapResize();
