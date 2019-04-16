@@ -1,28 +1,32 @@
 package by.maxi.puzzle.model;
 
+import by.maxi.puzzle.TranslatableEntity;
 import lombok.Data;
-import org.hibernate.annotations.Filter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
 @Entity
-public class Organization extends AbstractEntity {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
+public class Organization extends TranslatableEntity<BaseOrganization> {
 
+    public interface ToValidate {
+    }
+
+    @NotNull(groups = ToValidate.class)
     private String name;
 
+    @NotNull(groups = ToValidate.class)
+    @Size(min = 20, groups = ToValidate.class)
     private String description;
 
     private String location;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Link> links;
-
     @ManyToMany(cascade = CascadeType.ALL)
+//    @Where(clause = "language = 'EN'")
     private List<Member> members;
 
 }

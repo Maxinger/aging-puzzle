@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class WebController {
+public class MainController {
 
     @Autowired
     private UpdatesService updatesService;
@@ -18,14 +19,14 @@ public class WebController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("updates", updatesService.getLastUpdates(3));
-        model.addAttribute("tiles", puzzleService.getPuzzleView());
-        return "index";
+        return index("en", model);
     }
 
-    @GetMapping("/organizations")
-    public String organizations(Model model) {
+    @GetMapping("/{lang}")
+    public String index(@PathVariable String lang, Model model) {
         model.addAttribute("updates", updatesService.getLastUpdates(3));
-        return "organizations";
+        model.addAttribute("tiles", puzzleService.getPuzzleView());
+        model.addAttribute("lang", lang);
+        return "index";
     }
 }
