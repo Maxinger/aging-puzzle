@@ -7,7 +7,8 @@
 <body>
     <div layout:fragment="content">
         <h3 th:text="${area.id == null ? 'Add Area' : 'Edit Area'}"/>
-        <form action="#" th:action="@{/areas/save}" th:object="${area}" method="post">
+        <form action="#" th:action="@{|/${lang}/areas/save|}" th:object="${area}" method="post">
+            <input type="hidden" name="baseId" th:value="${baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
             <label>Name

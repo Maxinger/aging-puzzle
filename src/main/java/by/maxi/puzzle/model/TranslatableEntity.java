@@ -1,11 +1,13 @@
-package by.maxi.puzzle;
+package by.maxi.puzzle.model;
 
-import by.maxi.puzzle.model.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -18,6 +20,7 @@ public abstract class TranslatableEntity<T> extends AbstractEntity {
     private T baseEntity;
 
     @NotNull
+    @Size(max = 2)
     private String language;
 
 }

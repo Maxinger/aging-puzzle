@@ -41,10 +41,9 @@ public class OrganizationController {
     }
 
     @GetMapping("/new")
-    public String newPage(@PathVariable String lang, @RequestParam(required = false) Long baseId, Model model) {
+    public String newPage(@RequestParam(required = false) Long baseId, Model model) {
         model.addAttribute("baseId", baseId);
         model.addAttribute("organization", new Organization());
-        model.addAttribute("lang", lang);
         return "organization";
     }
 
@@ -53,9 +52,7 @@ public class OrganizationController {
                            @PathVariable Long id, Model model) {
 
         Organization organization = organizationRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-
         model.addAttribute("organization", organization);
-        model.addAttribute("lang", lang);
         return "organization";
     }
 
@@ -75,9 +72,6 @@ public class OrganizationController {
 
             organization.setBaseEntity(baseEntity);
             organization.setLanguage(lang);
-
-            organizationRepository.save(organization);
-            log.info("Saved organization {} with id={}", organization.getName(), organization.getId());
         } else {
             Organization updated = organization;
             organization = organizationRepository.findById(organization.getId()).get();

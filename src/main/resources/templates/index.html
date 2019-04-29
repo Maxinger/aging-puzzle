@@ -8,7 +8,7 @@
 <body>
     <div layout:fragment="content">
         <h3>Content</h3>
-        <img th:src="@{/img/puzzle.png}" usemap="#puzzle"/>
+        <img th:src="@{|/img/puzzle_${lang}.png|}" usemap="#puzzle"/>
         <map name="puzzle">
             <area th:each="tile, iter : ${tiles}" th:coords="${tile.coords}" th:href="${iter.index}">
         </map>

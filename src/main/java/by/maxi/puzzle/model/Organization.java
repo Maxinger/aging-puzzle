@@ -1,6 +1,5 @@
 package by.maxi.puzzle.model;
 
-import by.maxi.puzzle.TranslatableEntity;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -10,26 +10,32 @@
         <div layout:insert="~{deleteModal::modal(action='/areas/delete')}" th:remove="tag"/>
 
         <h3>Areas List</h3>
-        <a th:href="@{/areas/new}">New Area</a><br/>
+        <a th:href="@{|/${lang}/areas/new|}">New Area</a><br/>
         <table>
             <thead>
                 <th>ID</th>
                 <th>Area</th>
                 <th>Description</th>
+                <th>Translations</th>
                 <th>&nbsp;</th>
             </thead>
             <tbody>
                 <tr th:each="area : ${areas}" th:object="${area}">
-                    <td><a th:href="@{|/areas/*{id}/edit|}" th:text="*{id}"/></td>
+                    <td><a th:href="@{|/${lang}/areas/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
                     <td th:text="*{name}"/>
                     <td th:text="*{description}"/>
+                    <td>
+                        <a th:each="t : ${translations}"
+                           th:href="${t.value.contains(area.baseEntity.id)} ? @{|/${t.key}/areas/*{baseEntity.id}/edit|} : @{|/${t.key}/areas/new?baseId=*{baseEntity.id}|}"
+                           th:text="${t.key}" target="_blank"/>
+                    </td>
                     <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
                 </tr>
             </tbody>
         </table>
 
         <h3>Puzzle Layout</h3>
-        <form action="#" th:action="@{/areas/config/new}" th:object="${config}" method="post">
+        <form action="#" th:action="@{|/${lang}/areas/config/new|}" th:object="${config}" method="post">
             <label>Layout
                 <textarea rows="5" name="description" th:field="*{layout}"/>
                 <span th:if="${#fields.hasErrors('layout')}" class="form-error is-visible" th:errors="*{layout}"/>

@@ -6,12 +6,14 @@ import by.maxi.puzzle.model.Area;
 import by.maxi.puzzle.model.PuzzleConfig;
 import by.maxi.puzzle.repo.AreaRepository;
 import by.maxi.puzzle.repo.PuzzleConfigRepository;
+import by.maxi.puzzle.web.WebApplication;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +34,25 @@ public class PuzzleService {
     @Getter
     private PuzzleConfig config;
 
-    private Layout layout;
+    private Map<String, Layout> layouts = new HashMap<>();
 
     @PostConstruct
     private void initLayout() {
-        setPuzzleConfig(puzzleConfigRepository.findFirstByOrderByCreatedAtDesc());
+        PuzzleConfig config = puzzleConfigRepository.findFirstByOrderByCreatedAtDesc();
+
+        if (config != null) {
+            setPuzzleConfig(config);
+        } else {
+            config = new PuzzleConfig();
+            config.setLayout(
+                    "| 1|  |  |  |  |  |\n" +
+                    "|  |  |  |  |  |  |\n" +
+                    "|  |  |  |  |  |  |\n" +
+                    "|  |  |  |  |  |  |"
+            );
+            config.setCreatedAt(LocalDateTime.now());
+            newPuzzleConfig(config);
+        }
     }
 
     public void newPuzzleConfig(PuzzleConfig config) {
@@ -49,35 +65,41 @@ public class PuzzleService {
         setLayout(config.getLayout());
     }
 
-    private void setLayout(String layout) {
-        Map<Long, Area> areaMap = new HashMap<>();
-        areaRepository.findAll().forEach(area -> areaMap.put(area.getId(), area));
+    private void setLayout(String layoutStr) {
+        for (String lang : WebApplication.SUPPORTED_LANGUAGES) {
 
-        String[] rows = layout.split("\n");
+            Map<Long, Area> areaMap = new HashMap<>();
+            areaRepository.findAllByLanguage(lang).forEach(area -> areaMap.put(area.getBaseEntity().getId(), area));
 
-        Optional<Area>[][] areas = new Optional[rows.length][];
-        for (int row = 0; row < rows.length; row++) {
-            String[] cols = rows[row].substring(1, rows[row].length() - 1)
-                    .split("\\|");
+            String[] rows = layoutStr.split("\n");
 
-            areas[row] = new Optional[cols.length];
-            for (int col = 0; col < cols.length; col++) {
-                try {
-                    Long id = Long.parseLong(cols[col].trim());
-                    areas[row][col] = Optional.ofNullable(areaMap.get(id));
-                } catch (NumberFormatException e) {
-                    areas[row][col] = Optional.empty();
+            Optional<Area>[][] areas = new Optional[rows.length][];
+            for (int row = 0; row < rows.length; row++) {
+                String[] cols = rows[row].substring(1, rows[row].length() - 1)
+                        .split("\\|");
+
+                areas[row] = new Optional[cols.length];
+                for (int col = 0; col < cols.length; col++) {
+                    try {
+                        Long id = Long.parseLong(cols[col].trim());
+                        areas[row][col] = Optional.ofNullable(areaMap.get(id));
+                    } catch (NumberFormatException e) {
+                        areas[row][col] = Optional.empty();
+                    }
                 }
             }
-        }
 
-        this.layout = new Layout(areas, 200);
-        String outputPath = getClass().getResource("/static/img").getPath() + File.separator + "puzzle.png";
-        puzzleGenerator.render(this.layout, outputPath);
+            Layout layout = new Layout(areas, 200);
+            String outputPath = String.format("%s%spuzzle_%s.png",
+                    getClass().getResource("/static/img").getPath(), File.separator, lang);
+            puzzleGenerator.render(layout, outputPath);
+
+            layouts.put(lang, layout);
+        }
     }
 
-    public List<TileView> getPuzzleView() {
-        return layout.getPuzzleView((area, coords) -> new TileView(area, coords));
+    public List<TileView> getPuzzleView(String lang) {
+        return layouts.get(lang).getPuzzleView((area, coords) -> new TileView(area, coords));
     }
 
 }
