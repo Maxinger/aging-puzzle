@@ -1,29 +1,24 @@
 package by.maxi.puzzle.web.controller;
 
-import by.maxi.puzzle.model.*;
+import by.maxi.puzzle.model.Area;
+import by.maxi.puzzle.model.BaseArea;
+import by.maxi.puzzle.model.PuzzleConfig;
+import by.maxi.puzzle.model.ToValidate;
 import by.maxi.puzzle.repo.AreaRepository;
 import by.maxi.puzzle.repo.BaseAreaRepository;
 import by.maxi.puzzle.service.PuzzleService;
-import by.maxi.puzzle.web.WebApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.*;
-import java.util.function.Supplier;
 
 @Slf4j
 @Controller
 @RequestMapping("/{lang}/areas")
-public class AreaController {
+public class AreaController extends AbstractController {
 
     @Autowired
     private AreaRepository areaRepository;
@@ -34,23 +29,12 @@ public class AreaController {
     @Autowired
     private PuzzleService puzzleService;
 
-    @InitBinder
-    private void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
-
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
         model.addAttribute("config", puzzleService.getConfig());
 
-        Map<String, Set<Long>> translations = new LinkedHashMap<>();
-        for (String language : WebApplication.SUPPORTED_LANGUAGES) {
-            if (!language.equals(lang)) {
-                translations.put(language, areaRepository.findAllIdsByLanguage(language));
-            }
-        }
-        model.addAttribute("translations", translations);
+        addTranslations(lang, model, areaRepository);
         return "areas";
     }
 
@@ -73,7 +57,7 @@ public class AreaController {
     @PostMapping("/save")
     public String saveOrganization(@PathVariable String lang,
                                    @RequestParam(required = false) Long baseId,
-                                   @Validated(Area.ToValidate.class) Area area,
+                                   @Validated(ToValidate.class) Area area,
                                    BindingResult result) {
         if (result.hasErrors()) {
             return "area";
@@ -121,9 +105,5 @@ public class AreaController {
             log.error("Failed to update puzzle config", e);
             return String.format("redirect:/%s/areas", lang);
         }
-    }
-
-    private Supplier<ResponseStatusException> notFound() {
-        return () -> new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

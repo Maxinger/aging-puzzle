@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="content">
 
-    <div layout:insert="~{deleteModal::modal(action='organizations/delete')}" th:remove="tag"/>
+    <div layout:insert="~{fragments::deleteModal(action='organizations/delete')}" th:remove="tag"/>
 
     <h3>Organizations List</h3>
     <a th:href="@{|/${lang}/organizations/new|}">New Organization</a><br/>
@@ -17,6 +17,7 @@
         <th>Organization</th>
         <th>Description</th>
         <th>Location</th>
+        <th>Translations</th>
         <th>&nbsp;</th>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
             <td th:text="*{name}"/>
             <td th:text="*{description}"/>
             <td th:text="*{location}"/>
+            <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'organizations')}" />
             <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
         </tr>
         </tbody>

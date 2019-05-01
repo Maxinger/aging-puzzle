@@ -12,9 +12,6 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
 public class Organization extends TranslatableEntity<BaseOrganization> {
 
-    public interface ToValidate {
-    }
-
     @NotNull(groups = ToValidate.class)
     private String name;
 

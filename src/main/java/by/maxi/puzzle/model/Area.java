@@ -13,9 +13,6 @@ import javax.validation.constraints.Size;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
 public class Area extends TranslatableEntity<BaseArea> {
 
-    public interface ToValidate {
-    }
-
     @NotNull(groups = ToValidate.class)
     private String name;
 

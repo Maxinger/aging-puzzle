@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<body layout:fragment="modal(action)">
+<body layout:fragment="deleteModal(action)">
     <script type="text/javascript">
         function openDeleteModal(trigger) {
             $('#deleteModal strong').text(trigger.getAttribute('data-name'));
@@ -19,5 +19,10 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+</body>
+<body layout:fragment="translations(baseEntityId, controller)">
+    <a th:each="t : ${translations}"
+       th:href="${t.value.contains(baseEntityId)} ? @{|/${t.key}/${controller}/${baseEntityId}/edit|} : @{|/${t.key}/${controller}/new?baseId=${baseEntityId}|}"
+       th:text="|${t.key} |" target="_blank"/>
 </body>
 </html>

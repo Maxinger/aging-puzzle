@@ -2,26 +2,21 @@ package by.maxi.puzzle.web.controller;
 
 import by.maxi.puzzle.model.BaseOrganization;
 import by.maxi.puzzle.model.Organization;
+import by.maxi.puzzle.model.ToValidate;
 import by.maxi.puzzle.repo.BaseOrganizationRepository;
 import by.maxi.puzzle.repo.OrganizationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.function.Supplier;
 
 @Slf4j
 @Controller
 @RequestMapping("/{lang}/organizations")
-public class OrganizationController {
+public class OrganizationController extends AbstractController {
 
     @Autowired
     private OrganizationRepository organizationRepository;
@@ -29,14 +24,11 @@ public class OrganizationController {
     @Autowired
     private BaseOrganizationRepository baseOrganizationRepository;
 
-    @InitBinder
-    private void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
-
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+
+        addTranslations(lang, model, organizationRepository);
         return "organizations";
     }
 
@@ -59,7 +51,7 @@ public class OrganizationController {
     @PostMapping("/save")
     public String saveOrganization(@PathVariable String lang,
                                    @RequestParam(required = false) Long baseId,
-                                   @Validated(Organization.ToValidate.class) Organization organization,
+                                   @Validated(ToValidate.class) Organization organization,
                                    BindingResult result) {
         if (result.hasErrors()) {
             return "organization";
@@ -92,9 +84,5 @@ public class OrganizationController {
         organizationRepository.deleteById(id);
 
         return String.format("redirect:/%s/organizations", lang);
-    }
-
-    private Supplier<ResponseStatusException> notFound() {
-        return () -> new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

@@ -7,7 +7,7 @@
 <body>
     <div layout:fragment="content">
 
-        <div layout:insert="~{deleteModal::modal(action='/areas/delete')}" th:remove="tag"/>
+        <div layout:insert="~{fragments::deleteModal(action='/areas/delete')}" th:remove="tag"/>
 
         <h3>Areas List</h3>
         <a th:href="@{|/${lang}/areas/new|}">New Area</a><br/>
@@ -24,11 +24,7 @@
                     <td><a th:href="@{|/${lang}/areas/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
                     <td th:text="*{name}"/>
                     <td th:text="*{description}"/>
-                    <td>
-                        <a th:each="t : ${translations}"
-                           th:href="${t.value.contains(area.baseEntity.id)} ? @{|/${t.key}/areas/*{baseEntity.id}/edit|} : @{|/${t.key}/areas/new?baseId=*{baseEntity.id}|}"
-                           th:text="${t.key}" target="_blank"/>
-                    </td>
+                    <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'areas')}" />
                     <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
                 </tr>
             </tbody>

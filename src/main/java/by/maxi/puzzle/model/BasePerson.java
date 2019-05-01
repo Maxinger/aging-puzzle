@@ -9,9 +9,9 @@ import java.util.List;
 @Entity
 public class BasePerson extends AbstractEntity {
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
-    private BasePerson basePerson;
+    private Photo photo;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Link> links;
