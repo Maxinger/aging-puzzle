@@ -80,8 +80,8 @@ public class OrganizationController extends AbstractController {
 
     @PostMapping("/delete")
     public String delete(@PathVariable String lang, @RequestParam Long id) {
-        log.info("Deleted organization with id={}", id);
         organizationRepository.deleteById(id);
+        log.info("Deleted organization with id={}", id);
 
         return String.format("redirect:/%s/organizations", lang);
     }

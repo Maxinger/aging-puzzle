@@ -88,8 +88,8 @@ public class AreaController extends AbstractController {
 
     @PostMapping("/delete")
     public String delete(@PathVariable String lang, @RequestParam Long id) {
-        log.info("Deleted area with id={}", id);
         areaRepository.deleteById(id);
+        log.info("Deleted area with id={}", id);
 
         return String.format("redirect:/%s/areas", lang);
     }

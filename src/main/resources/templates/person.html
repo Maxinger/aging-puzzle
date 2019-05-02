@@ -2,12 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Organization</title>
+    <title>Person</title>
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${organization.id == null ? 'Add Organization' : 'Edit Organization'}"/>
-        <form action="#" th:action="@{|/${lang}/organizations/save|}" th:object="${organization}" method="post">
+        <h3 th:text="${person.id == null ? 'Add Person' : 'Edit Person'}"/>
+        <form action="#" th:action="@{|/${lang}/persons/save|}" th:object="${person}" method="post">
             <input type="hidden" name="baseId" th:value="${baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
@@ -21,10 +21,6 @@
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
             </label>
 
-            <label>Location
-                <input type="text" name="location" th:field="*{location}"/>
-                <span th:if="${#fields.hasErrors('location')}" class="form-error is-visible" th:errors="*{location}"/>
-            </label>
             <input type="submit" class="button" value="Save">
         </form>
     </div>
