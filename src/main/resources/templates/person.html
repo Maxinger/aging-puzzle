@@ -6,8 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${person.id == null ? 'Add Person' : 'Edit Person'}"/>
-        <form action="#" th:action="@{|/${lang}/persons/save|}" th:object="${person}" method="post">
+        <h3 th:text="${person.new ? 'Add Person' : 'Edit Person'}"/>
+        <form action="#" th:action="@{|/${lang}/persons/save|}" th:object="${person}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="baseId" th:value="${baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
@@ -22,6 +22,30 @@
             </label>
 
             <input type="submit" class="button" value="Save">
+        </form>
+        <h3>Photo</h3>
+        <img th:if="${!person.new && image.path != null}" th:src="@{|/images/${image.path}|}"/>
+        <form action="#" th:action="@{|/${lang}/persons/${person.baseEntity.id}/image/save|}" th:object="${image}"
+              method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{path}"/>
+
+            <label class="button">Upload Image
+                <input type="file" name="file" class="show-for-sr">
+            </label>
+
+            <label>Source
+                <input type="text" name="source" th:field="*{source}"/>
+                <span th:if="${#fields.hasErrors('source')}" class="form-error is-visible" th:errors="*{source}"/>
+            </label>
+
+            <input type="submit" class="button" value="Save">
+
+            <script type="text/javascript">
+                $('input[type=file]').change(function() {
+                    this.previousSibling.data = this.files[0].name;
+                });
+            </script>
         </form>
     </div>
 </body>

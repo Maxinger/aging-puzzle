@@ -11,7 +11,7 @@ public class BasePerson extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
-    private Photo photo;
+    private Image image;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Link> links;

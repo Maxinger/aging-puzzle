@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${organization.id == null ? 'Add Organization' : 'Edit Organization'}"/>
+        <h3 th:text="${organization.new ? 'Add Organization' : 'Edit Organization'}"/>
         <form action="#" th:action="@{|/${lang}/organizations/save|}" th:object="${organization}" method="post">
             <input type="hidden" name="baseId" th:value="${baseId}"/>
             <input type="hidden" th:field="*{id}"/>

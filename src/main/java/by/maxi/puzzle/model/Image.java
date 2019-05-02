@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
-public class Photo extends AbstractEntity {
+public class Image extends AbstractEntity {
 
-    @NotNull(groups = ToValidate.class)
+    @NotNull
     private String path;
 
     private String source;
