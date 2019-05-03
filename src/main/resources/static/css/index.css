@@ -10,3 +10,12 @@
     margin-top: 10px;
     margin-bottom: 0px;
 }
+
+img.person-image {
+    max-width: 400px;
+}
+
+img.person-image-small {
+    max-width: 200px;
+    display: block;
+}

@@ -32,9 +32,6 @@ public class PersonController extends AbstractController {
     private BasePersonRepository basePersonRepository;
 
     @Autowired
-    private ImageRepository imageRepository;
-
-    @Autowired
     private ImageService imageServce;
 
     @GetMapping
@@ -49,6 +46,13 @@ public class PersonController extends AbstractController {
     public String newPage(@RequestParam(required = false) Long baseId, Model model) {
         model.addAttribute("baseId", baseId);
         model.addAttribute("person", new Person());
+
+        Image image = Optional.ofNullable(baseId)
+                .flatMap(basePersonRepository::findById)
+                .map(BasePerson::getImage)
+                .orElse(new Image());
+
+        model.addAttribute("image", image);
         return "person";
     }
 
@@ -58,16 +62,19 @@ public class PersonController extends AbstractController {
 
         Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("person", person);
-        model.addAttribute("image", Optional.ofNullable(person.getBaseEntity().getImage()).orElse(new Image()));
+        model.addAttribute("image", Optional.ofNullable(person.getImage()).orElse(new Image()));
         return "person";
     }
 
     @PostMapping("/save")
     public String savePerson(@PathVariable String lang,
                              @RequestParam(required = false) Long baseId,
+                             @RequestParam MultipartFile file,
                              @Validated(ToValidate.class) Person person,
-                             BindingResult result) {
-        if (result.hasErrors()) {
+                             BindingResult personResult,
+                             @Validated(ToValidate.class) Image image,
+                             BindingResult imageResult) throws IOException {
+        if (personResult.hasErrors() || imageResult.hasErrors()) {
             return "person";
         }
 
@@ -85,6 +92,17 @@ public class PersonController extends AbstractController {
             person.setDescription(updated.getDescription());
         }
 
+        Image updated = image;
+        image = Optional.ofNullable(person.getImage()).orElse(new Image());
+        image.setSource(updated.getSource());
+
+        if (!file.isEmpty()) {
+            imageServce.saveImage(file, image);
+        }
+        if (image.getPath() != null) {
+            person.setImage(image);
+        }
+
         personRepository.save(person);
         log.info("Saved person {} with id={}", person.getName(), person.getId());
 
@@ -95,32 +113,6 @@ public class PersonController extends AbstractController {
     public String delete(@PathVariable String lang, @RequestParam Long id) {
         personRepository.deleteById(id);
         log.info("Deleted person with id={}", id);
-
-        return String.format("redirect:/%s/persons", lang);
-    }
-
-    @PostMapping("/{basePersonId}/image/save")
-    public String saveImage(@PathVariable String lang,
-                            @PathVariable Long basePersonId,
-                            @RequestParam(required = false) MultipartFile file,
-                            @Validated(ToValidate.class) Image image,
-                            BindingResult result) throws IOException {
-        if (result.hasErrors()) {
-            return "person";
-        }
-
-        if (!file.isEmpty()) {
-            imageServce.saveImage(file, image);
-        }
-        if (image.getPath() != null) {
-            imageRepository.save(image);
-
-            BasePerson basePerson = basePersonRepository.findById(basePersonId).get();
-            basePerson.setImage(image);
-            basePersonRepository.save(basePerson);
-
-            log.info("Saved image with id={} for person with id={}", image.getId(), basePerson.getId());
-        }
 
         return String.format("redirect:/%s/persons", lang);
     }
