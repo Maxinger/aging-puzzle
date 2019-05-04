@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Person</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3 th:text="${person.name}"/>
+        <img th:if="${person.image != null}" th:src="@{|/images/${person.image.path}|}" class="person-image"/>
+        <span th:text="${person.description}"></span>
+        <div layout:insert="~{fragments::links(${person.links})}" th:remove="tag"/>
+    </div>
+</body>
+</html>

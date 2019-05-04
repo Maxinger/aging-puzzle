@@ -11,6 +11,5 @@ import java.util.List;
 @Entity
 public class BaseOrganization extends AbstractEntity {
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Link> links;
+    private String links;
 }

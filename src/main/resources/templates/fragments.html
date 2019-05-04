@@ -25,4 +25,9 @@
        th:href="${t.value.contains(baseEntityId)} ? @{|/${t.key}/${controller}/${baseEntityId}/edit|} : @{|/${t.key}/${controller}/new?baseId=${baseEntityId}|}"
        th:text="|${t.key} |" target="_blank"/>
 </body>
+<body layout:fragment="links(links)">
+    <p th:each="link : ${links.split('\n')}">
+        <a th:href="${link}" th:text="${link}" target="_blank"/>
+    </p>
+</body>
 </html>

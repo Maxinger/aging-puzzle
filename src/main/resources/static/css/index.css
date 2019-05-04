@@ -13,6 +13,7 @@
 
 img.person-image {
     max-width: 400px;
+    display: block;
 }
 
 img.person-image-small {

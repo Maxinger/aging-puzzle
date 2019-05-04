@@ -41,6 +41,15 @@ public class PersonController extends AbstractController {
         return "persons";
     }
 
+    @GetMapping("/{id}")
+    public String viewPage(@PathVariable String lang,
+                           @PathVariable Long id, Model model) {
+
+        Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
+        model.addAttribute(person);
+        return "view/person";
+    }
+
     @GetMapping("/new")
     public String newPage(@RequestParam(required = false) Long baseId, Model model) {
         model.addAttribute("baseId", baseId);
