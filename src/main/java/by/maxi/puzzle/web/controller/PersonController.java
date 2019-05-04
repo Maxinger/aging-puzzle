@@ -5,7 +5,6 @@ import by.maxi.puzzle.model.Image;
 import by.maxi.puzzle.model.Person;
 import by.maxi.puzzle.model.ToValidate;
 import by.maxi.puzzle.repo.BasePersonRepository;
-import by.maxi.puzzle.repo.ImageRepository;
 import by.maxi.puzzle.repo.PersonRepository;
 import by.maxi.puzzle.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,12 +46,12 @@ public class PersonController extends AbstractController {
         model.addAttribute("baseId", baseId);
         model.addAttribute("person", new Person());
 
-        Image image = Optional.ofNullable(baseId)
-                .flatMap(basePersonRepository::findById)
-                .map(BasePerson::getImage)
-                .orElse(new Image());
+        Optional<BasePerson> basePerson = Optional.ofNullable(baseId)
+                .flatMap(basePersonRepository::findById);
 
-        model.addAttribute("image", image);
+        model.addAttribute("image", basePerson.map(BasePerson::getImage).orElse(new Image()));
+        model.addAttribute("links", basePerson.map(BasePerson::getLinks).orElse(null));
+
         return "person";
     }
 
@@ -63,6 +62,7 @@ public class PersonController extends AbstractController {
         Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("person", person);
         model.addAttribute("image", Optional.ofNullable(person.getImage()).orElse(new Image()));
+        model.addAttribute("links", person.getLinks());
         return "person";
     }
 
@@ -70,6 +70,7 @@ public class PersonController extends AbstractController {
     public String savePerson(@PathVariable String lang,
                              @RequestParam(required = false) Long baseId,
                              @RequestParam MultipartFile file,
+                             @RequestParam(required = false) String personLinks,
                              @Validated(ToValidate.class) Person person,
                              BindingResult personResult,
                              @Validated(ToValidate.class) Image image,
@@ -103,6 +104,9 @@ public class PersonController extends AbstractController {
             person.setImage(image);
         }
 
+        person.setLinks(personLinks);
+
+        basePersonRepository.save(person.getBaseEntity());
         personRepository.save(person);
         log.info("Saved person {} with id={}", person.getName(), person.getId());
 

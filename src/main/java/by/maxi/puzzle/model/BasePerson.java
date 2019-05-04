@@ -13,7 +13,6 @@ public class BasePerson extends AbstractEntity {
     @JoinColumn
     private Image image;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Link> links;
+    private String links;
 
 }

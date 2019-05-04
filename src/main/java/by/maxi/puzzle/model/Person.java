@@ -27,11 +27,11 @@ public class Person extends TranslatableEntity<BasePerson> {
         getBaseEntity().setImage(image);
     }
 
-    public List<Link> getLinks() {
+    public String getLinks() {
         return getBaseEntity().getLinks();
     }
 
-    public void setLinks(List<Link> links) {
+    public void setLinks(String links) {
         getBaseEntity().setLinks(links);
     }
 }

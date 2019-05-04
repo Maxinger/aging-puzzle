@@ -13,7 +13,7 @@
             <input type="hidden" th:field="${person.id}"/>
 
             <label>Name
-                <input type="text th:field="${person.name}"/>
+                <input type="text" th:field="${person.name}"/>
                 <span th:if="${#fields.hasErrors('person.name')}" class="form-error is-visible" th:errors="${person.name}"/>
             </label>
 
@@ -30,6 +30,10 @@
             <label>Image Source
                 <input type="text" th:field="${image.source}"/>
                 <span th:if="${#fields.hasErrors('image.source')}" class="form-error is-visible" th:errors="${image.source}"/>
+            </label>
+
+            <label>Links
+                <textarea rows="5" name="personLinks" th:text="${links}"></textarea>
             </label>
 
             <input type="submit" class="button" value="Save">
