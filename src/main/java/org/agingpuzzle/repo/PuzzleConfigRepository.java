@@ -1,9 +1,9 @@
 package org.agingpuzzle.repo;
 
 import org.agingpuzzle.model.PuzzleConfig;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PuzzleConfigRepository extends CrudRepository<PuzzleConfig, Long> {
+public interface PuzzleConfigRepository extends JpaRepository<PuzzleConfig, Long> {
 
     PuzzleConfig findFirstByOrderByCreatedAtDesc();
 }

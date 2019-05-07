@@ -2,7 +2,6 @@ package org.agingpuzzle.repo;
 
 import org.agingpuzzle.model.*;
 import org.agingpuzzle.TestConfiguration;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,9 +76,9 @@ public class RepositoryTests {
         member.setRole(Member.Role.FOUNDER);
         memberRepository.save(member);
 
-        var members = memberRepository.findOrganizationMembers(baseOrganization.getId(), "en");
+        var members = memberRepository.findPersonsByOrganization(baseOrganization.getId(), "en");
         assertEquals(1, members.size());
-        assertEquals("Max", members.get(0).getPerson().getName());
+        assertEquals("Max", members.get(0).getEntity().getName());
         assertEquals(Member.Role.FOUNDER, members.get(0).getRole());
 
         memberRepository.delete(member);

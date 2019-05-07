@@ -5,6 +5,7 @@ import org.agingpuzzle.model.Person;
 import org.agingpuzzle.model.Image;
 import org.agingpuzzle.model.ToValidate;
 import org.agingpuzzle.repo.BasePersonRepository;
+import org.agingpuzzle.repo.MemberRepository;
 import org.agingpuzzle.repo.PersonRepository;
 import org.agingpuzzle.service.ImageService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class PersonController extends AbstractController {
     private BasePersonRepository basePersonRepository;
 
     @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
     private ImageService imageServce;
 
     @GetMapping
@@ -46,7 +50,8 @@ public class PersonController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute(person);
+        model.addAttribute("person", person);
+        model.addAttribute("organizations", memberRepository.findOrganizationsByPerson(person.getBaseId(), lang));
         return "view/person";
     }
 

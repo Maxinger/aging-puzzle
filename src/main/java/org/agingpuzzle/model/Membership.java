@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class OrganizationMember {
+public class Membership<T extends TranslatableEntity> {
 
-    private Person person;
+    private Long id;
+    private T entity;
     private Member.Role role;
 }

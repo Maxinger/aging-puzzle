@@ -23,7 +23,7 @@
         <tbody>
         <tr th:each="org : ${organizations}" th:object="${org}">
             <td><a th:href="@{|/${lang}/organizations/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
-            <td th:text="*{name}"/>
+            <td><a th:href="@{|/${lang}/organizations/*{baseEntity.id}|}" th:text="*{name}"/></td>
             <td th:text="*{description}"/>
             <td th:text="*{location}"/>
             <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'organizations')}" />

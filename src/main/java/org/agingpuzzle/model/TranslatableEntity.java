@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class TranslatableEntity<T> extends AbstractEntity {
+public abstract class TranslatableEntity<T extends AbstractEntity> extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn
@@ -22,5 +22,9 @@ public abstract class TranslatableEntity<T> extends AbstractEntity {
     @NotNull
     @Size(max = 2)
     private String language;
+
+    public Long getBaseId() {
+        return baseEntity.getId();
+    }
 
 }
