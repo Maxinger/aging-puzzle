@@ -25,10 +25,7 @@ public class Project extends AbstractEntity {
     @JoinColumn
     private Area area;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Link> links;
-
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Member> members;
 
 }

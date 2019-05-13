@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 public class BasePerson extends AbstractEntity {
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn
     private Image image;
 

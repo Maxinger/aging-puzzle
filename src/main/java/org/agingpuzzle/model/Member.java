@@ -1,8 +1,11 @@
 package org.agingpuzzle.model;
 
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,15 +22,19 @@ public class Member extends AbstractEntity {
         }
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private BasePerson basePerson;
 
-    @ManyToOne//(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseOrganization baseOrganization;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Role role;
 
 }
