@@ -1,4 +1,4 @@
-package org.agingpuzzle.web;
+package org.agingpuzzle.web.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

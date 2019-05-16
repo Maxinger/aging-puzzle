@@ -1,4 +1,4 @@
-package org.agingpuzzle.web;
+package org.agingpuzzle.web.filter;
 
 import org.agingpuzzle.service.UpdatesService;
 import org.springframework.beans.factory.annotation.Autowired;

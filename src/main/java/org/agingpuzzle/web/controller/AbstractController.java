@@ -1,7 +1,7 @@
 package org.agingpuzzle.web.controller;
 
 import org.agingpuzzle.repo.TranslatableRepository;
-import org.agingpuzzle.web.WebApplication;
+import org.agingpuzzle.web.WebUtils;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ public abstract class AbstractController {
 
     protected void addTranslations(String lang, Model model, TranslatableRepository translatableRepository) {
         Map<String, Set<Long>> translations = new LinkedHashMap<>();
-        for (String language : WebApplication.SUPPORTED_LANGUAGES) {
+        for (String language : WebUtils.SUPPORTED_LANGUAGES) {
             if (!language.equals(lang)) {
                 translations.put(language, translatableRepository.findAllIdsByLanguage(language));
             }

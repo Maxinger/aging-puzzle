@@ -1,7 +1,7 @@
 package org.agingpuzzle.web.controller;
 
 import org.agingpuzzle.service.PuzzleService;
-import org.agingpuzzle.web.WebApplication;
+import org.agingpuzzle.web.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +16,17 @@ public class MainController {
 
     @GetMapping("/")
     public String index() {
-        return String.format("redirect:/%s", WebApplication.SUPPORTED_LANGUAGES[0]);
+        return String.format("redirect:/%s", WebUtils.SUPPORTED_LANGUAGES[0]);
     }
 
-    @GetMapping("/{lang}")
+    @GetMapping("/{lang:[a-z]{2}}")
     public String index(@PathVariable String lang, Model model) {
         model.addAttribute("tiles", puzzleService.getPuzzleView(lang));
         return "index";
+    }
+
+    @GetMapping("/{lang}/login")
+    public String loginPage() {
+        return "login";
     }
 }

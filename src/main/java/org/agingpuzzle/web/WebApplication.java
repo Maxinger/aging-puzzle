@@ -14,8 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("org.agingpuzzle.model")
 public class WebApplication {
 
-    public static final String[] SUPPORTED_LANGUAGES = {"en", "ru"};
-
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class);
     }

@@ -1,13 +1,13 @@
 package org.agingpuzzle.service;
 
+import lombok.Getter;
 import org.agingpuzzle.image.Layout;
 import org.agingpuzzle.image.PuzzleGenerator;
 import org.agingpuzzle.model.Area;
 import org.agingpuzzle.model.PuzzleConfig;
 import org.agingpuzzle.repo.AreaRepository;
 import org.agingpuzzle.repo.PuzzleConfigRepository;
-import org.agingpuzzle.web.WebApplication;
-import lombok.Getter;
+import org.agingpuzzle.web.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +66,7 @@ public class PuzzleService {
     }
 
     private void setLayout(String layoutStr) {
-        for (String lang : WebApplication.SUPPORTED_LANGUAGES) {
+        for (String lang : WebUtils.SUPPORTED_LANGUAGES) {
 
             Map<Long, Area> areaMap = new HashMap<>();
             areaRepository.findAllByLanguage(lang).forEach(area -> areaMap.put(area.getBaseEntity().getId(), area));
