@@ -21,8 +21,10 @@
                     <a th:href="@{|/${lang}/areas|}">Areas</a><br/>
                     <a th:href="@{|/${lang}/organizations|}">Organizations</a><br/>
                     <a th:href="@{|/${lang}/persons|}">Persons</a><br/>
+                    <a th:href="@{|/${lang}/admin/persons|}">Admin Persons</a><br/>
 
-                    <form id="logout" th:action="@{/logout}" method="post"/>
+                    <form id="logout" th:action="@{/logout}" method="post">
+                    </form>
                     <a href="#" onclick="$('#logout').submit()">Sing Out</a>
                 </div>
                 <div class="cell medium-6 medium-cell-block-y" layout:fragment="content">

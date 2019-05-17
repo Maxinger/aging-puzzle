@@ -22,12 +22,14 @@
 </body>
 <body layout:fragment="translations(baseEntityId, controller)">
     <a th:each="t : ${translations}"
-       th:href="${t.value.contains(baseEntityId)} ? @{|/${t.key}/${controller}/${baseEntityId}/edit|} : @{|/${t.key}/${controller}/new?baseId=${baseEntityId}|}"
+       th:href="${t.value.contains(baseEntityId)} ? @{|/${t.key}/admin/${controller}/${baseEntityId}/edit|} : @{|/${t.key}/admin/${controller}/new?baseId=${baseEntityId}|}"
        th:text="|${t.key} |" target="_blank"/>
 </body>
 <body layout:fragment="links(links)">
-    <p th:each="link : ${links.split('\n')}">
-        <a th:href="${link}" th:text="${link}" target="_blank"/>
-    </p>
+    <div th:if="${links != null}">
+        <p th:each="link : ${links.split('\n')}">
+            <a th:href="${link}" th:text="${link}" target="_blank"/>
+        </p>
+    </div>
 </body>
 </html>

@@ -6,43 +6,26 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${person.new ? 'Add Person' : 'Edit Person'}"/>
-        <img th:if="${image.path != null}" th:src="@{|/images/${image.path}|}" class="person-image"/>
-        <form action="#" th:action="@{|/${lang}/persons/save|}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="baseId" th:value="${baseId}"/>
-            <input type="hidden" th:field="${person.id}"/>
+        <h3 th:text="${person.name}"/>
+        <img th:if="${person.image != null}" th:src="@{|/images/${person.image.path}|}" class="person-image"/>
+        <span th:text="${person.description}"></span>
+        <div layout:insert="~{fragments::links(${person.links})}" th:remove="tag"/>
 
-            <label>Name
-                <input type="text" th:field="${person.name}"/>
-                <span th:if="${#fields.hasErrors('person.name')}" class="form-error is-visible" th:errors="${person.name}"/>
-            </label>
-
-            <label>Description
-                <textarea rows="5" th:field="${person.description}"/>
-                <span th:if="${#fields.hasErrors('person.description')}" class="form-error is-visible" th:errors="${person.description}"/>
-            </label>
-
-            <input type="hidden" th:field="${image.path}"/>
-            <label class="button">Upload Image
-                <input type="file" name="file" class="show-for-sr">
-            </label>
-
-            <label>Image Source
-                <input type="text" th:field="${image.source}"/>
-                <span th:if="${#fields.hasErrors('image.source')}" class="form-error is-visible" th:errors="${image.source}"/>
-            </label>
-
-            <label>Links
-                <textarea rows="5" name="personLinks" th:text="${links}"></textarea>
-            </label>
-
-            <input type="submit" class="button" value="Save">
-        </form>
-        <script type="text/javascript">
-            $('input[type=file]').change(function() {
-                this.previousSibling.data = this.files[0].name;
-            });
-        </script>
+        <div th:if="${not #lists.isEmpty(organizations)}">
+            <h3>Organizations</h3>
+            <table>
+                <thead>
+                    <th>Name</th>
+                    <th>Role</th>
+                </thead>
+                <tbody>
+                    <tr th:each="member : ${organizations}">
+                        <td><a th:href="@{|/${lang}/organizations/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
+                        <td th:text="${member.role}"/>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
