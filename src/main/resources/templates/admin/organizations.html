@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Organizations</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div layout:insert="~{fragments::deleteModal('admin/organizations/delete')}" th:remove="tag"/>
+
+    <h3>Organizations List</h3>
+    <a th:href="@{|/${lang}/admin/organizations/new|}">New Organization</a><br/>
+    <table>
+        <thead>
+        <th>ID</th>
+        <th>Organization</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Translations</th>
+        <th>&nbsp;</th>
+        </thead>
+        <tbody>
+        <tr th:each="org : ${organizations}" th:object="${org}">
+            <td><a th:href="@{|/${lang}/admin/organizations/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
+            <td><a th:href="@{|/${lang}/organizations/*{baseEntity.id}|}" th:text="*{name}"/></td>
+            <td th:text="*{description}"/>
+            <td th:text="*{location}"/>
+            <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'organizations')}" />
+            <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

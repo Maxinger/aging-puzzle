@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title layout:title-pattern="$LAYOUT_TITLE – $CONTENT_TITLE">Aging Puzzle</title>
     <link rel="stylesheet" th:href="@{/css/foundation.css}" />
@@ -17,15 +18,28 @@
         <div class="cell medium-auto medium-cell-block-container">
             <div class="grid-x grid-padding-x">
                 <div class="cell medium-3 medium-cell-block-y text-right">
-                    <a th:href="@{|/${lang}/|}">Main</a><br/>
-                    <a th:href="@{|/${lang}/areas|}">Areas</a><br/>
-                    <a th:href="@{|/${lang}/organizations|}">Organizations</a><br/>
-                    <a th:href="@{|/${lang}/persons|}">Persons</a><br/>
-                    <a th:href="@{|/${lang}/admin/persons|}">Admin Persons</a><br/>
+                    <a th:each="t : ${switchLinks}"
+                       th:href="@{|${t.value}|}"
+                       th:text="|${t.key} |"/>
 
-                    <form id="logout" th:action="@{/logout}" method="post">
-                    </form>
-                    <a href="#" onclick="$('#logout').submit()">Sing Out</a>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{|/${lang}/|}">Main</a><br/>
+                        <a th:href="@{|/${lang}/admin/areas|}">Areas</a><br/>
+                        <a th:href="@{|/${lang}/admin/organizations|}">Organizations</a><br/>
+                        <a th:href="@{|/${lang}/admin/persons|}">Persons</a><br/>
+                    </div>
+                    <div th:if="${#authorization.expression('isAnonymous()')}">
+                        <a th:href="@{|/${lang}/|}">Main</a><br/>
+                        <a th:href="@{|/${lang}/areas|}">Areas</a><br/>
+                        <a th:href="@{|/${lang}/organizations|}">Organizations</a><br/>
+                        <a th:href="@{|/${lang}/persons|}">Persons</a><br/>
+                        <a th:href="@{|/${lang}/login|}">Sign In</a><br/>
+                    </div>
+                    <div th:if="${#authorization.expression('isAuthenticated()')}">
+                        <form id="logout" th:action="@{/logout}" method="post">
+                        </form>
+                        <a href="#" onclick="$('#logout').submit()">Sing Out</a>
+                    </div>
                 </div>
                 <div class="cell medium-6 medium-cell-block-y" layout:fragment="content">
                     Main content is here

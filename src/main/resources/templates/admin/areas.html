@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Areas</title>
+</head>
+<body>
+    <div layout:fragment="content">
+
+        <div layout:insert="~{fragments::deleteModal('admin/areas/delete')}" th:remove="tag"/>
+
+        <h3>Areas List</h3>
+        <a th:href="@{|/${lang}/admin/areas/new|}">New Area</a><br/>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Area</th>
+                <th>Description</th>
+                <th>Translations</th>
+                <th>&nbsp;</th>
+            </thead>
+            <tbody>
+                <tr th:each="area : ${areas}" th:object="${area}">
+                    <td><a th:href="@{|/${lang}/admin/areas/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
+                    <td><a th:href="@{|/${lang}/areas/*{baseEntity.id}|}" th:text="*{name}"/></td>
+                    <td th:text="*{description}"/>
+                    <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'areas')}" />
+                    <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Puzzle Layout</h3>
+        <form action="#" th:action="@{|/${lang}/admin/areas/config/new|}" th:object="${config}" method="post">
+            <label>Layout
+                <textarea rows="5" name="description" th:field="*{layout}"/>
+                <span th:if="${#fields.hasErrors('layout')}" class="form-error is-visible" th:errors="*{layout}"/>
+            </label>
+            <input type="submit" class="button" value="Save">
+        </form>
+    </div>
+</body>
+</html>
