@@ -1,5 +1,6 @@
 package org.agingpuzzle.web;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public final class WebUtils {
@@ -8,9 +9,9 @@ public final class WebUtils {
 
     private static final Pattern LANGUAGE_PATTERN = Pattern.compile("^/([a-z]{2})");
 
-    public static String getLanguageFromUrl(String url) {
+    public static Optional<String> getLanguageFromUrl(String url) {
         var matcher = LANGUAGE_PATTERN.matcher(url);
-        return matcher.find() ? matcher.group(1) : SUPPORTED_LANGUAGES[0];
+        return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
     }
 
     public static String replaceLanguage(String url, String lang) {

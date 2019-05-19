@@ -57,9 +57,9 @@ public class AdminAreaController extends AbstractController {
 
     @PostMapping("/save")
     public String saveArea(@PathVariable String lang,
-                                   @RequestParam(required = false) Long baseId,
-                                   @Validated(ToValidate.class) Area area,
-                                   BindingResult result) {
+                           @RequestParam(required = false) Long baseId,
+                           @Validated(ToValidate.class) Area area,
+                           BindingResult result) {
         if (result.hasErrors()) {
             return "admin/area";
         }

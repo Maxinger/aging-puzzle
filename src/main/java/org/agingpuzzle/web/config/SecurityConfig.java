@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +17,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessHandler(logoutSuccessHandler())
                 .and()
             .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint());
@@ -67,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             protected String determineUrlToUseForThisRequest(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
                 String url = getLoginFormUrl();
-                String lang = WebUtils.getLanguageFromUrl(request.getServletPath());
+                String lang = WebUtils.getLanguageFromUrl(request.getServletPath()).orElse(WebUtils.SUPPORTED_LANGUAGES[0]);
                 return String.format("/%s%s", lang, url);
             }
         };
@@ -82,6 +85,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 String url = request.getServletPath() + "?error";
                 logger.debug("Redirecting to " + url);
                 getRedirectStrategy().sendRedirect(request, response, url);
+            }
+        };
+    }
+
+    private LogoutSuccessHandler logoutSuccessHandler() {
+        return new SimpleUrlLogoutSuccessHandler() {
+            @Override
+            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                getRedirectStrategy().sendRedirect(request, response, "/" + request.getParameter("lang"));
             }
         };
     }

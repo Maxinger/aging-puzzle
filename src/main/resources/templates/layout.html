@@ -37,6 +37,7 @@
                     </div>
                     <div th:if="${#authorization.expression('isAuthenticated()')}">
                         <form id="logout" th:action="@{/logout}" method="post">
+                            <input type="hidden" name="lang" th:value="${lang}"/>
                         </form>
                         <a href="#" onclick="$('#logout').submit()">Sing Out</a>
                     </div>

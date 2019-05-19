@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,8 +21,11 @@ public class LanguageFilter extends BaseFilter {
         String path = request.getServletPath();
         String query = request.getQueryString();
 
-        String lang = WebUtils.getLanguageFromUrl(path);
-        request.setAttribute("lang", WebUtils.getLanguageFromUrl(path));
+        Optional<String> langOpt = WebUtils.getLanguageFromUrl(path);
+        langOpt.ifPresent(s -> request.getSession().setAttribute("lang", s));
+
+        String lang = langOpt.orElse(WebUtils.SUPPORTED_LANGUAGES[0]);
+        request.setAttribute("lang", lang);
 
         request.setAttribute("switchLinks", Arrays.stream(WebUtils.SUPPORTED_LANGUAGES)
                 .filter(s -> !lang.equals(s))

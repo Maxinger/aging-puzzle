@@ -5,8 +5,7 @@ import org.agingpuzzle.web.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MainController {
@@ -15,8 +14,8 @@ public class MainController {
     private PuzzleService puzzleService;
 
     @GetMapping("/")
-    public String index() {
-        return String.format("redirect:/%s", WebUtils.SUPPORTED_LANGUAGES[0]);
+    public String index(@SessionAttribute(value = "lang", required = false) String lang) {
+        return String.format("redirect:/%s", lang != null ? lang : WebUtils.SUPPORTED_LANGUAGES[0]);
     }
 
     @GetMapping("/{lang:[a-z]{2}}")
