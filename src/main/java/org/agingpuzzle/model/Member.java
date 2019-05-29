@@ -33,6 +33,11 @@ public class Member extends AbstractEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseOrganization baseOrganization;
 
+    @ManyToOne
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private BaseProject baseProject;
+
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;

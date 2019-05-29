@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>projects</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div layout:insert="~{fragments::deleteModal('admin/projects/delete')}" th:remove="tag"/>
+
+    <h3>Projects List</h3>
+    <a th:href="@{|/${lang}/admin/projects/new|}">New Project</a><br/>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Area</th>
+            <th>Organization</th>
+            <th>Translations</th>
+            <th>&nbsp;</th>
+            </thead>
+        <tbody>
+            <tr th:each="p : ${projects}" th:object="${p}">
+                <td><a th:href="@{|/${lang}/admin/projects/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
+                <td>
+                    <a th:href="@{|/${lang}/projects/*{baseEntity.id}|}" th:text="*{name}"/>
+                    <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
+                </td>
+                <!-- TODO use translatable entities -->
+                <td th:with="area=${baseEntity.area}" th:if="${area != null}">
+                    <a th:href="@{|${lang}/areas/*{area.id}|}" th:text="*{area.name}"/>
+                </td>
+                <td th:with="org=${baseEntity.organization}" th:if="${org != null}">
+                    <a th:href="@{|${lang}/organizations/*{org.id}|}" th:text="*{org.name}"/>
+                </td>
+                <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

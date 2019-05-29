@@ -2,30 +2,36 @@ package org.agingpuzzle.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity
-public class Project extends AbstractEntity {
+public class Project extends TranslatableEntity<BaseProject> {
 
+    @NotNull(groups = ToValidate.class)
     private String name;
 
+    @NotNull(groups = ToValidate.class)
+    @Size(min = 20, max = 200, groups = ToValidate.class)
     private String description;
-
-    private String type;
 
     private String status;
 
-    @ManyToOne
-    @JoinColumn
-    private Organization organization;
+    public Image getImage() {
+        return getBaseEntity().getImage();
+    }
 
-    @ManyToOne
-    @JoinColumn
-    private Area area;
+    public void setImage(Image image) {
+        getBaseEntity().setImage(image);
+    }
 
-    @ManyToMany
-    private List<Member> members;
+    public String getLinks() {
+        return getBaseEntity().getLinks();
+    }
 
+    public void setLinks(String links) {
+        getBaseEntity().setLinks(links);
+    }
 }
