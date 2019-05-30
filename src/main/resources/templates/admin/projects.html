@@ -15,8 +15,8 @@
         <thead>
             <th>ID</th>
             <th>Name</th>
-            <th>Area</th>
-            <th>Organization</th>
+            <!--<th>Area</th>-->
+            <!--<th>Organization</th>-->
             <th>Translations</th>
             <th>&nbsp;</th>
             </thead>
@@ -28,12 +28,13 @@
                     <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
                 </td>
                 <!-- TODO use translatable entities -->
-                <td th:with="area=${baseEntity.area}" th:if="${area != null}">
-                    <a th:href="@{|${lang}/areas/*{area.id}|}" th:text="*{area.name}"/>
-                </td>
-                <td th:with="org=${baseEntity.organization}" th:if="${org != null}">
-                    <a th:href="@{|${lang}/organizations/*{org.id}|}" th:text="*{org.name}"/>
-                </td>
+                <!--<td th:with="area=${baseEntity.area}" th:if="${area != null}">-->
+                    <!--<a th:href="@{|${lang}/areas/*{area.id}|}" th:text="*{area.name}"/>-->
+                <!--</td>-->
+                <!--<td th:with="org=${baseEntity.organization}" th:if="${org != null}">-->
+                    <!--<a th:href="@{|${lang}/organizations/*{org.id}|}" th:text="*{org.name}"/>-->
+                <!--</td>-->
+                <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'persons')}" />
                 <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
             </tr>
         </tbody>

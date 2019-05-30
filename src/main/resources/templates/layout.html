@@ -26,6 +26,7 @@
                         <a th:href="@{|/${lang}/|}">Main</a><br/>
                         <a th:href="@{|/${lang}/admin/areas|}">Areas</a><br/>
                         <a th:href="@{|/${lang}/admin/organizations|}">Organizations</a><br/>
+                        <a th:href="@{|/${lang}/admin/projects|}">Projects</a><br/>
                         <a th:href="@{|/${lang}/admin/persons|}">Persons</a><br/>
                     </div>
                     <div th:if="${#authorization.expression('isAnonymous()')}">
@@ -33,6 +34,7 @@
                         <a th:href="@{|/${lang}/areas|}">Areas</a><br/>
                         <a th:href="@{|/${lang}/organizations|}">Organizations</a><br/>
                         <a th:href="@{|/${lang}/persons|}">Persons</a><br/>
+                        <a th:href="@{|/${lang}/projects|}">Projects</a><br/>
                         <a th:href="@{|/${lang}/login|}">Sign In</a><br/>
                     </div>
                     <div th:if="${#authorization.expression('isAuthenticated()')}">

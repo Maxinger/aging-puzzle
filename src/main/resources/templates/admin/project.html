@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Project</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3 th:text="${project.new ? 'Add Project' : 'Edit Project'}"/>
+        <img th:if="${image.path != null}" th:src="@{|/images/${image.path}|}" class="project-image"/>
+        <form action="#" th:action="@{|/${lang}/admin/projects/save|}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="baseId" th:value="${baseId}"/>
+            <input type="hidden" th:field="${project.id}"/>
+
+            <label>Name
+                <input type="text" th:field="${project.name}"/>
+                <span th:if="${#fields.hasErrors('project.name')}" class="form-error is-visible" th:errors="${project.name}"/>
+            </label>
+
+            <label>Description
+                <textarea rows="5" th:field="${project.description}"/>
+                <span th:if="${#fields.hasErrors('project.description')}" class="form-error is-visible" th:errors="${project.description}"/>
+            </label>
+
+            <label>Area
+                <select name="baseAreaId">
+                    <option th:value="${null}">-- Select --</option>
+                    <option th:each="area : ${areas}" th:value="${area.baseId}" th:text="${area.name}"/>
+                </select>
+            </label>
+
+            <label>Status
+                <input type="text" th:field="${project.status}"/>
+                <span th:if="${#fields.hasErrors('project.status')}" class="form-error is-visible" th:errors="${project.status}"/>
+            </label>
+
+            <input type="hidden" th:field="${image.path}"/>
+            <label class="button">Upload Image
+                <input type="file" name="file" class="show-for-sr">
+            </label>
+
+            <label>Image Source
+                <input type="text" th:field="${image.source}"/>
+                <span th:if="${#fields.hasErrors('image.source')}" class="form-error is-visible" th:errors="${image.source}"/>
+            </label>
+
+            <label>Links
+                <textarea rows="5" name="projectLinks" th:text="${links}"></textarea>
+            </label>
+
+            <input type="submit" class="button" value="Save">
+        </form>
+        <script type="text/javascript">
+            $('input[type=file]').change(function() {
+                this.previousSibling.data = this.files[0].name;
+            });
+        </script>
+    </div>
+</body>
+</html>
