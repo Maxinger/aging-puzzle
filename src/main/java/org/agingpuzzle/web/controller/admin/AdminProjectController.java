@@ -2,10 +2,7 @@ package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
-import org.agingpuzzle.repo.AreaRepository;
-import org.agingpuzzle.repo.BaseProjectRepository;
-import org.agingpuzzle.repo.OrganizationRepository;
-import org.agingpuzzle.repo.ProjectRepository;
+import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.function.Function.identity;
 
 @Slf4j
 @Controller
@@ -34,7 +35,13 @@ public class AdminProjectController extends AbstractController {
     private AreaRepository areaRepository;
 
     @Autowired
+    private BaseAreaRepository baseAreaRepository;
+
+    @Autowired
     private OrganizationRepository organizationRepository;
+
+    @Autowired
+    private BaseOrganizationRepository baseOrganizationRepository;
 
     @Autowired
     private ImageService imageServce;
@@ -43,6 +50,11 @@ public class AdminProjectController extends AbstractController {
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
 
+        model.addAttribute("areas", areaRepository.findAllByLanguage(lang)
+                .stream().collect(Collectors.toMap(Area::getBaseId, identity())));
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang)
+                .stream().collect(Collectors.toMap(Organization::getBaseId, identity())));
+
         addTranslations(lang, model, projectRepository);
         return "admin/projects";
     }
@@ -50,11 +62,15 @@ public class AdminProjectController extends AbstractController {
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
-        model.addAttribute("baseId", baseId);
-        model.addAttribute("project", new Project());
 
         Optional<BaseProject> baseProject = Optional.ofNullable(baseId)
                 .flatMap(baseProjectRepository::findById);
+
+        Project project = new Project();
+        project.setBaseEntity(baseProject.orElse(null));
+
+        model.addAttribute("baseId", baseId);
+        model.addAttribute("project", project);
 
         model.addAttribute("image", baseProject.map(BaseProject::getImage).orElse(new Image()));
         model.addAttribute("links", baseProject.map(BaseProject::getLinks).orElse(null));
@@ -73,6 +89,8 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("project", project);
         model.addAttribute("image", Optional.ofNullable(project.getImage()).orElse(new Image()));
         model.addAttribute("links", project.getLinks());
+        model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         return "admin/project";
     }
 
@@ -81,6 +99,8 @@ public class AdminProjectController extends AbstractController {
                               @RequestParam(required = false) Long baseId,
                               @RequestParam MultipartFile file,
                               @RequestParam(required = false) String projectLinks,
+                              @RequestParam(required = false) Long baseAreaId,
+                              @RequestParam(required = false) Long baseOrganizationId,
                               @Validated(ToValidate.class) Project project,
                               BindingResult projectResult,
                               @Validated(ToValidate.class) Image image,
@@ -115,6 +135,16 @@ public class AdminProjectController extends AbstractController {
         }
 
         project.setLinks(projectLinks);
+
+        BaseArea baseArea = Optional.ofNullable(baseAreaId)
+                .flatMap(baseAreaRepository::findById)
+                .orElse(null);
+        project.getBaseEntity().setBaseArea(baseArea);
+
+        BaseOrganization baseOrganization = Optional.ofNullable(baseOrganizationId)
+                .flatMap(baseOrganizationRepository::findById)
+                .orElse(null);
+        project.getBaseEntity().setBaseOrganization(baseOrganization);
 
         baseProjectRepository.save(project.getBaseEntity());
         projectRepository.save(project);

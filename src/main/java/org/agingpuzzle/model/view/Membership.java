@@ -1,7 +1,9 @@
-package org.agingpuzzle.model;
+package org.agingpuzzle.model.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.agingpuzzle.model.Member;
+import org.agingpuzzle.model.TranslatableEntity;
 
 @AllArgsConstructor
 @Getter

@@ -2,6 +2,7 @@ package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
+import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
