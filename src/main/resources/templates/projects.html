@@ -7,26 +7,25 @@
 <body>
 <div layout:fragment="content">
 
-    <div layout:insert="~{fragments::deleteModal('admin/projects/delete')}" th:remove="tag"/>
+    <h3 th:unless="${baseAreaId == null}" th:text="${areas.get(baseAreaId).name}"/>
+    <h4 th:unless="${baseAreaId == null}">Projects List</h4>
 
-    <h3>Projects List</h3>
-    <a th:href="@{|/${lang}/admin/projects/new|}">New Project</a><br/>
+    <h3 th:if="${baseAreaId == null}">Projects List</h3>
+
     <table>
         <thead>
-            <th>ID</th>
             <th>Name</th>
+            <th>Description</th>
             <th>Area</th>
             <th>Organization</th>
-            <th>Translations</th>
-            <th>&nbsp;</th>
-            </thead>
+        </thead>
         <tbody>
             <tr th:each="p : ${projects}" th:object="${p}">
-                <td><a th:href="@{|/${lang}/admin/projects/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
                 <td>
                     <a th:href="@{|/${lang}/projects/*{baseEntity.id}|}" th:text="*{name}"/>
                     <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
                 </td>
+                <td th:text="*{description}"/>
                 <td th:with="area=*{baseEntity.baseArea}">
                     <a th:if="${area != null}"
                        th:href="@{|/${lang}/areas/${area.id}|}" th:text="${areas.get(area.id).name}"/>
@@ -35,8 +34,6 @@
                     <a th:if="${org != null}"
                        th:href="@{|/${lang}/organizations/${org.id}|}" th:text="${organizations.get(org.id).name}"/>
                 </td>
-                <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'projects')}" />
-                <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
             </tr>
         </tbody>
     </table>
