@@ -4,7 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.Area;
 import org.agingpuzzle.model.Organization;
 import org.agingpuzzle.model.Project;
-import org.agingpuzzle.repo.*;
+import org.agingpuzzle.repo.AreaRepository;
+import org.agingpuzzle.repo.OrganizationRepository;
+import org.agingpuzzle.repo.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -63,8 +66,17 @@ public class ProjectController extends AbstractController {
 
         Project project = projectRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("project", project);
+
+        Optional.ofNullable(project.getBaseEntity().getBaseArea())
+                .flatMap(baseArea -> areaRepository.findByBaseEntity_IdAndLanguage(baseArea.getId(), lang))
+                .ifPresent(area -> model.addAttribute("area", area));
+
+        Optional.ofNullable(project.getBaseEntity().getBaseOrganization())
+                .flatMap(baseOrg -> organizationRepository.findByBaseEntity_IdAndLanguage(baseOrg.getId(), lang))
+                .ifPresent(area -> model.addAttribute("organization", area));
+
 //        model.addAttribute("members", memberRepository.findPersonsByOrganization(organization.getBaseId(), lang));
-        return "organization";
+        return "project";
     }
 
 }

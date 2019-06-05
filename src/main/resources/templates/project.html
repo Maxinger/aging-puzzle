@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Project</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3 th:text="${project.name}"/>
+        <img th:if="${project.image != null}" th:src="@{|/images/${project.image.path}|}" class="project-image"/>
+        <p th:text="${project.description}"/>
+        <p th:if="${area != null}">
+            Area: <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
+        </p>
+        <td th:if="${organization != null}">
+            Organization: <a th:href="@{|/${lang}/organizations/${organization.baseId}|}" th:text="${organization.name}"/>
+        </td>
+
+        <div th:if="${not #lists.isEmpty(members)}">
+            <h3>Members</h3>
+            <table>
+                <thead>
+                    <th>Name</th>
+                    <th>Role</th>
+                </thead>
+                <tbody>
+                    <tr th:each="member : ${members}">
+                        <td><a th:href="@{|/${lang}/persons/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
+                        <td th:text="${member.role}"/>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
