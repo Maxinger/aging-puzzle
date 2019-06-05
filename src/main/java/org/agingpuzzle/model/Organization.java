@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
-public class Organization extends TranslatableEntity<BaseOrganization> {
+public class Organization extends TranslatableEntity<BaseOrganization> implements WithImage {
 
     @NotNull(groups = ToValidate.class)
     private String name;

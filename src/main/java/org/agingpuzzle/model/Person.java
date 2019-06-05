@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
-public class Person extends TranslatableEntity<BasePerson> {
+public class Person extends TranslatableEntity<BasePerson> implements WithImage {
 
     @NotNull(groups = ToValidate.class)
     private String name;
@@ -17,14 +17,6 @@ public class Person extends TranslatableEntity<BasePerson> {
     @NotNull(groups = ToValidate.class)
     @Size(min = 20, max = 200, groups = ToValidate.class)
     private String description;
-
-    public Image getImage() {
-        return getBaseEntity().getImage();
-    }
-
-    public void setImage(Image image) {
-        getBaseEntity().setImage(image);
-    }
 
     public String getLinks() {
         return getBaseEntity().getLinks();

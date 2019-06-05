@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class BasePerson extends AbstractEntity {
+public class BasePerson extends AbstractEntity implements WithImage {
 
     @OneToOne
     @JoinColumn
