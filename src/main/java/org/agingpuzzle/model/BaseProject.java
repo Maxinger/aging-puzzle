@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 
 @Data
 @Entity
-public class BaseProject extends AbstractEntity {
+public class BaseProject extends AbstractEntity implements WithImage {
 
     @ManyToOne
     @JoinColumn

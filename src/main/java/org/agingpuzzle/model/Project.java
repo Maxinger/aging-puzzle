@@ -3,12 +3,15 @@ package org.agingpuzzle.model;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
 @Entity
-public class Project extends TranslatableEntity<BaseProject> {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
+public class Project extends TranslatableEntity<BaseProject> implements WithImage {
 
     @NotNull(groups = ToValidate.class)
     private String name;
@@ -18,14 +21,6 @@ public class Project extends TranslatableEntity<BaseProject> {
     private String description;
 
     private String status;
-
-    public Image getImage() {
-        return getBaseEntity().getImage();
-    }
-
-    public void setImage(Image image) {
-        getBaseEntity().setImage(image);
-    }
 
     public String getLinks() {
         return getBaseEntity().getLinks();
