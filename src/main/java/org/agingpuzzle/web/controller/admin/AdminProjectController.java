@@ -2,6 +2,7 @@ package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
+import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
@@ -42,6 +43,15 @@ public class AdminProjectController extends AbstractController {
 
     @Autowired
     private BaseOrganizationRepository baseOrganizationRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private BasePersonRepository basePersonRepository;
 
     @Autowired
     private ImageService imageServce;
@@ -91,6 +101,19 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("links", project.getLinks());
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+
+        var members = memberRepository.findPersonsByProject(project.getBaseEntity().getId(), lang);
+        var persons = members.stream()
+                .map(Membership::getEntity)
+                .collect(Collectors.toSet());
+        var candidates = personRepository.findAllByLanguage(lang).stream()
+                .filter(person -> !persons.contains(person))
+                .collect(Collectors.toList());
+
+        model.addAttribute("members", members);
+        model.addAttribute("candidates", candidates);
+        model.addAttribute("roles", Member.Role.getValues());
+
         return "admin/project";
     }
 
@@ -159,5 +182,33 @@ public class AdminProjectController extends AbstractController {
         log.info("Deleted project with id={}", id);
 
         return String.format("redirect:/%s/admin/projects", lang);
+    }
+
+    @PostMapping("/{baseProjectId}/member")
+    public String addMember(@PathVariable String lang,
+                            @PathVariable Long baseProjectId,
+                            @RequestParam(required = false) Long basePersonId,
+                            @RequestParam(required = false) String role) {
+
+        if (basePersonId != null && role != null) {
+            Member member = new Member();
+            member.setBaseProject(baseProjectRepository.getOne(baseProjectId));
+            member.setBasePerson(basePersonRepository.getOne(basePersonId));
+            member.setRole(Member.Role.valueOf(role));
+            memberRepository.save(member);
+            log.info("Added member with id={}", member.getId());
+        }
+
+        return String.format("redirect:/%s/admin/projects/%d/edit", lang, baseProjectId);
+    }
+
+    @PostMapping("/{baseProjectId}/member/delete")
+    public String deleteMember(@PathVariable String lang,
+                               @PathVariable Long baseProjectId,
+                               @RequestParam Long id) {
+        memberRepository.deleteById(id);
+        log.info("Deleted member with id={}", id);
+
+        return String.format("redirect:/%s/admin/projects/%d/edit", lang, baseProjectId);
     }
 }

@@ -5,6 +5,7 @@ import org.agingpuzzle.model.Area;
 import org.agingpuzzle.model.Organization;
 import org.agingpuzzle.model.Project;
 import org.agingpuzzle.repo.AreaRepository;
+import org.agingpuzzle.repo.MemberRepository;
 import org.agingpuzzle.repo.OrganizationRepository;
 import org.agingpuzzle.repo.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class ProjectController extends AbstractController {
 
     @Autowired
     private OrganizationRepository organizationRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @GetMapping
     public String listPage(@PathVariable String lang,
@@ -75,7 +79,7 @@ public class ProjectController extends AbstractController {
                 .flatMap(baseOrg -> organizationRepository.findByBaseEntity_IdAndLanguage(baseOrg.getId(), lang))
                 .ifPresent(area -> model.addAttribute("organization", area));
 
-//        model.addAttribute("members", memberRepository.findPersonsByOrganization(organization.getBaseId(), lang));
+        model.addAttribute("members", memberRepository.findPersonsByProject(project.getBaseId(), lang));
         return "project";
     }
 

@@ -32,7 +32,7 @@
             <div layout:insert="~{fragments::deleteModal('admin/organizations/' + ${organization.baseId} + '/member/delete')}" th:remove="tag"/>
 
             <h3>Members</h3>
-            <table th:if="${not organization.new && not #lists.isEmpty(members)}">
+            <table th:unless="${#lists.isEmpty(members)}">
                 <thead>
                     <th>ID</th>
                     <th>Name</th>
