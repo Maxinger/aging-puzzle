@@ -1,3 +1,7 @@
+area {
+    outline: none;
+}
+
 .card.update {
     width: 300px;
 }

@@ -10,11 +10,27 @@
         <h3>Content</h3>
         <img th:src="@{|/img/puzzle_${lang}.png|}" usemap="#puzzle"/>
         <map name="puzzle">
-            <area th:each="tile, iter : ${tiles}" th:coords="${tile.coords}" th:href="${iter.index}">
+            <area th:each="tile : ${tiles}" th:coords="${tile.coords}" href="#"
+                  th:data-id="${tile.area.id}" th:onclick="openModal(this)">
         </map>
         <script type="text/javascript">
+            function openModal(trigger) {
+                var id = "#modal" + trigger.getAttribute('data-id');
+                $(id).foundation('open');
+            }
             $('map').imageMapResize();
         </script>
+        <div th:each="tile : ${tiles}" th:with="area=${tile.area},count=${projectCounts.getOrDefault(area.id, 0)}"
+             th:id="@{|modal${area.id}|}" class="reveal tiny" data-reveal>
+            <h4 th:text="${area.name}"/>
+            <p th:text="${area.description}"/>
+            <a th:if="${count > 0}"
+               th:href="@{|/${lang}/projects?areaId=${area.baseId}|}"
+               th:text="@{|View ${count} project(s)|}"/>
+            <button class="close-button" data-close aria-label="Close modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     </div>
 </body>
 </html>
