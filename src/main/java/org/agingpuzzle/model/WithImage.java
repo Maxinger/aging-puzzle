@@ -14,3 +14,4 @@ public interface WithImage {
         getBaseEntity().setImage(image);
     }
 }
+

@@ -1,6 +1,7 @@
 package org.agingpuzzle.web.filter;
 
-import org.agingpuzzle.service.UpdatesService;
+import org.agingpuzzle.repo.UpdateRepository;
+import org.agingpuzzle.web.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,13 @@ import java.io.IOException;
 public class UpdatesFilter extends BaseFilter {
 
     @Autowired
-    private UpdatesService updatesService;
+    private UpdateRepository updateRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        request.setAttribute("updates", updatesService.getLastUpdates(3));
-
+        WebUtils.getLanguageFromUrl(request.getServletPath()).ifPresent(lang -> {
+            request.setAttribute("updates", updateRepository.findTop3ByLanguageOrderByBaseEntityDate(lang));
+        });
         filterChain.doFilter(request, response);
     }
 }
