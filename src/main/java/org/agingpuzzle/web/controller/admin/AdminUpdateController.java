@@ -5,8 +5,11 @@ import org.agingpuzzle.model.BaseUpdate;
 import org.agingpuzzle.model.ToValidate;
 import org.agingpuzzle.model.Update;
 import org.agingpuzzle.repo.BaseUpdateRepository;
+import org.agingpuzzle.repo.OrganizationRepository;
+import org.agingpuzzle.repo.ProjectRepository;
 import org.agingpuzzle.repo.UpdateRepository;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +28,12 @@ public class AdminUpdateController extends AbstractController {
     @Autowired
     private BaseUpdateRepository baseUpdateRepository;
 
+    @Autowired
+    private OrganizationRepository organizationRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("updates", updateRepository.findAllByLanguage(lang));
@@ -34,9 +43,13 @@ public class AdminUpdateController extends AbstractController {
     }
 
     @GetMapping("/new")
-    public String newPage(@RequestParam(required = false) Long baseId, Model model) {
+    public String newPage(@PathVariable String lang,
+                          @RequestParam(required = false) Long baseId, Model model) {
         model.addAttribute("baseId", baseId);
-        model.addAttribute("update", new Update());
+        model.addAttribute("update", new UpdateForm());
+
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+        model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
         return "admin/update";
     }
 
@@ -46,6 +59,9 @@ public class AdminUpdateController extends AbstractController {
 
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("update", update);
+
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+        model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
         return "admin/update";
     }
 

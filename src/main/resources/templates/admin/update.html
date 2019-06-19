@@ -8,7 +8,7 @@
     <div layout:fragment="content">
         <h3 th:text="${update.new ? 'Add Update' : 'Edit Update'}"/>
         <form action="#" th:action="@{|/${lang}/admin/updates/save|}" th:object="${update}" method="post">
-            <input type="hidden" name="baseId" th:value="${baseId}"/>
+            <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
             <label>Date
@@ -16,19 +16,21 @@
                 <span th:if="${#fields.hasErrors('date')}" class="form-error is-visible" th:errors="*{date}"/>
             </label>
 
-            <script>
-                $(function(){
-                    $('input[name="date"]').fdatepicker({
-                        initialDate: '18.06.2019',
-                        format: 'dd.mm.yyyy',
-                        disableDblClickSelection: true,
-                        leftArrow:'<<',
-                        rightArrow:'>>',
-                        closeIcon:'X',
-                        closeButton: true
-                    });
-                });
-            </script>
+            <label>Organization
+                <select th:field="*{baseOrganizationId}">
+                    <option th:value="${null}">-- Select --</option>
+                    <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
+                            th:selected="${baseOrganizationId == org.baseEntity.id}"/>/>
+                </select>
+            </label>
+
+            <label>Project
+                <select th:field="*{baseProjectId}">
+                    <option th:value="${null}">-- Select --</option>
+                    <option th:each="p : ${projects}" th:value="${p.baseId}" th:text="${p.name}"
+                            th:selected="${baseProjectId == p.baseEntity.id}"/>/>
+                </select>
+            </label>
 
             <label>Title
                 <input type="text" name="title" th:field="*{title}"/>
