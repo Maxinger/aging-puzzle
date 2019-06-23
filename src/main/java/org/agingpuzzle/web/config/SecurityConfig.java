@@ -1,6 +1,6 @@
 package org.agingpuzzle.web.config;
 
-import org.agingpuzzle.web.WebUtils;
+import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -70,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             protected String determineUrlToUseForThisRequest(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
                 String url = getLoginFormUrl();
-                String lang = WebUtils.getLanguageFromUrl(request.getServletPath()).orElse(WebUtils.SUPPORTED_LANGUAGES[0]);
+                String lang = LanguageUtils.getLanguageFromUrl(request.getServletPath()).orElse(LanguageUtils.DEFAULT_LANGUAGE);
                 return String.format("/%s%s", lang, url);
             }
         };

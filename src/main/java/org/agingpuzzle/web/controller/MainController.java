@@ -3,7 +3,7 @@ package org.agingpuzzle.web.controller;
 import org.agingpuzzle.model.view.Statistics;
 import org.agingpuzzle.repo.ProjectRepository;
 import org.agingpuzzle.service.PuzzleService;
-import org.agingpuzzle.web.WebUtils;
+import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +24,7 @@ public class MainController {
 
     @GetMapping("/")
     public String index(@SessionAttribute(value = "lang", required = false) String lang) {
-        return String.format("redirect:/%s", lang != null ? lang : WebUtils.SUPPORTED_LANGUAGES[0]);
+        return String.format("redirect:/%s", lang != null ? lang : LanguageUtils.DEFAULT_LANGUAGE);
     }
 
     @GetMapping("/{lang:[a-z]{2}}")

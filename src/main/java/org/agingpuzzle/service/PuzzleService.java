@@ -7,7 +7,7 @@ import org.agingpuzzle.model.Area;
 import org.agingpuzzle.model.PuzzleConfig;
 import org.agingpuzzle.repo.AreaRepository;
 import org.agingpuzzle.repo.PuzzleConfigRepository;
-import org.agingpuzzle.web.WebUtils;
+import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +66,7 @@ public class PuzzleService {
     }
 
     private void setLayout(String layoutStr) {
-        for (String lang : WebUtils.SUPPORTED_LANGUAGES) {
+        for (String lang : LanguageUtils.getSupportedLanguages()) {
 
             Map<Long, Area> areaMap = new HashMap<>();
             areaRepository.findAllByLanguage(lang).forEach(area -> areaMap.put(area.getBaseEntity().getId(), area));

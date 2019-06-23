@@ -1,13 +1,8 @@
 package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.agingpuzzle.model.BaseUpdate;
-import org.agingpuzzle.model.ToValidate;
-import org.agingpuzzle.model.Update;
-import org.agingpuzzle.repo.BaseUpdateRepository;
-import org.agingpuzzle.repo.OrganizationRepository;
-import org.agingpuzzle.repo.ProjectRepository;
-import org.agingpuzzle.repo.UpdateRepository;
+import org.agingpuzzle.model.*;
+import org.agingpuzzle.repo.*;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -32,7 +30,13 @@ public class AdminUpdateController extends AbstractController {
     private OrganizationRepository organizationRepository;
 
     @Autowired
+    private BaseOrganizationRepository baseOrganizationRepository;
+
+    @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private BaseProjectRepository baseProjectRepository;
 
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
@@ -45,8 +49,10 @@ public class AdminUpdateController extends AbstractController {
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
-        model.addAttribute("baseId", baseId);
-        model.addAttribute("update", new UpdateForm());
+        UpdateForm update = new UpdateForm();
+        update.setDate(LocalDate.now());
+        update.setBaseId(baseId);
+        model.addAttribute("update", update);
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
@@ -67,30 +73,41 @@ public class AdminUpdateController extends AbstractController {
 
     @PostMapping("/save")
     public String saveUpdate(@PathVariable String lang,
-                             @RequestParam(required = false) Long baseId,
-                             @Validated(ToValidate.class) Update update,
+                             @Validated @ModelAttribute("update") UpdateForm updateForm,
                              BindingResult result) {
         if (result.hasErrors()) {
             return "admin/update";
         }
 
-        if (update.isNew()) {
-            BaseUpdate baseEntity = baseId == null
+        Update update;
+        if (updateForm.isNew()) {
+            BaseUpdate baseEntity = updateForm.getBaseId() == null
                     ? baseUpdateRepository.save(new BaseUpdate())
-                    : baseUpdateRepository.findById(baseId).get();
+                    : baseUpdateRepository.findById(updateForm.getBaseId()).get();
 
+            update = new Update();
             update.setBaseEntity(baseEntity);
             update.setLanguage(lang);
-
         } else {
-            Update updated = update;
-            update = updateRepository.findById(update.getId()).get();
-            update.setTitle(updated.getTitle());
-            update.setPreview(updated.getPreview());
-            update.setFullText(updated.getFullText());
+            update = updateRepository.findById(updateForm.getId()).get();
+            update.setTitle(updateForm.getTitle());
+            update.setPreview(updateForm.getPreview());
+            update.setFullText(updateForm.getFullText());
         }
 
+        BaseOrganization baseOrganization = Optional.ofNullable(updateForm.getBaseOrganizationId())
+                .flatMap(baseOrganizationRepository::findById)
+                .orElse(null);
+        update.getBaseEntity().setBaseOrganization(baseOrganization);
+
+        BaseProject baseProject = Optional.ofNullable(updateForm.getBaseProjectId())
+                .flatMap(baseProjectRepository::findById)
+                .orElse(null);
+        update.getBaseEntity().setBaseProject(baseProject);
+
+        baseUpdateRepository.save(update.getBaseEntity());
         updateRepository.save(update);
+
         log.info("Saved update {} with id={}", update.getTitle(), update.getId());
 
         return String.format("redirect:/%s/admin/updates", lang);

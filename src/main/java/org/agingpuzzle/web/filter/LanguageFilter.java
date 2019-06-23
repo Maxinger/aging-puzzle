@@ -1,6 +1,6 @@
 package org.agingpuzzle.web.filter;
 
-import org.agingpuzzle.web.WebUtils;
+import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,17 +20,17 @@ public class LanguageFilter extends BaseFilter {
         String path = request.getServletPath();
         String query = request.getQueryString();
 
-        Optional<String> langOpt = WebUtils.getLanguageFromUrl(path);
+        Optional<String> langOpt = LanguageUtils.getLanguageFromUrl(path);
         langOpt.ifPresent(s -> request.getSession().setAttribute("lang", s));
 
-        String lang = langOpt.orElse(WebUtils.SUPPORTED_LANGUAGES[0]);
+        String lang = langOpt.orElse(LanguageUtils.DEFAULT_LANGUAGE);
         request.setAttribute("lang", lang);
 
-        request.setAttribute("switchLinks", Arrays.stream(WebUtils.SUPPORTED_LANGUAGES)
+        request.setAttribute("switchLinks", LanguageUtils.getSupportedLanguages().stream()
                 .filter(s -> !lang.equals(s))
                 .collect(Collectors.toMap(
                         Function.identity(),
-                        s -> WebUtils.replaceLanguage(path, s) + (query != null ? "?" + query : ""))));
+                        s -> LanguageUtils.replaceLanguage(path, s) + (query != null ? "?" + query : ""))));
 
         filterChain.doFilter(request, response);
     }
