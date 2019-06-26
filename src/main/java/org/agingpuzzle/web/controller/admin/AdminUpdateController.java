@@ -49,10 +49,10 @@ public class AdminUpdateController extends AbstractController {
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
-        UpdateForm update = new UpdateForm();
-        update.setDate(LocalDate.now());
-        update.setBaseId(baseId);
-        model.addAttribute("update", update);
+        UpdateForm updateForm = new UpdateForm();
+        updateForm.setDate(LocalDate.now());
+        updateForm.setBaseId(baseId);
+        model.addAttribute("update", updateForm);
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
@@ -64,7 +64,17 @@ public class AdminUpdateController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute("update", update);
+
+        UpdateForm updateForm = new UpdateForm();
+        updateForm.setId(update.getId());
+        updateForm.setBaseId(update.getBaseId());
+        updateForm.setDate(update.getBaseEntity().getDate());
+        Optional.ofNullable(update.getBaseEntity().getBaseOrganization()).map(BaseOrganization::getId).ifPresent(updateForm::setBaseOrganizationId);
+        Optional.ofNullable(update.getBaseEntity().getBaseProject()).map(BaseProject::getId).ifPresent(updateForm::setBaseProjectId);
+        updateForm.setTitle(update.getTitle());
+        updateForm.setPreview(update.getPreview());
+        updateForm.setFullText(update.getFullText());
+        model.addAttribute("update", updateForm);
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));

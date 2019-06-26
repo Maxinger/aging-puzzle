@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="content">
 
-    <div layout:insert="~{fragments::deleteModal('admin/projects/delete')}" th:remove="tag"/>
+    <div layout:insert="~{fragments::deleteModal('admin/updates/delete')}" th:remove="tag"/>
 
     <h3>Updates List</h3>
     <a th:href="@{|/${lang}/admin/updates/new|}">New Update</a><br/>
