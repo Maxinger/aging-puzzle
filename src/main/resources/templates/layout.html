@@ -28,6 +28,7 @@
                         <a th:href="@{|/${lang}/admin/organizations|}">Organizations</a><br/>
                         <a th:href="@{|/${lang}/admin/projects|}">Projects</a><br/>
                         <a th:href="@{|/${lang}/admin/persons|}">Persons</a><br/>
+                        <a th:href="@{|/${lang}/admin/updates|}">Updates</a><br/>
                     </div>
                     <div th:if="${#authorization.expression('isAnonymous()')}">
                         <a th:href="@{|/${lang}/|}">Main</a><br/>
@@ -48,15 +49,15 @@
                     Main content is here
                 </div>
                 <div class="cell medium-3 medium-cell-block-y">
-                    <div th:each="update : ${updates}" class="card update">
+                    <div th:each="u : ${lastUpdates}" th:object="${u}" class="card update">
                         <div class="card-divider">
-                            <span th:text="${update.title}"/>
+                            <span th:text="*{update.title}"/>
                         </div>
                         <div class="card-section update-image">
-                            <img th:src="@{${'/img/projects/' + update.image}}">
+                            <img th:src="@{*{'/img/projects/' + update.image}}">
                         </div>
                         <div class="card-section">
-                            <span th:text="${update.preview}"/>
+                            <span th:text="*{update.preview}"/>
                         </div>
                     </div>
                 </div>

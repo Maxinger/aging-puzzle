@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Updates</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div layout:insert="~{fragments::deleteModal('admin/projects/delete')}" th:remove="tag"/>
+
+    <h3>Updates List</h3>
+    <a th:href="@{|/${lang}/admin/updates/new|}">New Update</a><br/>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Organization</th>
+            <th>Project</th>
+            <th>Title</th>
+            <th>Translations</th>
+            <th>&nbsp;</th>
+            </thead>
+        <tbody>
+            <tr th:each="u : ${updates}" th:object="${u}">
+                <td><a th:href="@{|/${lang}/admin/updates/*{update.baseId}/edit|}" th:text="*{update.baseId}"/></td>
+                <td th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"></td>
+                <td>
+                    <a th:if="*{organization != null}"
+                       th:href="@{|/${lang}/organizations/*{organization.baseId}|}" th:text="*{organization.name}"/>
+                </td>
+                <td>
+                    <a th:if="*{project != null}"
+                       th:href="@{|/${lang}/projects/*{project.baseId}|}" th:text="*{project.name}"/>
+                </td>
+                <td th:text="*{update.title}"/>
+                <td layout:insert="~{fragments::translations(*{update.baseId}, 'updates')}" />
+                <td><a href="#" th:data-id="*{update.id}" th:data-name="*{update.title}" th:onclick="openDeleteModal(this)">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <div layout:insert="~{fragments::pagination(1, 1)}" th:remove="tag"/>
+</div>
+</body>
+</html>

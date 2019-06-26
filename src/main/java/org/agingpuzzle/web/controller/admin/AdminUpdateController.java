@@ -40,7 +40,7 @@ public class AdminUpdateController extends AbstractController {
 
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
-        model.addAttribute("updates", updateRepository.findAllByLanguage(lang));
+        model.addAttribute("updates", updateRepository.viewAllByLanguage(lang, updateRepository.page(0, 10)));
 
         addTranslations(lang, model, updateRepository);
         return "admin/updates";
@@ -90,10 +90,12 @@ public class AdminUpdateController extends AbstractController {
             update.setLanguage(lang);
         } else {
             update = updateRepository.findById(updateForm.getId()).get();
-            update.setTitle(updateForm.getTitle());
-            update.setPreview(updateForm.getPreview());
-            update.setFullText(updateForm.getFullText());
         }
+
+        update.getBaseEntity().setDate(updateForm.getDate());
+        update.setTitle(updateForm.getTitle());
+        update.setPreview(updateForm.getPreview());
+        update.setFullText(updateForm.getFullText());
 
         BaseOrganization baseOrganization = Optional.ofNullable(updateForm.getBaseOrganizationId())
                 .flatMap(baseOrganizationRepository::findById)
