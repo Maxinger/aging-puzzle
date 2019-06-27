@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.util.stream.IntStream;
+
 import static org.junit.Assert.assertEquals;
 
 @SpringBootTest(classes = TestConfiguration.class)
@@ -28,6 +31,29 @@ public class RepositoryTests {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    BaseUpdateRepository baseUpdateRepository;
+
+    @Autowired
+    UpdateRepository updateRepository;
+
+    @Test
+    public void createUpdates() {
+        IntStream.rangeClosed(1, 40).forEach(i -> {
+            BaseUpdate baseUpdate = new BaseUpdate();
+            baseUpdate.setDate(LocalDate.now());
+            baseUpdateRepository.save(baseUpdate);
+
+            Update update = new Update();
+            update.setBaseEntity(baseUpdate);
+            update.setTitle("Title " + i);
+            update.setPreview("Preview " + i);
+            update.setFullText("Long long full description " + i);
+            update.setLanguage("en");
+            updateRepository.save(update);
+        });
+    }
 
     @Test
     public void testPerson() {

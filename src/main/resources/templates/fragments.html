@@ -32,18 +32,14 @@
         </p>
     </div>
 </body>
-<body layout:fragment="pagination(current, total)">
+<body layout:fragment="pagination">
 <nav aria-label="Pagination">
     <ul class="pagination text-center">
-        <li class="pagination-previous disabled">Previous</li>
-        <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-        <li><a href="#" aria-label="Page 2">2</a></li>
-        <li><a href="#" aria-label="Page 3">3</a></li>
-        <li><a href="#" aria-label="Page 4">4</a></li>
-        <li class="ellipsis"></li>
-        <li><a href="#" aria-label="Page 12">12</a></li>
-        <li><a href="#" aria-label="Page 13">13</a></li>
-        <li class="pagination-next"><a href="#" aria-label="Next page">Next</a></li>
+        <li th:class="|pagination-previous ${pagination.firstPage ? 'disabled' : ''}|">Previous</li>
+        <li th:each="p : ${pagination.getPageNumbers()}" th:class="${pagination.currentPage == p ? 'current' : ''}">
+            <a th:href="${pagination.getUrl(p)}" th:text="${p}"/>
+        </li>
+        <li th:class="|pagination-next ${pagination.lastPage ? 'disabled' : ''}|">Next</li>
     </ul>
 </nav>
 </body>

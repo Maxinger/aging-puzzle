@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -41,9 +42,10 @@ public class AdminUpdateController extends AbstractController {
 
     @GetMapping
     public String listPage(@PathVariable String lang,
-                           @RequestParam(defaultValue = "1") int page, Model model) {
+                           @RequestParam(defaultValue = "1") int page,
+                           HttpServletRequest request, Model model) {
         int count = updateRepository.countByLanguage(lang);
-        Pagination pagination = new Pagination(page, count);
+        Pagination pagination = new Pagination(request.getServletPath(), page, count);
 
         model.addAttribute("updates",
                 updateRepository.viewAllByLanguage(lang,
