@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.controller.Pagination;
 import org.agingpuzzle.web.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,8 +40,16 @@ public class AdminUpdateController extends AbstractController {
     private BaseProjectRepository baseProjectRepository;
 
     @GetMapping
-    public String listPage(@PathVariable String lang, Model model) {
-        model.addAttribute("updates", updateRepository.viewAllByLanguage(lang, updateRepository.page(0, 10)));
+    public String listPage(@PathVariable String lang,
+                           @RequestParam(defaultValue = "1") int page, Model model) {
+        int count = updateRepository.countByLanguage(lang);
+        Pagination pagination = new Pagination(page, count);
+
+        model.addAttribute("updates",
+                updateRepository.viewAllByLanguage(lang,
+                        updateRepository.page(page - 1, pagination.getItemsPerPage())));
+
+        model.addAttribute("pagination", pagination);
 
         addTranslations(lang, model, updateRepository);
         return "admin/updates";

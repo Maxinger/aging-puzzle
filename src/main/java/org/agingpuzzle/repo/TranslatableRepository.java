@@ -16,6 +16,8 @@ public interface TranslatableRepository<T extends TranslatableEntity> extends Jp
 
     List<T> findAllByLanguage(String language);
 
+    int countByLanguage(String language);
+
     @Query("select e.baseEntity.id from #{#entityName} e where e.language = ?1")
     Set<Long> findAllIdsByLanguage(String language);
 }
