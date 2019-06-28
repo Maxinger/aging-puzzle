@@ -3,17 +3,22 @@ package org.agingpuzzle.repo;
 import org.agingpuzzle.model.TranslatableEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static org.hibernate.annotations.QueryHints.CACHEABLE;
 
 @NoRepositoryBean
 public interface TranslatableRepository<T extends TranslatableEntity> extends JpaRepository<T, Long> {
 
     Optional<T> findByBaseEntity_IdAndLanguage(Long id, String language);
 
+    @QueryHints(@QueryHint(name = CACHEABLE, value = "true"))
     List<T> findAllByLanguage(String language);
 
     int countByLanguage(String language);

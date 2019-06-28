@@ -6,8 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 
+import javax.persistence.QueryHint;
 import java.util.List;
+
+import static org.hibernate.annotations.QueryHints.CACHEABLE;
 
 public interface UpdateRepository extends TranslatableRepository<Update> {
 
@@ -15,6 +19,7 @@ public interface UpdateRepository extends TranslatableRepository<Update> {
             " left join Organization o on o.baseEntity = u.baseEntity.baseOrganization and o.language = u.language" +
             " left join Project p on p.baseEntity = u.baseEntity.baseProject and p.language = u.language" +
             " where u.language = ?1")
+    @QueryHints(@QueryHint(name = CACHEABLE, value = "true"))
     List<UpdateView> viewAllByLanguage(String lang, Pageable pageable);
 
     default Pageable page(int page, int size) {
