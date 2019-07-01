@@ -45,7 +45,7 @@ public class AdminUpdateController extends AbstractController {
                            @RequestParam(defaultValue = "1") int page,
                            HttpServletRequest request, Model model) {
         int count = updateRepository.countByLanguage(lang);
-        Pagination pagination = new Pagination(request.getServletPath(), page, count);
+        Pagination pagination = new Pagination(request, page, count);
 
         model.addAttribute("updates",
                 updateRepository.viewAllByLanguage(lang,

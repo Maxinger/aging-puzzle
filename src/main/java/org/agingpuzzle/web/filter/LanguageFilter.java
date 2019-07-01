@@ -2,6 +2,7 @@ package org.agingpuzzle.web.filter;
 
 import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -30,7 +31,10 @@ public class LanguageFilter extends BaseFilter {
                 .filter(s -> !lang.equals(s))
                 .collect(Collectors.toMap(
                         Function.identity(),
-                        s -> LanguageUtils.replaceLanguage(path, s) + (query != null ? "?" + query : ""))));
+                        s -> UriComponentsBuilder
+                                .fromPath(LanguageUtils.replaceLanguage(path, s))
+                                .query(query)
+                                .toUriString())));
 
         filterChain.doFilter(request, response);
     }

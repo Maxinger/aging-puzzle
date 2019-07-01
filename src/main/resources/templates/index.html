@@ -25,7 +25,7 @@
             <h4 th:text="${area.name}"/>
             <p th:text="${area.description}"/>
             <a th:if="${count > 0}"
-               th:href="@{|/${lang}/projects?areaId=${area.baseId}|}"
+               th:href="@{|/${lang}/projects?area=${area.baseId}|}"
                th:text="@{|View ${count} project(s)|}"/>
             <button class="close-button" data-close aria-label="Close modal" type="button">
                 <span aria-hidden="true">&times;</span>

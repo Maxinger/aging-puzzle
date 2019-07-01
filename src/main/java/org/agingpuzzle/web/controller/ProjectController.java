@@ -41,7 +41,7 @@ public class ProjectController extends AbstractController {
 
     @GetMapping
     public String listPage(@PathVariable String lang,
-                           @RequestParam(name="areaId", required = false) Long baseAreaId,
+                           @RequestParam(name="area", required = false) Long baseAreaId,
                            Model model) {
 
         if (baseAreaId != null) {
