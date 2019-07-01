@@ -7,7 +7,10 @@
 <body>
 <div layout:fragment="content">
 
-    <h3>Updates</h3>
+    <h3 th:if="${project != null}" th:text="#{updates.title.for.project(${project.name})}"/>
+    <h3 th:if="${organization != null}" th:text="#{updates.title.for.project(${organization.name})}"/>
+    <h3 th:if="${project == null and organization == null}" th:text="#{updates.title}"/>
+
     <div th:each="u : ${updates}" th:object="${u}" class="card">
         <div class="card-section">
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>

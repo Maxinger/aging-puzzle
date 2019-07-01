@@ -47,11 +47,11 @@ public class UpdateController extends AbstractController {
         if (baseProjectId != null) {
             count = updateRepository.countAllByProject(baseProjectId, lang);
             updates = updateRepository.viewAllByProject(baseProjectId, lang, updateRepository.page(page - 1, itemsPerPage));
-            model.addAttribute("project", projectRepository.findByBaseEntity_IdAndLanguage(baseProjectId, lang));
+            model.addAttribute("project", projectRepository.findByBaseEntity_IdAndLanguage(baseProjectId, lang).orElseThrow(notFound()));
         } else if (baseOrganizationId != null) {
             count = updateRepository.countAllByOrganization(baseOrganizationId, lang);
             updates = updateRepository.viewAllByOrganization(baseOrganizationId, lang, updateRepository.page(page - 1, itemsPerPage));
-            model.addAttribute("organization", organizationRepository.findByBaseEntity_IdAndLanguage(baseOrganizationId, lang));
+            model.addAttribute("organization", organizationRepository.findByBaseEntity_IdAndLanguage(baseOrganizationId, lang).orElseThrow(notFound()));
         } else {
             count = updateRepository.countByLanguage(lang);
             updates = updateRepository.viewAllByLanguage(lang, updateRepository.page(page - 1, itemsPerPage));
