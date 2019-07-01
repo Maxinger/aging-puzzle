@@ -22,9 +22,9 @@
             </thead>
         <tbody>
             <tr th:each="p : ${projects}" th:object="${p}">
-                <td><a th:href="@{|/${lang}/admin/projects/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
+                <td><a th:href="@{|/${lang}/admin/projects/*{baseId}/edit|}" th:text="*{baseId}"/></td>
                 <td>
-                    <a th:href="@{|/${lang}/projects/*{baseEntity.id}|}" th:text="*{name}"/>
+                    <a th:href="@{|/${lang}/projects/*{baseId}|}" th:text="*{name}"/>
                     <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
                 </td>
                 <td th:with="area=*{baseEntity.baseArea}">
@@ -35,7 +35,7 @@
                     <a th:if="${org != null}"
                        th:href="@{|/${lang}/organizations/${org.id}|}" th:text="${organizations.get(org.id).name}"/>
                 </td>
-                <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'projects')}" />
+                <td layout:insert="~{fragments::translations(*{baseId}, 'projects')}" />
                 <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
             </tr>
         </tbody>

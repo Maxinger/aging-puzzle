@@ -26,7 +26,7 @@
                 <select name="baseAreaId">
                     <option th:value="${null}">-- Select --</option>
                     <option th:each="area : ${areas}" th:value="${area.baseId}" th:text="${area.name}"
-                            th:selected="${project.baseEntity != null && project.baseEntity.baseArea.id == area.baseEntity.id}"/>
+                            th:selected="${project.baseEntity != null && project.baseEntity.baseArea.id == area.baseId}"/>
                 </select>
             </label>
 
@@ -34,7 +34,7 @@
                 <select name="baseOrganizationId">
                     <option th:value="${null}">-- Select --</option>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
-                            th:selected="${project.baseEntity != null && project.baseEntity.baseOrganization.id == org.baseEntity.id}"/>/>
+                            th:selected="${project.baseEntity != null && project.baseEntity.baseOrganization.id == org.baseId}"/>/>
                 </select>
             </label>
 

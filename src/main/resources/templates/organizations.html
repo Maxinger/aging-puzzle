@@ -15,7 +15,7 @@
         </thead>
         <tbody>
         <tr th:each="org : ${organizations}" th:object="${org}">
-            <td><a th:href="@{|/${lang}/organizations/*{baseEntity.id}|}" th:text="*{name}"/></td>
+            <td><a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/></td>
             <td th:text="*{description}"/>
             <td th:text="*{location}"/>
         </tr>

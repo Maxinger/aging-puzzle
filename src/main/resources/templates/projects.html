@@ -22,7 +22,7 @@
         <tbody>
             <tr th:each="p : ${projects}" th:object="${p}">
                 <td>
-                    <a th:href="@{|/${lang}/projects/*{baseEntity.id}|}" th:text="*{name}"/>
+                    <a th:href="@{|/${lang}/projects/*{baseId}|}" th:text="*{name}"/>
                     <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
                 </td>
                 <td th:text="*{description}"/>

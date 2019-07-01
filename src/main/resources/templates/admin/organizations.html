@@ -22,11 +22,11 @@
         </thead>
         <tbody>
         <tr th:each="org : ${organizations}" th:object="${org}">
-            <td><a th:href="@{|/${lang}/admin/organizations/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
-            <td><a th:href="@{|/${lang}/organizations/*{baseEntity.id}|}" th:text="*{name}"/></td>
+            <td><a th:href="@{|/${lang}/admin/organizations/*{baseId}/edit|}" th:text="*{baseId}"/></td>
+            <td><a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/></td>
             <td th:text="*{description}"/>
             <td th:text="*{location}"/>
-            <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'organizations')}" />
+            <td layout:insert="~{fragments::translations(*{baseId}, 'organizations')}" />
             <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
         </tr>
         </tbody>

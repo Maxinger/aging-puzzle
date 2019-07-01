@@ -14,7 +14,7 @@
             </thead>
             <tbody>
                 <tr th:each="area : ${areas}" th:object="${area}">
-                    <td><a th:href="@{|/${lang}/areas/*{baseEntity.id}|}" th:text="*{name}"/></td>
+                    <td><a th:href="@{|/${lang}/areas/*{baseId}|}" th:text="*{name}"/></td>
                     <td th:text="*{description}"/>
                 </tr>
             </tbody>

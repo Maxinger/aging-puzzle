@@ -21,13 +21,13 @@
             </thead>
         <tbody>
             <tr th:each="p : ${persons}" th:object="${p}">
-                <td><a th:href="@{|/${lang}/admin/persons/*{baseEntity.id}/edit|}" th:text="*{baseEntity.id}"/></td>
+                <td><a th:href="@{|/${lang}/admin/persons/*{baseId}/edit|}" th:text="*{baseId}"/></td>
                 <td>
-                    <a th:href="@{|/${lang}/persons/*{baseEntity.id}|}" th:text="*{name}"/>
+                    <a th:href="@{|/${lang}/persons/*{baseId}|}" th:text="*{name}"/>
                     <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="person-image-small"/>
                 </td>
                 <td th:text="*{description}"/>
-                <td layout:insert="~{fragments::translations(*{baseEntity.id}, 'persons')}" />
+                <td layout:insert="~{fragments::translations(*{baseId}, 'persons')}" />
                 <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
             </tr>
         </tbody>
