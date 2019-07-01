@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -24,4 +25,11 @@ public class Update extends TranslatableEntity<BaseUpdate> implements WithImage 
     @NotNull(groups = ToValidate.class)
     @Size(min = 20, max = 200, groups = ToValidate.class)
     private String fullText;
+
+    public Image getImage() {
+        return Optional.<WithImage>ofNullable(getBaseEntity().getBaseProject())
+                .or(() -> Optional.ofNullable(getBaseEntity().getBaseOrganization()))
+                .map(WithImage::getImage)
+                .orElse(null);
+    }
 }

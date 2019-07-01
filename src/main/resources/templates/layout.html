@@ -53,8 +53,8 @@
                         <div class="card-divider">
                             <span th:text="*{update.title}"/>
                         </div>
-                        <div class="card-section update-image">
-                            <img th:src="@{*{'/img/projects/' + update.image}}">
+                        <div class="card-section update-image" th:with="image=*{update.image}">
+                            <img th:if="${image != null}" th:src="@{|/images/${image.path}|}" class="project-image-small"/>
                         </div>
                         <div class="card-section">
                             <span th:text="*{update.preview}"/>
