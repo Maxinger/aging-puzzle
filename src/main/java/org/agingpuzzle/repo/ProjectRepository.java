@@ -17,6 +17,6 @@ public interface ProjectRepository extends TranslatableRepository<Project> {
             " where p.language = ?1" +
             " and a.language = ?1" +
             " and p.baseEntity.baseArea = a.baseEntity" +
-            " group by p")
+            " group by a")
     List<Statistics> getCountsByArea(String lang);
 }
