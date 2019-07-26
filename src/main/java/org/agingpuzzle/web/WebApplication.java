@@ -11,7 +11,9 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.time.ZoneId;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @SpringBootApplication
 @ComponentScan("org.agingpuzzle")
@@ -20,6 +22,8 @@ import java.util.Locale;
 public class WebApplication {
 
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+
         SpringApplication.run(WebApplication.class);
     }
 
