@@ -92,6 +92,7 @@ public class AdminPersonController extends AbstractController {
             person = personRepository.findById(person.getId()).get();
             person.setName(updated.getName());
             person.setDescription(updated.getDescription());
+            person.setResidence(updated.getResidence());
         }
 
         Image updated = image;

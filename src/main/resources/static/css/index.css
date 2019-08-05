@@ -24,3 +24,7 @@ img.person-image-small, img.project-image-small {
     max-width: 200px;
     display: block;
 }
+
+td {
+    vertical-align: top;
+}

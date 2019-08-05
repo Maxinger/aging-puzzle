@@ -7,9 +7,19 @@
 <body>
     <div layout:fragment="content">
         <h3 th:text="${person.name}"/>
-        <img th:if="${person.image != null}" th:src="@{|/images/${person.image.path}|}" class="person-image"/>
-        <span th:text="${person.description}"></span>
-        <div layout:insert="~{fragments::links(${person.links})}" th:remove="tag"/>
+        <div class="grid-x">
+            <div class="cell medium-6">
+                <img th:if="${person.image != null}" th:src="@{|/images/${person.image.path}|}" class="person-image"/>
+            </div>
+            <div class="cell medium-6">
+                <p th:utext="${#strings.replace(person.description,'&#10;','&lt;br&gt;')}"/>
+                <p th:if="${person.residence != null}">
+                    <strong>Residence: </strong>
+                    <span th:text="${person.residence}"/>
+                </p>
+                <div layout:insert="~{fragments::links(${person.links})}" th:remove="tag"/>
+            </div>
+        </div>
 
         <div th:if="${not #lists.isEmpty(organizations)}">
             <h3>Organizations</h3>

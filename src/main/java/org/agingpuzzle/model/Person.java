@@ -15,8 +15,10 @@ public class Person extends TranslatableEntity<BasePerson> implements WithImage 
     private String name;
 
     @NotNull(groups = ToValidate.class)
-    @Size(min = 20, max = 200, groups = ToValidate.class)
+    @Size(min = 20, max = 500, groups = ToValidate.class)
     private String description;
+
+    private String residence;
 
     public String getLinks() {
         return getBaseEntity().getLinks();

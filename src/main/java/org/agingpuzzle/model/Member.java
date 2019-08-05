@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Member extends AbstractEntity {
 
     public enum Role {
-        FOUNDER, LEAD;
+        FOUNDER, LEAD, CEO;
 
         public static List<String> getValues() {
             return Arrays.stream(Member.Role.values()).map(Member.Role::name).collect(Collectors.toList());

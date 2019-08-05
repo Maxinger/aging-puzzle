@@ -22,6 +22,11 @@
                 <span th:if="${#fields.hasErrors('person.description')}" class="form-error is-visible" th:errors="${person.description}"/>
             </label>
 
+            <label>Residence
+                <input type="text" th:field="${person.residence}"/>
+                <span th:if="${#fields.hasErrors('person.residence')}" class="form-error is-visible" th:errors="${person.residence}"/>
+            </label>
+
             <input type="hidden" th:field="${image.path}"/>
             <label class="button">Upload Image
                 <input type="file" name="file" class="show-for-sr">
