@@ -27,9 +27,10 @@
 </body>
 <body layout:fragment="links(links)">
     <div th:if="${links != null}">
-        <p th:each="link : ${links.split('\n')}">
-            <a th:href="${link}" th:text="${link}" target="_blank"/>
-        </p>
+        <a th:each="url : ${links.split('\n')}" th:with="link=${@linkVisualizer.getLink(url)}"
+           th:href="${link.url}" target="_blank" class="external-link">
+            <img th:src="@{|/img/icons/${link.image}|}"/>
+        </a>
     </div>
 </body>
 <body layout:fragment="pagination">

@@ -25,6 +25,10 @@ img.person-image-small, img.project-image-small {
     display: block;
 }
 
+a.external-link {
+    padding: 5px;
+}
+
 td {
     vertical-align: top;
 }
