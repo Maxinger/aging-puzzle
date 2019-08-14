@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
 import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
+import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.form.OrganizationForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -37,6 +39,9 @@ public class AdminOrganizationController extends AbstractController {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private ImageService imageServce;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
@@ -50,7 +55,7 @@ public class AdminOrganizationController extends AbstractController {
                           @RequestParam(required = false) Long baseId, Model model) {
         OrganizationForm orgForm = new OrganizationForm();
         orgForm.setBaseId(baseId);
-        model.addAttribute("organization", new Organization());
+        model.addAttribute("organization", orgForm);
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         return "admin/organization";
@@ -76,10 +81,8 @@ public class AdminOrganizationController extends AbstractController {
         });
         model.addAttribute("organization", orgForm);
 
-        var organizations = organizationRepository.findAllByLanguage(lang).stream()
-                .filter(org -> !organization.getBaseId().equals(org.getBaseId()))
-                .collect(Collectors.toList());
-        model.addAttribute("organizations", organizations);
+        model.addAttribute("organizations",
+                organizationRepository.findAllByLanguageAndIdNot(lang, organization.getId()));
 
         var members = memberRepository.findPersonsByOrganization(organization.getBaseEntity().getId(), lang);
         var persons = members.stream()
@@ -97,30 +100,50 @@ public class AdminOrganizationController extends AbstractController {
 
     @PostMapping("/save")
     public String saveOrganization(@PathVariable String lang,
-                                   @RequestParam(required = false) Long baseId,
-                                   @Validated(ToValidate.class) Organization organization,
-                                   BindingResult result) {
+                                   @RequestParam MultipartFile file,
+                                   @Validated(ToValidate.class) @ModelAttribute("organization") OrganizationForm orgForm,
+                                   BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "admin/organization";
         }
 
-        if (organization.isNew()) {
-            BaseOrganization baseEntity = baseId == null
+        Organization organization;
+        if (orgForm.isNew()) {
+            BaseOrganization baseEntity = orgForm.getBaseId() == null
                     ? baseOrganizationRepository.save(new BaseOrganization())
-                    : baseOrganizationRepository.findById(baseId).get();
+                    : baseOrganizationRepository.findById(orgForm.getBaseId()).get();
 
+            organization = new Organization();
             organization.setBaseEntity(baseEntity);
             organization.setLanguage(lang);
         } else {
-            Organization updated = organization;
-            organization = organizationRepository.findById(organization.getId()).get();
-            organization.setName(updated.getName());
-            organization.setDescription(updated.getDescription());
-            organization.setLocation(updated.getLocation());
+            organization = organizationRepository.findById(orgForm.getId()).get();
         }
 
+        organization.setName(orgForm.getName());
+        organization.setDescription(orgForm.getDescription());;
+        organization.setLocation(orgForm.getLocation());
+
+        var parent = Optional.ofNullable(orgForm.getParentId())
+                .flatMap(baseOrganizationRepository::findById)
+                .orElse(null);
+        organization.getBaseEntity().setParent(parent);
+
+        Image image = Optional.ofNullable(organization.getImage()).orElse(new Image());
+        image.setSource(orgForm.getImageSource());
+
+        if (!file.isEmpty()) {
+            imageServce.saveImage(file, image);
+        }
+        if (image.getPath() != null) {
+            organization.setImage(image);
+        }
+
+        organization.setLinks(orgForm.getLinks());
+
+        baseOrganizationRepository.save(organization.getBaseEntity());
         organizationRepository.save(organization);
-        log.info("Saved organization {} with id={}", organization.getName(), organization.getId());
+        log.info("Saved organization {} with id={}", orgForm.getName(), orgForm.getId());
 
         return String.format("redirect:/%s/admin/organizations", lang);
     }
@@ -160,6 +183,4 @@ public class AdminOrganizationController extends AbstractController {
 
         return String.format("redirect:/%s/admin/organizations/%d/edit", lang, baseOrganizationId);
     }
-
-
 }

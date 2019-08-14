@@ -7,8 +7,9 @@
 <body>
     <div layout:fragment="content">
         <h3 th:text="${organization.new ? 'Add Organization' : 'Edit Organization'}"/>
-        <form action="#" th:action="@{|/${lang}/admin/organizations/save|}" th:object="${organization}" method="post">
-            <input type="hidden" name="baseId" th:value="${baseId}"/>
+        <img th:if="${organization.imagePath != null}" th:src="@{|/images/${organization.imagePath}|}" class="org-image"/>
+        <form action="#" th:action="@{|/${lang}/admin/organizations/save|}" th:object="${organization}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
             <label>Name
@@ -21,18 +22,32 @@
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
             </label>
 
-            <!--<label>Organization
-                <select name="baseOrganizationId">
-                    <option th:value="${null}">&#45;&#45; Select &#45;&#45;</option>
+            <label>Parent Organization
+                <select name="parentId">
+                    <option th:value="${null}">-- Select --</option>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
-                            th:selected="${project.baseEntity != null && project.baseEntity.baseOrganization.id == org.baseId}"/>/>
+                            th:selected="${organization.parentId == org.baseId}"/>
                 </select>
-            </label>-->
+            </label>
 
             <label>Location
                 <input type="text" name="location" th:field="*{location}"/>
                 <span th:if="${#fields.hasErrors('location')}" class="form-error is-visible" th:errors="*{location}"/>
             </label>
+
+            <label class="button">Upload Image
+                <input type="file" name="file" class="show-for-sr">
+            </label>
+
+            <label>Image Source
+                <input type="text" th:field="*{imageSource}"/>
+                <span th:if="${#fields.hasErrors('imageSource')}" class="form-error is-visible" th:errors="*{imageSource}"/>
+            </label>
+
+            <label>Links
+                <textarea rows="5" th:field="*{links}"></textarea>
+            </label>
+
             <input type="submit" class="button" value="Save">
         </form>
 
@@ -75,6 +90,11 @@
 
                 <input type="submit" class="button" value="Save">
             </form>
+            <script type="text/javascript">
+                $('input[type=file]').change(function() {
+                    this.previousSibling.data = this.files[0].name;
+                });
+            </script>
         </div>
     </div>
 </body>
