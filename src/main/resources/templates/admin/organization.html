@@ -21,6 +21,14 @@
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
             </label>
 
+            <!--<label>Organization
+                <select name="baseOrganizationId">
+                    <option th:value="${null}">&#45;&#45; Select &#45;&#45;</option>
+                    <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
+                            th:selected="${project.baseEntity != null && project.baseEntity.baseOrganization.id == org.baseId}"/>/>
+                </select>
+            </label>-->
+
             <label>Location
                 <input type="text" name="location" th:field="*{location}"/>
                 <span th:if="${#fields.hasErrors('location')}" class="form-error is-visible" th:errors="*{location}"/>

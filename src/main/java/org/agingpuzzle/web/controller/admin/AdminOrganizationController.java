@@ -5,6 +5,7 @@ import org.agingpuzzle.model.*;
 import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.OrganizationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,9 +46,13 @@ public class AdminOrganizationController extends AbstractController {
     }
 
     @GetMapping("/new")
-    public String newPage(@RequestParam(required = false) Long baseId, Model model) {
-        model.addAttribute("baseId", baseId);
+    public String newPage(@PathVariable String lang,
+                          @RequestParam(required = false) Long baseId, Model model) {
+        OrganizationForm orgForm = new OrganizationForm();
+        orgForm.setBaseId(baseId);
         model.addAttribute("organization", new Organization());
+
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         return "admin/organization";
     }
 
@@ -54,7 +61,25 @@ public class AdminOrganizationController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Organization organization = organizationRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute("organization", organization);
+
+        OrganizationForm orgForm = new OrganizationForm();
+        orgForm.setId(organization.getId());
+        orgForm.setBaseId(organization.getBaseId());
+        Optional.ofNullable(organization.getBaseEntity().getParent()).map(BaseOrganization::getId).ifPresent(orgForm::setParentId);
+        orgForm.setName(organization.getName());
+        orgForm.setDescription(organization.getDescription());
+        orgForm.setLocation(organization.getLocation());
+        orgForm.setLinks(organization.getBaseEntity().getLinks());
+        Optional.ofNullable(organization.getImage()).ifPresent(image -> {
+            orgForm.setImagePath(image.getPath());
+            orgForm.setImageSource(image.getSource());
+        });
+        model.addAttribute("organization", orgForm);
+
+        var organizations = organizationRepository.findAllByLanguage(lang).stream()
+                .filter(org -> !organization.getBaseId().equals(org.getBaseId()))
+                .collect(Collectors.toList());
+        model.addAttribute("organizations", organizations);
 
         var members = memberRepository.findPersonsByOrganization(organization.getBaseEntity().getId(), lang);
         var persons = members.stream()

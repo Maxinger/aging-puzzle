@@ -20,4 +20,11 @@ public class Organization extends TranslatableEntity<BaseOrganization> implement
 
     private String location;
 
+    public String getLinks() {
+        return getBaseEntity().getLinks();
+    }
+
+    public void setLinks(String links) {
+        getBaseEntity().setLinks(links);
+    }
 }
