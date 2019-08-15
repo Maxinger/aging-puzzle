@@ -8,11 +8,11 @@
     <div layout:fragment="content">
         <h3 th:text="${organization.name}"/>
 
-        <div class="grid-x">
-            <div class="cell medium-6">
+        <div class="grid-x grid-margin-x">
+            <div class="cell shrink">
                 <img th:if="${organization.image != null}" th:src="@{|/images/${organization.image.path}|}" class="org-image"/>
             </div>
-            <div class="cell medium-6">
+            <div class="cell auto">
                 <p th:utext="${#strings.replace(organization.description,'&#10;','&lt;br&gt;')}"/>
                 <p th:if="${organization.location != null}">
                     <strong>Location: </strong>
