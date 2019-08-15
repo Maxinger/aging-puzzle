@@ -5,22 +5,9 @@
     <title>Organizations</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <h3>Organizations List</h3>
-    <table>
-        <thead>
-            <th>Organization</th>
-            <th>Description</th>
-            <th>Location</th>
-        </thead>
-        <tbody>
-        <tr th:each="org : ${organizations}" th:object="${org}">
-            <td><a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/></td>
-            <td th:text="*{description}"/>
-            <td th:text="*{location}"/>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <div layout:fragment="content">
+        <h3>Organizations List</h3>
+        <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
+    </div>
 </body>
 </html>

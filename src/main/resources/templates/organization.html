@@ -7,8 +7,34 @@
 <body>
     <div layout:fragment="content">
         <h3 th:text="${organization.name}"/>
-        <p th:text="${organization.description}"/>
-        <p th:text="${organization.location}"/>
+
+        <div class="grid-x">
+            <div class="cell medium-6">
+                <img th:if="${organization.image != null}" th:src="@{|/images/${organization.image.path}|}" class="org-image"/>
+            </div>
+            <div class="cell medium-6">
+                <p th:utext="${#strings.replace(organization.description,'&#10;','&lt;br&gt;')}"/>
+                <p th:if="${organization.location != null}">
+                    <strong>Location: </strong>
+                    <span th:text="${organization.location}"/>
+                </p>
+                <p th:if="${parent != null}">
+                    <strong>Parent organization: </strong>
+                    <a th:href="@{|/${lang}/organizations/${parent.baseId}|}" th:text="${parent.name}"/>
+                </p>
+                <div layout:insert="~{fragments::links(${organization.links})}" th:remove="tag"/>
+            </div>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(organizations)}">
+            <h3>Organizations</h3>
+            <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(projects)}">
+            <h3>Projects</h3>
+            <div layout:insert="~{tables::projects(${projects}, false)}" th:remove="tag"/>
+        </div>
 
         <div th:if="${not #lists.isEmpty(members)}">
             <h3>Members</h3>

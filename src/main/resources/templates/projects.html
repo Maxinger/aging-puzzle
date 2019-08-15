@@ -12,31 +12,7 @@
 
     <h3 th:if="${baseAreaId == null}">Projects List</h3>
 
-    <table>
-        <thead>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Area</th>
-            <th>Organization</th>
-        </thead>
-        <tbody>
-            <tr th:each="p : ${projects}" th:object="${p}">
-                <td>
-                    <a th:href="@{|/${lang}/projects/*{baseId}|}" th:text="*{name}"/>
-                    <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
-                </td>
-                <td th:text="*{description}"/>
-                <td th:with="area=*{baseEntity.baseArea}">
-                    <a th:if="${area != null}"
-                       th:href="@{|/${lang}/areas/${area.id}|}" th:text="${areas.get(area.id).name}"/>
-                </td>
-                <td th:with="org=*{baseEntity.baseOrganization}">
-                    <a th:if="${org != null}"
-                       th:href="@{|/${lang}/organizations/${org.id}|}" th:text="${organizations.get(org.id).name}"/>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div layout:insert="~{tables::projects(${projects}, true)}" th:remove="tag"/>
 </div>
 </body>
 </html>

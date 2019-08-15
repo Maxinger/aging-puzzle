@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body layout:fragment="organizations(list)">
+    <table>
+        <thead>
+            <th>Organization</th>
+            <th>Description</th>
+            <th>Location</th>
+        </thead>
+        <tbody>
+        <tr th:each="org : ${list}" th:object="${org}">
+            <td>
+                <a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/>
+                <img th:if="${org.image != null}" th:src="@{|/images/${org.image.path}|}" class="org-image-small"/>
+            </td>
+            <td th:text="*{description}"/>
+            <td th:text="*{location}"/>
+        </tr>
+        </tbody>
+    </table>
+</body>
+<body layout:fragment="projects(list, showOrganization)">
+    <table>
+        <thead>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Area</th>
+        <th th:if="${showOrganization}">Organization</th>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${list}" th:object="${p}">
+            <td>
+                <a th:href="@{|/${lang}/projects/*{baseId}|}" th:text="*{name}"/>
+                <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
+            </td>
+            <td th:text="*{description}"/>
+            <td th:with="area=*{baseEntity.baseArea}">
+                <a th:if="${area != null}"
+                   th:href="@{|/${lang}/areas/${area.id}|}" th:text="${areas.get(area.id).name}"/>
+            </td>
+            <td th:if="${showOrganization}" th:with="org=*{baseEntity.baseOrganization}">
+                <a th:if="${org != null}"
+                   th:href="@{|/${lang}/organizations/${org.id}|}" th:text="${organizations.get(org.id).name}"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
