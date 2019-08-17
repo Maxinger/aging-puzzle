@@ -11,7 +11,7 @@ import java.util.function.IntSupplier;
 
 public class Layout {
 
-    final Optional<Tile>[][] tiles;
+    final Tile[][] tiles;
     final int tileSize;
 
     public Layout(Optional<Area>[][] areas, int tileSize) {
@@ -19,7 +19,7 @@ public class Layout {
 
         int rows = areas.length;
         int cols = areas[0].length;
-        this.tiles = new Optional[rows][cols];
+        this.tiles = new Tile[rows][cols];
 
         int[] tabs = {1, -1};
         Random rand = new Random();
@@ -45,9 +45,9 @@ public class Layout {
                 }
 
                 Optional<Area> area = areas[row][col];
-                Tile tile = new Tile(area.orElse(null), top, right, left, bottom);
+                Tile tile = new Tile(area, top, right, left, bottom);
                 tiles[row][col] = tile;
-                this.tiles[row][col] = Optional.ofNullable(area.isPresent() ? tile : null);
+                this.tiles[row][col] = tile;
             }
         }
     }
@@ -61,8 +61,8 @@ public class Layout {
         int cols = tiles[0].length;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                Optional<Tile> tile = tiles[row][col];
-                if (tile.isPresent()) {
+                Tile tile = tiles[row][col];
+                if (tile.getArea().isPresent()) {
                     int x1 = Math.round((col + padding) * tileSize);
                     int y1 = Math.round((row + padding) * tileSize);
 
@@ -71,7 +71,7 @@ public class Layout {
 
                     String coords = String.format("%d,%d,%d,%d", x1, y1, x2, y2);
 
-                    result.add(func.apply(tile.get().area, coords));
+                    result.add(func.apply(tile.getArea().get(), coords));
                 }
             }
         }
