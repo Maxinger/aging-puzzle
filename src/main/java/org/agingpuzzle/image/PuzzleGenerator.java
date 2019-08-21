@@ -30,7 +30,7 @@ public class PuzzleGenerator {
 
     private Random rand = new Random();
 
-    public void render(Layout layout, String outputPath) {
+    public void render(Layout layout, File outputFile) {
         int rows = layout.tiles.length;
         int cols = layout.tiles[0].length;
 
@@ -123,7 +123,7 @@ public class PuzzleGenerator {
                 }
             }
 
-            ImageIO.write(bi, "PNG", new File(outputPath));
+            ImageIO.write(bi, "PNG", outputFile);
         } catch (IOException e) {
             throw new RuntimeException("Failed to render puzzle", e);
         }
@@ -161,6 +161,6 @@ public class PuzzleGenerator {
         create(areas, 2, 5, "Six");
         create(areas, 3, 5, "Seven");
 
-        new PuzzleGenerator().render(new Layout(areas, 200), "puzzle.png");
+        new PuzzleGenerator().render(new Layout(areas, 200), new File("puzzle.png"));
     }
 }

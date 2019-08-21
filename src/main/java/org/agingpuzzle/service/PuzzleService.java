@@ -9,10 +9,12 @@ import org.agingpuzzle.repo.AreaRepository;
 import org.agingpuzzle.repo.PuzzleConfigRepository;
 import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,9 @@ public class PuzzleService {
 
     @Autowired
     private PuzzleGenerator puzzleGenerator;
+
+    @Value("${image.dir}")
+    private String imageDir;
 
     @Getter
     private PuzzleConfig config;
@@ -90,9 +95,8 @@ public class PuzzleService {
             }
 
             Layout layout = new Layout(areas, 200);
-            String outputPath = String.format("%s%spuzzle_%s.png",
-                    getClass().getResource("/static/img").getPath(), File.separator, lang);
-            puzzleGenerator.render(layout, outputPath);
+            File outputFile = Paths.get(imageDir, String.format("puzzle_%s.png", lang)).toFile();
+            puzzleGenerator.render(layout, outputFile);
 
             layouts.put(lang, layout);
         }

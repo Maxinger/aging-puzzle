@@ -8,7 +8,7 @@
 <body>
     <div layout:fragment="content">
         <h3>Content</h3>
-        <img th:src="@{|/img/puzzle_${lang}.png|}" usemap="#puzzle"/>
+        <img th:src="@{|/images/puzzle_${lang}.png|}" usemap="#puzzle"/>
         <map name="puzzle">
             <area th:each="tile : ${tiles}" th:coords="${tile.coords}" href="#"
                   th:data-id="${tile.area.id}" th:onclick="openModal(this)">
