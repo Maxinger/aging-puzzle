@@ -50,17 +50,8 @@
                     Main content is here
                 </div>
                 <div class="cell medium-3 medium-cell-block-y">
-                    <div th:each="u : ${lastUpdates}" th:object="${u}" class="card update">
-                        <div class="card-divider">
-                            <span th:text="*{update.title}"/>
-                        </div>
-                        <div class="card-section update-image" th:with="image=*{update.image}">
-                            <img th:if="${image != null}" th:src="@{|/images/${image.path}|}" class="project-image-small"/>
-                        </div>
-                        <div class="card-section">
-                            <span th:text="*{update.preview}"/>
-                        </div>
-                    </div>
+                    <h3>Latest updates</h3>
+                    <div class="updates-column" layout:insert="~{fragments::updates(${lastUpdates})}" />
                 </div>
             </div>
         </div>
