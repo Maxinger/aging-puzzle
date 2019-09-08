@@ -13,11 +13,12 @@
     <!--https://foundation.zurb.com/sites/docs/xy-grid.html-->
     <div class="grid-y medium-grid-frame">
         <div class="cell shrink header medium-cell-block-container">
-            <img src="https://placehold.it/1200x150/ffebcd&amp;text=Aging Puzzle">
+            <img th:src="@{|/img/stone033.png|}" class="float-center logo"/>
         </div>
         <div class="cell medium-auto medium-cell-block-container">
             <div class="grid-x grid-padding-x">
-                <div class="cell medium-3 medium-cell-block-y text-right">
+                <div class="cell medium-1 medium-cell-block-y"></div>
+                <div class="cell medium-2 medium-cell-block-y text-right">
                     <a th:each="t : ${switchLinks}"
                        th:href="@{|${t.value}|}"
                        th:text="|${t.key} |"/>
@@ -46,13 +47,14 @@
                         <a href="#" onclick="$('#logout').submit()">Sing Out</a>
                     </div>
                 </div>
-                <div class="cell medium-6 medium-cell-block-y" layout:fragment="content">
+                <div class="cell medium-6 medium-cell-block-y main-content" layout:fragment="content">
                     Main content is here
                 </div>
-                <div class="cell medium-3 medium-cell-block-y">
+                <div class="cell medium-2 medium-cell-block-y">
                     <h3>Latest updates</h3>
                     <div class="updates-column" layout:insert="~{fragments::updates(${lastUpdates})}" />
                 </div>
+                <div class="cell medium-1 medium-cell-block-y"></div>
             </div>
         </div>
         <div class="cell shrink footer medium-cell-block-container">
