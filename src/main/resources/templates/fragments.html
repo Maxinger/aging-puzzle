@@ -58,7 +58,7 @@
 </nav>
 </body>
 <body layout:fragment="updates(updates)">
-<div th:each="u : ${updates}" th:object="${u}" class="card">
+<div th:each="u : ${updates}" th:object="${u}" class="card update">
     <div class="card-section">
         <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
         <p th:if="*{organization != null}">

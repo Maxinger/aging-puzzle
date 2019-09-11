@@ -2,22 +2,53 @@ body {
     background: url(/img/grass2.jpg);
     background-attachment: fixed;
     background-size: 100%;
+    color: #182625;
 }
 
 .logo {
     width: 50%;
 }
 
-.main-content {
-    background-color: lightgreen;
+/*#6ca632 #bed95f #b4bf8a #d5d9b8 #f2f0e4*/
+/*#182625*/
+
+.cell.left-menu {
+    padding: 5px;
+}
+
+.left-menu a {
+    display: block;
+    float: right;
+    clear: both;
+    width: 100%;
+    max-width: 200px;
+    height: 35px;
+    background-color: white;
+    text-align: right;
+    border-top-left-radius: 2em;
+    border-bottom-left-radius: 2em;
+    border-bottom: 2px solid green;
+    border-left: 2px solid green;
+    padding-right: 25px;
+    margin-bottom: 5px;
+    font-size: 1.3em;
+}
+
+.left-menu a:hover {
+    background-color: #bed95f;
+}
+
+.content {
+    background-color: #f2f0e4;
+    border: 1px solid green;
 }
 
 area {
     outline: none;
 }
 
-.updates-column {
-    width: 300px;
+.card.update {
+    background-color: #d5d9b8;
 }
 
 .card.update .update-image {
