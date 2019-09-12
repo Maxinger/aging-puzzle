@@ -2,15 +2,22 @@ body {
     background: url(/img/background.jpg);
     background-attachment: fixed;
     background-size: 100%;
-    color: #182625;
+    color: #314036;
 }
 
 .logo {
     width: 50%;
 }
 
-/*#6ca632 #bed95f #b4bf8a #d5d9b8 #f2f0e4*/
-/*#182625*/
+/* Color scheme
+    content background: #f2f2e9
+    panel background, menu, button labels: #f1ecc2
+    main header, panel header, buttons, menu hovered: #6aae3f
+    borders, text headers: #2e731a
+    normal text: #314036
+    panel borders, tables: #6b7a53
+    light text:
+ */
 
 .cell.left-menu {
     padding: 5px;
@@ -23,24 +30,25 @@ body {
     width: 100%;
     max-width: 200px;
     height: 35px;
-    background-color: white;
+    background-color: #f1ecc2;
     text-align: right;
     border-top-left-radius: 2em;
     border-bottom-left-radius: 2em;
-    border-bottom: 2px solid green;
-    border-left: 2px solid green;
+    border-bottom: 2px solid #2e731a;
+    border-left: 2px solid #2e731a;
     padding-right: 25px;
     margin-bottom: 5px;
     font-size: 1.3em;
 }
 
 .left-menu a:hover {
-    background-color: #bed95f;
+    color: #f1ecc2;
+    background-color: #6aae3f;
 }
 
 .content {
-    background-color: #f2f0e4;
-    border: 1px solid green;
+    background-color: #f2f2e9;
+    border: 1px solid #2e731a;
 }
 
 area {
@@ -48,7 +56,8 @@ area {
 }
 
 .card.update {
-    background-color: #d5d9b8;
+    background-color: #f1ecc2;
+    border: 1px solid #6b7a53;
 }
 
 .card.update .update-image {
@@ -75,15 +84,19 @@ a.external-link {
     padding: 5px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: #2e731a;
+}
+
 td {
     vertical-align: top;
 }
 
 .footer {
-    color: #d5d9b8;
+    color: #f1ecc2;
     background-image: linear-gradient(#3b8437, #25621f);
 }
 
 .footer a {
-    color: #d5d9b8;
+    color: #f1ecc2;
 }
