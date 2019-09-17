@@ -11,12 +11,11 @@ body {
 
 /* Color scheme
     content background: #f2f2e9
-    panel background, menu, button labels: #f1ecc2
+    panel background, menu, button labels, table headers: #f1ecc2
     main header, panel header, buttons, menu hovered: #6aae3f
     borders, text headers: #2e731a
     normal text: #314036
     panel borders, tables: #6b7a53
-    light text:
  */
 
 .cell.left-menu {
@@ -60,6 +59,26 @@ area {
     border: 1px solid #6b7a53;
 }
 
+th {
+    background-color: #f1ecc2;
+}
+
+td, th {
+    border: 1px solid #6b7a53;
+}
+
+td {
+    vertical-align: top;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f2f2e9;
+}
+
 .card.update .update-image {
     text-align: center;
 }
@@ -88,10 +107,6 @@ h1, h2, h3, h4, h5, h6 {
     color: #2e731a;
 }
 
-td {
-    vertical-align: top;
-}
-
 .footer {
     color: #f1ecc2;
     background-image: linear-gradient(#3b8437, #25621f);
@@ -99,4 +114,18 @@ td {
 
 .footer a {
     color: #f1ecc2;
+}
+
+ul.pagination .current {
+    color: #f1ecc2;
+    background-color: #3b8437;
+}
+
+input.button, label.button {
+    color: #f1ecc2;
+    background-color: #3b8437;
+}
+
+input.button:hover, label.button:hover {
+    background-color: #25621f;
 }
