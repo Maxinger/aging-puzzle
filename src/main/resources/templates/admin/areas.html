@@ -9,7 +9,7 @@
 
         <div layout:insert="~{fragments::deleteModal('admin/areas/delete')}" th:remove="tag"/>
 
-        <h3>Areas List</h3>
+        <h4>Areas List</h4>
         <a th:href="@{|/${lang}/admin/areas/new|}">New Area</a><br/>
         <table>
             <thead>
@@ -30,7 +30,7 @@
             </tbody>
         </table>
 
-        <h3>Puzzle Layout</h3>
+        <h4>Puzzle Layout</h4>
         <form action="#" th:action="@{|/${lang}/admin/areas/config/new|}" th:object="${config}" method="post">
             <label>Layout
                 <textarea rows="5" name="description" th:field="*{layout}"/>

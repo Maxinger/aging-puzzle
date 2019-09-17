@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${person.name}"/>
+        <h4 th:text="${person.name}"/>
         <div class="grid-x grid-margin-x">
             <div class="cell shrink">
                 <img th:if="${person.image != null}" th:src="@{|/images/${person.image.path}|}" class="person-image"/>
@@ -22,7 +22,7 @@
         </div>
 
         <div th:if="${not #lists.isEmpty(organizations)}">
-            <h3>Organizations</h3>
+            <h4>Organizations</h4>
             <table>
                 <thead>
                     <th>Name</th>

@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${person.new ? 'Add Person' : 'Edit Person'}"/>
+        <h4 th:text="${person.new ? 'Add Person' : 'Edit Person'}"/>
         <img th:if="${image.path != null}" th:src="@{|/images/${image.path}|}" class="person-image"/>
         <form action="#" th:action="@{|/${lang}/admin/persons/save|}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="baseId" th:value="${baseId}"/>

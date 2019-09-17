@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${organization.new ? 'Add Organization' : 'Edit Organization'}"/>
+        <h4 th:text="${organization.new ? 'Add Organization' : 'Edit Organization'}"/>
         <img th:if="${organization.imagePath != null}" th:src="@{|/images/${organization.imagePath}|}" class="org-image"/>
         <form action="#" th:action="@{|/${lang}/admin/organizations/save|}" th:object="${organization}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>
@@ -54,7 +54,7 @@
         <div th:if="${not organization.new}">
             <div layout:insert="~{fragments::deleteModal('admin/organizations/' + ${organization.baseId} + '/member/delete')}" th:remove="tag"/>
 
-            <h3>Members</h3>
+            <h4>Members</h4>
             <table th:unless="${#lists.isEmpty(members)}">
                 <thead>
                     <th>ID</th>
@@ -72,7 +72,7 @@
                 </tbody>
             </table>
 
-            <h4>Add Member</h4>
+            <h5>Add Member</h5>
             <form action="#" th:action="@{|/${lang}/admin/organizations/${organization.baseId}/member|}" method="post">
                 <label>Person
                     <select name="basePersonId">

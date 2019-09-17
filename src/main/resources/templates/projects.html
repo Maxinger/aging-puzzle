@@ -7,10 +7,10 @@
 <body>
 <div layout:fragment="content">
 
-    <h3 th:unless="${baseAreaId == null}" th:text="${areas.get(baseAreaId).name}"/>
+    <h4 th:unless="${baseAreaId == null}" th:text="${areas.get(baseAreaId).name}"/>
     <h4 th:unless="${baseAreaId == null}">Projects List</h4>
 
-    <h3 th:if="${baseAreaId == null}">Projects List</h3>
+    <h4 th:if="${baseAreaId == null}">Projects List</h4>
 
     <div layout:insert="~{tables::projects(${projects}, true)}" th:remove="tag"/>
 </div>

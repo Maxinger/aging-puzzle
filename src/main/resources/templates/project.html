@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${project.name}"/>
+        <h4 th:text="${project.name}"/>
         <img th:if="${project.image != null}" th:src="@{|/images/${project.image.path}|}" class="project-image"/>
         <p th:text="${project.description}"/>
         <p th:if="${area != null}">
@@ -17,7 +17,7 @@
         </td>
 
         <div th:if="${not #lists.isEmpty(members)}">
-            <h3>Members</h3>
+            <h4>Members</h4>
             <table>
                 <thead>
                     <th>Name</th>

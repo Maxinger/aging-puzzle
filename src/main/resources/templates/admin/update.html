@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${update.new ? 'Add Update' : 'Edit Update'}"/>
+        <h4 th:text="${update.new ? 'Add Update' : 'Edit Update'}"/>
         <form action="#" th:action="@{|/${lang}/admin/updates/save|}" th:object="${update}" method="post">
             <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>

@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3 th:text="${organization.name}"/>
+        <h4 th:text="${organization.name}"/>
 
         <div class="grid-x grid-margin-x">
             <div class="cell shrink">
@@ -27,17 +27,17 @@
         </div>
 
         <div th:if="${not #lists.isEmpty(organizations)}">
-            <h3>Organizations</h3>
+            <h4>Organizations</h4>
             <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
         </div>
 
         <div th:if="${not #lists.isEmpty(projects)}">
-            <h3>Projects</h3>
+            <h4>Projects</h4>
             <div layout:insert="~{tables::projects(${projects}, false)}" th:remove="tag"/>
         </div>
 
         <div th:if="${not #lists.isEmpty(members)}">
-            <h3>Members</h3>
+            <h4>Members</h4>
             <table>
                 <thead>
                 <th>Name</th>
