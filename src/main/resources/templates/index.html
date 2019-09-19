@@ -7,7 +7,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h4>Content</h4>
+        <div th:text="#{mission}" class="mission"/>
         <img th:src="@{|/images/puzzle_${lang}.png|}" usemap="#puzzle"/>
         <map name="puzzle">
             <area th:each="tile : ${tiles}" th:coords="${tile.coords}" href="#"

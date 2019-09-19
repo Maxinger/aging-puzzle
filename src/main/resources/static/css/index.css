@@ -48,6 +48,15 @@ body {
 .content {
     background-color: #f2f2e9;
     border: 1px solid #2e731a;
+    padding-top: 0.9375rem;
+    padding-bottom: 0.9375rem;
+}
+
+.mission {
+    background-color: #f1ecc2;
+    border: 1px solid #6b7a53;
+    margin-bottom: 10px;
+    padding: 5px;
 }
 
 area {
