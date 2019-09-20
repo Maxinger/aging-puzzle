@@ -12,11 +12,11 @@
 <body>
     <!--https://foundation.zurb.com/sites/docs/xy-grid.html-->
     <div class="grid-y medium-grid-frame">
-        <div class="cell shrink header medium-cell-block-container">
+        <div class="cell shrink header">
             <img th:src="@{|/img/logo.png|}" class="float-center logo"/>
         </div>
         <div class="cell medium-auto medium-cell-block-container">
-            <div class="grid-x grid-padding-x">
+            <div class="grid-x grid-padding-x content-grid">
                 <div class="cell medium-1 medium-cell-block-y"></div>
                 <div class="cell medium-2 medium-cell-block-y left-menu">
                     <a th:each="t : ${switchLinks}"
@@ -57,7 +57,7 @@
                 <div class="cell medium-1 medium-cell-block-y"></div>
             </div>
         </div>
-        <div class="cell shrink footer medium-cell-block-container text-center">
+        <div class="cell shrink footer text-center">
             <span>© Aging Puzzle 2019 | Created by <a href="https://t.me/mindmaker">@mindmaker</a></span>
         </div>
     </div>

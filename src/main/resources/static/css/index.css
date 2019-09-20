@@ -9,6 +9,14 @@ body {
     width: 50%;
 }
 
+.content-grid {
+    height: 100%;
+}
+
+#puzzle {
+    max-height: 100%;
+}
+
 /* Color scheme
     content background: #f2f2e9
     panel background, menu, button labels, table headers: #f1ecc2

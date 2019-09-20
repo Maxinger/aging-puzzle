@@ -7,12 +7,19 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <div th:text="#{mission}" class="mission"/>
-        <img th:src="@{|/images/puzzle_${lang}.png|}" usemap="#puzzle"/>
-        <map name="puzzle">
-            <area th:each="tile : ${tiles}" th:coords="${tile.coords}" href="#"
-                  th:data-id="${tile.area.id}" th:onclick="openModal(this)">
-        </map>
+        <div class="grid-y medium-grid-frame">
+            <div class="cell mission" th:text="#{mission}">
+                <img src="/img/logo.png" class="float-center logo">
+            </div>
+            <div class="cell medium-auto text-center">
+                <img th:src="@{|/images/puzzle_${lang}.png|}" id="puzzle" usemap="#puzzle"/>
+                <map name="puzzle">
+                    <area th:each="tile : ${tiles}" th:coords="${tile.coords}" href="#"
+                          th:data-id="${tile.area.id}" th:onclick="openModal(this)">
+                </map>
+            </div>
+        </div>
+
         <script type="text/javascript">
             function openModal(trigger) {
                 var id = "#modal" + trigger.getAttribute('data-id');
