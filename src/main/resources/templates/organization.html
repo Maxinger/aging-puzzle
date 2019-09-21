@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <div layout:insert="~{fragments::editLink('organizations', ${organization.baseId})}" th:remove="tag"/>
+
         <h4 th:text="${organization.name}"/>
 
         <div class="grid-x grid-margin-x">

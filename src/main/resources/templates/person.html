@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <div layout:insert="~{fragments::editLink('persons', ${person.baseId})}" th:remove="tag"/>
+
         <h4 th:text="${person.name}"/>
         <div class="grid-x grid-margin-x">
             <div class="cell shrink">

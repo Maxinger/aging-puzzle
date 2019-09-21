@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <div layout:insert="~{fragments::editLink('projects', ${project.baseId})}" th:remove="tag"/>
+
         <h4 th:text="${project.name}"/>
         <img th:if="${project.image != null}" th:src="@{|/images/${project.image.path}|}" class="project-image"/>
         <p th:text="${project.description}"/>

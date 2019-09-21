@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <div layout:insert="~{fragments::editLink('areas', ${area.baseId})}" th:remove="tag"/>
+
         <h4 th:text="${area.name}"/>
         <p th:text="${area.description}"/>
     </div>

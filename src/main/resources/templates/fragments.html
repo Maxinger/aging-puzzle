@@ -72,5 +72,8 @@
         <a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a>
     </div>
 </div>
+<body layout:fragment="editLink(path, id)">
+    <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
+</body>
 </body>
 </html>
