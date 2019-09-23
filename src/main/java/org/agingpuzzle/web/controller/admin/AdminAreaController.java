@@ -1,20 +1,23 @@
 package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.agingpuzzle.model.Area;
-import org.agingpuzzle.model.BaseArea;
-import org.agingpuzzle.model.PuzzleConfig;
-import org.agingpuzzle.model.ToValidate;
+import org.agingpuzzle.model.*;
 import org.agingpuzzle.repo.AreaRepository;
 import org.agingpuzzle.repo.BaseAreaRepository;
+import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.service.PuzzleService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.AreaForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -30,6 +33,9 @@ public class AdminAreaController extends AbstractController {
     @Autowired
     private PuzzleService puzzleService;
 
+    @Autowired
+    private ImageService imageServce;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
@@ -41,8 +47,10 @@ public class AdminAreaController extends AbstractController {
 
     @GetMapping("/new")
     public String newPage(@RequestParam(required = false) Long baseId, Model model) {
-        model.addAttribute("baseId", baseId);
-        model.addAttribute("area", new Area());
+        AreaForm areaForm = new AreaForm();
+        areaForm.setBaseId(baseId);
+
+        model.addAttribute("area", areaForm);
         return "admin/area";
     }
 
@@ -51,37 +59,62 @@ public class AdminAreaController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Area area = areaRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute("area", area);
+
+        AreaForm areaForm = new AreaForm();
+        areaForm.setId(area.getId());
+        areaForm.setBaseId(area.getBaseId());
+        areaForm.setName(area.getName());
+        areaForm.setDescription(area.getDescription());
+        Optional.ofNullable(area.getImage()).ifPresent(image -> {
+            areaForm.setImagePath(image.getPath());
+            areaForm.setImageSource(image.getSource());
+        });
+
+        model.addAttribute("area", areaForm);
         return "admin/area";
     }
 
     @PostMapping("/save")
     public String saveArea(@PathVariable String lang,
-                           @RequestParam(required = false) Long baseId,
-                           @Validated(ToValidate.class) Area area,
-                           BindingResult result) {
+                           @RequestParam MultipartFile file,
+                           @Validated(ToValidate.class) @ModelAttribute("area") AreaForm areaForm,
+                           BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "admin/area";
         }
 
-
-        if (area.isNew()) {
-            BaseArea baseEntity = baseId == null
+        Area area;
+        if (areaForm.isNew()) {
+            BaseArea baseEntity = areaForm.getBaseId() == null
                     ? baseAreaRepository.save(new BaseArea())
-                    : baseAreaRepository.findById(baseId).get();
+                    : baseAreaRepository.findById(areaForm.getBaseId()).get();
 
+            area = new Area();
             area.setBaseEntity(baseEntity);
             area.setLanguage(lang);
 
         } else {
-            Area updated = area;
-            area = areaRepository.findById(area.getId()).get();
-            area.setName(updated.getName());
-            area.setDescription(updated.getDescription());
+            area = areaRepository.findById(areaForm.getId()).get();
         }
 
+        area.setName(areaForm.getName());
+        area.setDescription(areaForm.getDescription());
+
+        Image image = Optional.ofNullable(area.getImage()).orElse(new Image());
+        image.setSource(areaForm.getImageSource());
+
+        if (!file.isEmpty()) {
+            imageServce.saveImage(file, image);
+        }
+        if (image.getPath() != null) {
+            area.setImage(image);
+        }
+
+        baseAreaRepository.save(area.getBaseEntity());
         areaRepository.save(area);
         log.info("Saved area {} with id={}", area.getName(), area.getId());
+
+        puzzleService.refreshPuzzle();
 
         return String.format("redirect:/%s/admin/areas", lang);
     }
@@ -91,6 +124,8 @@ public class AdminAreaController extends AbstractController {
     public String delete(@PathVariable String lang, @RequestParam Long id) {
         areaRepository.deleteById(id);
         log.info("Deleted area with id={}", id);
+
+        puzzleService.refreshPuzzle();
 
         return String.format("redirect:/%s/admin/areas", lang);
     }

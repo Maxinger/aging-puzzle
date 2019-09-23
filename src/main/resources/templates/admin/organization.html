@@ -50,6 +50,7 @@
 
             <input type="submit" class="button" value="Save">
         </form>
+        <div layout:insert="~{fragments::uploadScript}" th:remove="tag"/>
 
         <div th:if="${not organization.new}">
             <div layout:insert="~{fragments::deleteModal('admin/organizations/' + ${organization.baseId} + '/member/delete')}" th:remove="tag"/>
@@ -90,11 +91,6 @@
 
                 <input type="submit" class="button" value="Save">
             </form>
-            <script type="text/javascript">
-                $('input[type=file]').change(function() {
-                    this.previousSibling.data = this.files[0].name;
-                });
-            </script>
         </div>
     </div>
 </body>

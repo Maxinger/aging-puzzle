@@ -60,6 +60,10 @@ public class PuzzleService {
         }
     }
 
+    public void refreshPuzzle() {
+        setLayout(config.getLayout());
+    }
+
     public void newPuzzleConfig(PuzzleConfig config) {
         puzzleConfigRepository.save(config);
         setPuzzleConfig(config);

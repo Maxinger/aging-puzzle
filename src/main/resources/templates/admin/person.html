@@ -43,11 +43,7 @@
 
             <input type="submit" class="button" value="Save">
         </form>
-        <script type="text/javascript">
-            $('input[type=file]').change(function() {
-                this.previousSibling.data = this.files[0].name;
-            });
-        </script>
+        <div layout:insert="~{fragments::uploadScript}" th:remove="tag"/>
     </div>
 </body>
 </html>

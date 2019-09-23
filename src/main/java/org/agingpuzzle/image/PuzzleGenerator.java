@@ -1,6 +1,7 @@
 package org.agingpuzzle.image;
 
 import org.agingpuzzle.model.Area;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -9,12 +10,16 @@ import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
 
 @Component
 public class PuzzleGenerator {
+
+    @Value("${image.dir}")
+    private String imageDir;
 
     // https://www.codeproject.com/Articles/395453/Html5-Jigsaw-Puzzle
     private static final int[][] BASE_COORDS = new int[][]{
@@ -27,6 +32,7 @@ public class PuzzleGenerator {
     };
 
     private static int BASE_SIZE = 100;
+    private float ICON_PADDING = 0.25f;
 
     private Random rand = new Random();
 
@@ -47,7 +53,7 @@ public class PuzzleGenerator {
             Graphics2D g2d = bi.createGraphics();
             g2d.setFont(new Font("Arial", Font.PLAIN, 75));
 
-            GradientPaint paint = new GradientPaint(0f, 0f, randomColor(), bi.getWidth(), bi.getHeight(), randomColor());
+            GradientPaint paint = new GradientPaint(0f, 0f, new Color(59, 132, 55), bi.getWidth(), bi.getHeight(), new Color(241, 236, 194));
             FontMetrics fontMetrics = g2d.getFontMetrics();
 
             Random rand = new Random();
@@ -113,12 +119,25 @@ public class PuzzleGenerator {
                         g2d.setColor(Color.DARK_GRAY);
                         g2d.draw(path);
 
-                        String text = tile.getCode();
-                        int textX = col * layout.tileSize + (layout.tileSize - fontMetrics.stringWidth(text)) / 2;
-                        int textY = row * layout.tileSize + ((layout.tileSize - fontMetrics.getHeight()) / 2) + fontMetrics.getAscent();
+                        if (tile.getImage() != null) {
+                            File file = Paths.get(imageDir, tile.getImage().getPath()).toFile();
+                            BufferedImage icon = ImageIO.read(file);
+                            float iconBoxSize = layout.tileSize * (1 - 2 * ICON_PADDING);
+                            float iconScale = iconBoxSize / Math.max(icon.getWidth(), icon.getHeight());
+                            int iconWidth = (int) (icon.getWidth() * iconScale);
+                            int iconHeight = (int) (icon.getHeight() * iconScale);
+                            int iconX = (int) ((col + ICON_PADDING) * layout.tileSize + (iconBoxSize - iconWidth) / 2);
+                            int iconY = (int) ((row + ICON_PADDING) * layout.tileSize + (iconBoxSize - iconHeight) / 2);
 
-                        g2d.setColor(Color.BLACK);
-                        g2d.drawString(text, textX, textY);
+                            g2d.drawImage(icon, iconX, iconY, iconWidth, iconHeight, null);
+                        } else {
+                            String text = tile.getCode();
+                            int textX = col * layout.tileSize + (layout.tileSize - fontMetrics.stringWidth(text)) / 2;
+                            int textY = row * layout.tileSize + ((layout.tileSize - fontMetrics.getHeight()) / 2) + fontMetrics.getAscent();
+
+                            g2d.setColor(Color.BLACK);
+                            g2d.drawString(text, textX, textY);
+                        }
                     }
                 }
             }

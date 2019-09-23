@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
-public class Area extends TranslatableEntity<BaseArea> {
+public class Area extends TranslatableEntity<BaseArea> implements WithImage{
 
     @NotNull(groups = ToValidate.class)
     private String name;

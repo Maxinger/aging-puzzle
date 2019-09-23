@@ -75,5 +75,12 @@
 <body layout:fragment="editLink(path, id)">
     <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
 </body>
+<body layout:fragment="uploadScript">
+    <script type="text/javascript">
+        $('input[type=file]').change(function() {
+            this.previousSibling.data = this.files[0].name;
+        });
+    </script>
+</body>
 </body>
 </html>

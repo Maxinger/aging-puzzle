@@ -15,7 +15,7 @@
                 <img th:src="@{|/images/puzzle_${lang}.png|}" id="puzzle" usemap="#puzzle"/>
                 <map name="puzzle">
                     <area th:each="tile : ${tiles}" th:coords="${tile.coords}" href="#"
-                          th:data-id="${tile.area.id}" th:onclick="openModal(this)">
+                          th:data-id="${tile.area.id}" th:onclick="openModal(this)" th:title="${tile.area.name}">
                 </map>
             </div>
         </div>
