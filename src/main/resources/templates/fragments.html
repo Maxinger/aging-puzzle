@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body layout:fragment="deleteModal(action)">
     <script type="text/javascript">
         function openDeleteModal(trigger) {
@@ -73,7 +74,9 @@
     </div>
 </div>
 <body layout:fragment="editLink(path, id)">
-    <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
+    </th:block>
 </body>
 <body layout:fragment="uploadScript">
     <script type="text/javascript">
