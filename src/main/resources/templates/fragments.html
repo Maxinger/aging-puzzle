@@ -73,6 +73,7 @@
         <a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a>
     </div>
 </div>
+</body>
 <body layout:fragment="editLink(path, id)">
     <th:block sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
