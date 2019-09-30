@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Review</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h4>Next to review</h4>
+    <form id="saveReview" th:action="@{|/${lang}/admin/reviews/save|}" method="post">
+        <input type="hidden" name="lang" th:value="${lang}"/>
+        <input type="hidden" name="entityId"/>
+        <input type="hidden" name="entityType"/>
+    </form>
+    <script type="text/javascript">
+        function saveReview(trigger) {
+            $('#saveReview[name="entityId"]').val(trigger.getAttribute('data-entityId'));
+            $('#saveReview[name="entityType"]').val(trigger.getAttribute('data-entityType'));
+            $('#saveReview').submit();
+        }
+    </script>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Entity</th>
+            <th>Name</th>
+            <th>Total reviews</th>
+            <th>Days waiting</th>
+            <th>&nbsp;</th>
+        </thead>
+        <tbody>
+            <tr th:each="r : ${reviews}" th:object="${r}" th:with="entityPath=${r.entityType == 'Organization' ? 'organizations' : 'projects'}">
+                <td>
+                    <a th:href="@{|/${lang}/admin/${entityPath}/*{entityId}/edit|}" th:text="*{entityId}"/>
+                </td>
+                <td th:text="*(name}"/>
+                <td>
+                    <a th:href="@{|/${lang}/${entityPath}/*{entityId}|}" th:text="*{projectName}"/>
+                </td>
+                <td th:text="*{daysWaiting}"/>
+                <td>
+                    <a href="#" th:data-id="*{entityId}" th:data-type="${entityType}" th:onclick="saveReview(this)">Reviewed</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
+</div>
+</body>
+</html>
