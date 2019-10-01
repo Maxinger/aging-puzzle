@@ -37,6 +37,7 @@
                 <td>
                     <a th:href="@{|/${lang}/${entityPath}/*{entityId}|}" th:text="*{projectName}"/>
                 </td>
+                <td th:text="*{count}"/>
                 <td th:text="*{daysWaiting}"/>
                 <td>
                     <a href="#" th:data-id="*{entityId}" th:data-type="${entityType}" th:onclick="saveReview(this)">Reviewed</a>

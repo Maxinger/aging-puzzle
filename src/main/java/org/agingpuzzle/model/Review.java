@@ -30,7 +30,7 @@ public class Review extends AbstractEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseProject baseProject;
 
-    @NotNull(groups = ToValidate.class)
+//    @NotNull(groups = ToValidate.class)
     @Size(min = 20, max = 500, groups = ToValidate.class)
     private String text;
 }

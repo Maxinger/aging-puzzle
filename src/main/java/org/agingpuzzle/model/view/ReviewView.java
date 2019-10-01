@@ -10,5 +10,6 @@ public class ReviewView {
     private Long entityId;
     private String entityType;
     private String name;
+    private int count;
     private int daysWaiting;
 }
