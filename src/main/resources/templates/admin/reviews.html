@@ -14,8 +14,8 @@
     </form>
     <script type="text/javascript">
         function saveReview(trigger) {
-            $('#saveReview[name="entityId"]').val(trigger.getAttribute('data-entityId'));
-            $('#saveReview[name="entityType"]').val(trigger.getAttribute('data-entityType'));
+            $('#saveReview input[name="entityId"]').val(trigger.getAttribute('data-id'));
+            $('#saveReview input[name="entityType"]').val(trigger.getAttribute('data-type'));
             $('#saveReview').submit();
         }
     </script>
@@ -24,6 +24,7 @@
             <th>ID</th>
             <th>Entity</th>
             <th>Name</th>
+            <th>Translations</th>
             <th>Total reviews</th>
             <th>Days waiting</th>
             <th>&nbsp;</th>
@@ -31,21 +32,21 @@
         <tbody>
             <tr th:each="r : ${reviews}" th:object="${r}" th:with="entityPath=${r.entityType == 'Organization' ? 'organizations' : 'projects'}">
                 <td>
-                    <a th:href="@{|/${lang}/admin/${entityPath}/*{entityId}/edit|}" th:text="*{entityId}"/>
+                    <a th:href="@{|/*{language}/admin/${entityPath}/*{baseEntityId}/edit|}" th:text="*{baseEntityId}"/>
                 </td>
-                <td th:text="*(name}"/>
+                <td th:text="*{entityName}"/>
                 <td>
-                    <a th:href="@{|/${lang}/${entityPath}/*{entityId}|}" th:text="*{projectName}"/>
+                    <a th:href="@{|/*{language}/${entityPath}/*{baseEntityId}|}" th:text="*{entityName}"/>
                 </td>
-                <td th:text="*{count}"/>
+                <td th:text="*{translations}"/>
+                <td th:text="*{reviewsCount}"/>
                 <td th:text="*{daysWaiting}"/>
                 <td>
-                    <a href="#" th:data-id="*{entityId}" th:data-type="${entityType}" th:onclick="saveReview(this)">Reviewed</a>
+                    <a href="#" th:data-id="*{baseEntityId}" th:data-type="*{entityType}" th:onclick="saveReview(this)">Reviewed</a>
                 </td>
             </tr>
         </tbody>
     </table>
-    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
 </div>
 </body>
 </html>
