@@ -86,5 +86,12 @@
         });
     </script>
 </body>
+<body layout:fragment="image(img, class)">
+    <div th:if="${img != null}" class="text-center">
+        <img th:src="@{|/images/${img.path}|}" class="${class}"/>
+        <th:block th:if="${img.source != null}">
+            <a th:if="${#strings.startsWith(img.source, 'http')}" href="${img.source}">Source</a>
+        </th:block>
+    </div>
 </body>
 </html>
