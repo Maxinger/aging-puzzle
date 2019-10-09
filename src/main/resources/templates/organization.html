@@ -12,7 +12,7 @@
 
         <div class="grid-x grid-margin-x">
             <div class="cell shrink">
-                <img th:if="${organization.image != null}" th:src="@{|/images/${organization.image.path}|}" class="org-image"/>
+                <div layout:insert="~{fragments::image(${organization.image}, 'org')}" th:remove="tag"/>
             </div>
             <div class="cell auto">
                 <p th:utext="${#strings.replace(organization.description,'&#10;','&lt;br&gt;')}"/>

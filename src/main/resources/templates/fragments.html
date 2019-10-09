@@ -87,11 +87,11 @@
     </script>
 </body>
 <body layout:fragment="image(img, class)">
-    <div th:if="${img != null}" class="text-center">
-        <img th:src="@{|/images/${img.path}|}" class="${class}"/>
-        <th:block th:if="${img.source != null}">
-            <a th:if="${#strings.startsWith(img.source, 'http')}" href="${img.source}">Source</a>
-        </th:block>
+    <div th:if="${img != null}" class="text-center" th:with="sourceUrl=${img.sourceUrl}">
+        <img th:src="@{|/images/${img.path}|}" th:class="${class + '-image'}"/>
+        <a th:if="${sourceUrl != null}" th:href="${sourceUrl}" target="_blank">Source</a>
+        <span th:if="${img.source != null and sourceUrl == null}"
+              th:text="#{image.source(${img.source})}"/>
     </div>
 </body>
 </html>

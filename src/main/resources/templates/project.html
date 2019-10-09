@@ -9,14 +9,22 @@
         <div layout:insert="~{fragments::editLink('projects', ${project.baseId})}" th:remove="tag"/>
 
         <h4 th:text="${project.name}"/>
-        <img th:if="${project.image != null}" th:src="@{|/images/${project.image.path}|}" class="project-image"/>
-        <p th:text="${project.description}"/>
-        <p th:if="${area != null}">
-            Area: <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
-        </p>
-        <td th:if="${organization != null}">
-            Organization: <a th:href="@{|/${lang}/organizations/${organization.baseId}|}" th:text="${organization.name}"/>
-        </td>
+
+        <div class="grid-x grid-margin-x">
+            <div class="cell shrink">
+                <div layout:insert="~{fragments::image(${project.image}, 'project')}" th:remove="tag"/>
+            </div>
+            <div class="cell auto">
+                <p th:utext="${#strings.replace(project.description,'&#10;','&lt;br&gt;')}"/>
+                <p th:if="${area != null}">
+                    Area: <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
+                </p>
+                <td th:if="${organization != null}">
+                    Organization: <a th:href="@{|/${lang}/organizations/${organization.baseId}|}" th:text="${organization.name}"/>
+                </td>
+                <div layout:insert="~{fragments::links(${organization.links})}" th:remove="tag"/>
+            </div>
+        </div>
 
         <div th:if="${not #lists.isEmpty(members)}">
             <h4>Members</h4>

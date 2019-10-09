@@ -11,10 +11,7 @@
         <h4 th:text="${person.name}"/>
         <div class="grid-x grid-margin-x">
             <div class="cell shrink">
-                <div class="text-center">
-                <img th:if="${person.image != null}" th:src="@{|/images/${person.image.path}|}" class="person-image"/>
-                <a href="${p.image.source}">Source</a>
-            </div>
+                <div layout:insert="~{fragments::image(${person.image}, 'person')}" th:remove="tag"/>
             </div>
             <div class="cell auto">
                 <p th:utext="${#strings.replace(person.description,'&#10;','&lt;br&gt;')}"/>
