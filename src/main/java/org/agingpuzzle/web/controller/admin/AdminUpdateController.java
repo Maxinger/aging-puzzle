@@ -5,7 +5,7 @@ import org.agingpuzzle.model.*;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.controller.Pagination;
-import org.agingpuzzle.web.form.FormMapper;
+import org.agingpuzzle.web.mapper.UpdateMapper;
 import org.agingpuzzle.web.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -36,7 +35,7 @@ public class AdminUpdateController extends AbstractController {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private FormMapper formMapper;
+    private UpdateMapper updateMapper;
 
     @GetMapping
     public String listPage(@PathVariable String lang,
@@ -73,7 +72,7 @@ public class AdminUpdateController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute("update", formMapper.updateToForm(update));
+        model.addAttribute("update", updateMapper.updateToForm(update));
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
@@ -101,7 +100,7 @@ public class AdminUpdateController extends AbstractController {
             update = updateRepository.findById(updateForm.getId()).get();
         }
 
-        formMapper.formToUpdate(updateForm, update);
+        updateMapper.formToUpdate(updateForm, update);
 
         baseUpdateRepository.save(update.getBaseEntity());
         updateRepository.save(update);

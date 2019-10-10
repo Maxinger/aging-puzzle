@@ -3,6 +3,7 @@ package org.agingpuzzle.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @NoRepositoryBean
