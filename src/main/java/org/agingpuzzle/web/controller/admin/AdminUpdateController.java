@@ -5,6 +5,7 @@ import org.agingpuzzle.model.*;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.controller.Pagination;
+import org.agingpuzzle.web.form.FormMapper;
 import org.agingpuzzle.web.form.UpdateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,9 @@ public class AdminUpdateController extends AbstractController {
 
     @Autowired
     private BaseProjectRepository baseProjectRepository;
+
+    @Autowired
+    private FormMapper formMapper;
 
     @GetMapping
     public String listPage(@PathVariable String lang,
@@ -75,6 +79,8 @@ public class AdminUpdateController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
+
+        UpdateForm testForm = formMapper.updateToForm(update);
 
         UpdateForm updateForm = new UpdateForm();
         updateForm.setId(update.getId());
