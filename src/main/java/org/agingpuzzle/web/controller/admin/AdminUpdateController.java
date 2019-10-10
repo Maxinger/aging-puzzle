@@ -33,13 +33,7 @@ public class AdminUpdateController extends AbstractController {
     private OrganizationRepository organizationRepository;
 
     @Autowired
-    private BaseOrganizationRepository baseOrganizationRepository;
-
-    @Autowired
     private ProjectRepository projectRepository;
-
-    @Autowired
-    private BaseProjectRepository baseProjectRepository;
 
     @Autowired
     private FormMapper formMapper;
@@ -79,19 +73,7 @@ public class AdminUpdateController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-
-        UpdateForm testForm = formMapper.updateToForm(update);
-
-        UpdateForm updateForm = new UpdateForm();
-        updateForm.setId(update.getId());
-        updateForm.setBaseId(update.getBaseId());
-        updateForm.setDate(update.getBaseEntity().getDate());
-        Optional.ofNullable(update.getBaseEntity().getBaseOrganization()).map(BaseOrganization::getId).ifPresent(updateForm::setBaseOrganizationId);
-        Optional.ofNullable(update.getBaseEntity().getBaseProject()).map(BaseProject::getId).ifPresent(updateForm::setBaseProjectId);
-        updateForm.setTitle(update.getTitle());
-        updateForm.setPreview(update.getPreview());
-        updateForm.setFullText(update.getFullText());
-        model.addAttribute("update", updateForm);
+        model.addAttribute("update", formMapper.updateToForm(update));
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
@@ -119,20 +101,7 @@ public class AdminUpdateController extends AbstractController {
             update = updateRepository.findById(updateForm.getId()).get();
         }
 
-        update.getBaseEntity().setDate(updateForm.getDate());
-        update.setTitle(updateForm.getTitle());
-        update.setPreview(updateForm.getPreview());
-        update.setFullText(updateForm.getFullText());
-
-        BaseOrganization baseOrganization = Optional.ofNullable(updateForm.getBaseOrganizationId())
-                .flatMap(baseOrganizationRepository::findById)
-                .orElse(null);
-        update.getBaseEntity().setBaseOrganization(baseOrganization);
-
-        BaseProject baseProject = Optional.ofNullable(updateForm.getBaseProjectId())
-                .flatMap(baseProjectRepository::findById)
-                .orElse(null);
-        update.getBaseEntity().setBaseProject(baseProject);
+        formMapper.formToUpdate(updateForm, update);
 
         baseUpdateRepository.save(update.getBaseEntity());
         updateRepository.save(update);
