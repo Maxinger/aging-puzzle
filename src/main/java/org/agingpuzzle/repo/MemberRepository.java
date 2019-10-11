@@ -2,15 +2,14 @@ package org.agingpuzzle.repo;
 
 import org.agingpuzzle.model.Member;
 import org.agingpuzzle.model.Organization;
+import org.agingpuzzle.model.Person;
 import org.agingpuzzle.model.Project;
 import org.agingpuzzle.model.view.Membership;
-import org.agingpuzzle.model.Person;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends AbstractRepository<Member> {
 
     @Query("select new org.agingpuzzle.model.view.Membership(m.id, p, m.role) from Person p, Member m" +
             " where p.baseEntity = m.basePerson" +

@@ -6,6 +6,7 @@ import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -56,6 +56,9 @@ public class AdminProjectController extends AbstractController {
     @Autowired
     private ImageService imageServce;
 
+    @Autowired
+    private ProjectMapper projectMapper;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
@@ -73,17 +76,8 @@ public class AdminProjectController extends AbstractController {
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
 
-        Optional<BaseProject> baseProject = Optional.ofNullable(baseId)
-                .flatMap(baseProjectRepository::findById);
-
-        Project project = new Project();
-        project.setBaseEntity(baseProject.orElse(null));
-
-        model.addAttribute("baseId", baseId);
-        model.addAttribute("project", project);
-
-        model.addAttribute("image", baseProject.map(BaseProject::getImage).orElse(new Image()));
-        model.addAttribute("links", baseProject.map(BaseProject::getLinks).orElse(null));
+        BaseProject baseProject = baseProjectRepository.safeFindById(baseId);
+        model.addAttribute("project", projectMapper.baseProjectToForm(baseProject));
 
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));

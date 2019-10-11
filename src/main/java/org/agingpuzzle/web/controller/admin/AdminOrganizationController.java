@@ -1,12 +1,16 @@
 package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.agingpuzzle.model.*;
+import org.agingpuzzle.model.BaseOrganization;
+import org.agingpuzzle.model.Member;
+import org.agingpuzzle.model.Organization;
+import org.agingpuzzle.model.ToValidate;
 import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.form.OrganizationForm;
+import org.agingpuzzle.web.mapper.OrganizationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,6 +44,9 @@ public class AdminOrganizationController extends AbstractController {
 
     @Autowired
     private ImageService imageServce;
+
+    @Autowired
+    private OrganizationMapper organizationMapper;
 
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
@@ -67,19 +73,7 @@ public class AdminOrganizationController extends AbstractController {
 
         Organization organization = organizationRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
 
-        OrganizationForm orgForm = new OrganizationForm();
-        orgForm.setId(organization.getId());
-        orgForm.setBaseId(organization.getBaseId());
-        Optional.ofNullable(organization.getBaseEntity().getParent()).map(BaseOrganization::getId).ifPresent(orgForm::setParentId);
-        orgForm.setName(organization.getName());
-        orgForm.setDescription(organization.getDescription());
-        orgForm.setLocation(organization.getLocation());
-        orgForm.setLinks(organization.getBaseEntity().getLinks());
-        Optional.ofNullable(organization.getImage()).ifPresent(image -> {
-            orgForm.setImagePath(image.getPath());
-            orgForm.setImageSource(image.getSource());
-        });
-        model.addAttribute("organization", orgForm);
+        model.addAttribute("organization", organizationMapper.organizationToForm(organization));
 
         model.addAttribute("organizations",
                 organizationRepository.findAllByLanguageAndIdNot(lang, organization.getId()));
@@ -120,26 +114,9 @@ public class AdminOrganizationController extends AbstractController {
             organization = organizationRepository.findById(orgForm.getId()).get();
         }
 
-        organization.setName(orgForm.getName());
-        organization.setDescription(orgForm.getDescription());;
-        organization.setLocation(orgForm.getLocation());
+        organizationMapper.formToOrganization(orgForm, organization);
 
-        var parent = Optional.ofNullable(orgForm.getParentId())
-                .flatMap(baseOrganizationRepository::findById)
-                .orElse(null);
-        organization.getBaseEntity().setParent(parent);
-
-        Image image = Optional.ofNullable(organization.getImage()).orElse(new Image());
-        image.setSource(orgForm.getImageSource());
-
-        if (!file.isEmpty()) {
-            imageServce.saveImage(file, image);
-        }
-        if (image.getPath() != null) {
-            organization.setImage(image);
-        }
-
-        organization.setLinks(orgForm.getLinks());
+        imageServce.saveImage(organization, file, orgForm.getImageSource());
 
         baseOrganizationRepository.save(organization.getBaseEntity());
         organizationRepository.save(organization);

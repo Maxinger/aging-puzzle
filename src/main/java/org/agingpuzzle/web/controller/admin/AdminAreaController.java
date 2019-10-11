@@ -8,6 +8,7 @@ import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.service.PuzzleService;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.form.AreaForm;
+import org.agingpuzzle.web.mapper.AreaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,9 @@ public class AdminAreaController extends AbstractController {
     @Autowired
     private ImageService imageServce;
 
+    @Autowired
+    private AreaMapper areaMapper;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
@@ -59,18 +63,7 @@ public class AdminAreaController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Area area = areaRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-
-        AreaForm areaForm = new AreaForm();
-        areaForm.setId(area.getId());
-        areaForm.setBaseId(area.getBaseId());
-        areaForm.setName(area.getName());
-        areaForm.setDescription(area.getDescription());
-        Optional.ofNullable(area.getImage()).ifPresent(image -> {
-            areaForm.setImagePath(image.getPath());
-            areaForm.setImageSource(image.getSource());
-        });
-
-        model.addAttribute("area", areaForm);
+        model.addAttribute("area", areaMapper.areaToForm(area));
         return "admin/area";
     }
 
@@ -97,18 +90,9 @@ public class AdminAreaController extends AbstractController {
             area = areaRepository.findById(areaForm.getId()).get();
         }
 
-        area.setName(areaForm.getName());
-        area.setDescription(areaForm.getDescription());
+        areaMapper.formToArea(areaForm, area);
 
-        Image image = Optional.ofNullable(area.getImage()).orElse(new Image());
-        image.setSource(areaForm.getImageSource());
-
-        if (!file.isEmpty()) {
-            imageServce.saveImage(file, image);
-        }
-        if (image.getPath() != null) {
-            area.setImage(image);
-        }
+        imageServce.saveImage(area, file, areaForm.getImageSource());
 
         baseAreaRepository.save(area.getBaseEntity());
         areaRepository.save(area);

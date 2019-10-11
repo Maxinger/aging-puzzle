@@ -7,11 +7,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-public class OrganizationForm extends AbstractForm {
+public class ProjectForm extends AbstractForm {
 
     private Long baseId;
-
-    private Long parentId;
 
     @NotNull
     private String name;
@@ -20,7 +18,11 @@ public class OrganizationForm extends AbstractForm {
     @Size(min = 20, groups = ToValidate.class)
     private String description;
 
-    private String location;
+    private Long baseAreaId;
+
+    private Long baseOrganizationId;
+
+    private String status;
 
     private String imagePath;
 

@@ -1,7 +1,6 @@
 package org.agingpuzzle.repo;
 
 import org.agingpuzzle.model.TranslatableEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -14,7 +13,7 @@ import java.util.Set;
 import static org.hibernate.annotations.QueryHints.CACHEABLE;
 
 @NoRepositoryBean
-public interface TranslatableRepository<T extends TranslatableEntity> extends JpaRepository<T, Long> {
+public interface TranslatableRepository<T extends TranslatableEntity> extends AbstractRepository<T> {
 
     Optional<T> findByBaseEntity_IdAndLanguage(Long id, String language);
 
