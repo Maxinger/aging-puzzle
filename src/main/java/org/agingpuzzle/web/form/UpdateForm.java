@@ -14,7 +14,7 @@ public class UpdateForm extends AbstractForm {
 
     @NotNull
     @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @NotNull
     private String title;

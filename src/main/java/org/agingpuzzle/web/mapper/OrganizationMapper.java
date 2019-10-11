@@ -24,6 +24,15 @@ public abstract class OrganizationMapper {
     public abstract OrganizationForm organizationToForm(Organization organization);
 
     @Mappings({
+            @Mapping(ignore = true, target = "id"),
+            @Mapping(source = "id", target = "baseId"),
+            @Mapping(source = "parent.id", target = "parentId"),
+            @Mapping(source = "image.path", target = "imagePath"),
+            @Mapping(source = "image.source", target = "imageSource"),
+    })
+    public abstract OrganizationForm baseOrganizationToForm(BaseOrganization baseOrganization);
+
+    @Mappings({
             @Mapping(source = "parentId", target = "baseEntity.parent"),
     })
     public abstract void formToOrganization(OrganizationForm form, @MappingTarget Organization organization);

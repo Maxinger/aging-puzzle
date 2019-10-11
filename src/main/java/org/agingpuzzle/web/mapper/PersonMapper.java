@@ -1,21 +1,21 @@
 package org.agingpuzzle.web.mapper;
 
-import org.agingpuzzle.model.Area;
-import org.agingpuzzle.model.BaseArea;
-import org.agingpuzzle.web.form.AreaForm;
+import org.agingpuzzle.model.BasePerson;
+import org.agingpuzzle.model.Person;
+import org.agingpuzzle.web.form.PersonForm;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
-public abstract class AreaMapper {
+public abstract class PersonMapper {
 
     @Mappings({
             @Mapping(source = "image.path", target = "imagePath"),
             @Mapping(source = "image.source", target = "imageSource"),
     })
-    public abstract AreaForm areaToForm(Area update);
+    public abstract PersonForm personToForm(Person person);
 
     @Mappings({
             @Mapping(ignore = true, target = "id"),
@@ -23,8 +23,8 @@ public abstract class AreaMapper {
             @Mapping(source = "image.path", target = "imagePath"),
             @Mapping(source = "image.source", target = "imageSource"),
     })
-    public abstract AreaForm baseAreaToForm(BaseArea baseArea);
+    public abstract PersonForm basePersonToForm(BasePerson basePerson);
 
-    public abstract void formToArea(AreaForm form, @MappingTarget Area area);
+    public abstract void formToPerson(PersonForm form, @MappingTarget Person person);
 
 }

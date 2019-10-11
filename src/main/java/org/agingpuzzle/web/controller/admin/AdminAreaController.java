@@ -51,10 +51,9 @@ public class AdminAreaController extends AbstractController {
 
     @GetMapping("/new")
     public String newPage(@RequestParam(required = false) Long baseId, Model model) {
-        AreaForm areaForm = new AreaForm();
-        areaForm.setBaseId(baseId);
+        BaseArea baseArea = baseAreaRepository.safeFindById(baseId);
 
-        model.addAttribute("area", areaForm);
+        model.addAttribute("area", areaMapper.baseAreaToForm(baseArea));
         return "admin/area";
     }
 

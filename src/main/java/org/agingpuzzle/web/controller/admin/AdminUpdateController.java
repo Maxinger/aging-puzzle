@@ -1,12 +1,16 @@
 package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.agingpuzzle.model.*;
-import org.agingpuzzle.repo.*;
+import org.agingpuzzle.model.BaseUpdate;
+import org.agingpuzzle.model.Update;
+import org.agingpuzzle.repo.BaseUpdateRepository;
+import org.agingpuzzle.repo.OrganizationRepository;
+import org.agingpuzzle.repo.ProjectRepository;
+import org.agingpuzzle.repo.UpdateRepository;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.controller.Pagination;
-import org.agingpuzzle.web.mapper.UpdateMapper;
 import org.agingpuzzle.web.form.UpdateForm;
+import org.agingpuzzle.web.mapper.UpdateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 
 @Slf4j
 @Controller
@@ -57,10 +60,9 @@ public class AdminUpdateController extends AbstractController {
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
-        UpdateForm updateForm = new UpdateForm();
-        updateForm.setDate(LocalDate.now());
-        updateForm.setBaseId(baseId);
-        model.addAttribute("update", updateForm);
+
+        BaseUpdate baseUpdate = baseUpdateRepository.safeFindById(baseId);
+        model.addAttribute("update", updateMapper.baseUpdateToForm(baseUpdate));
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         model.addAttribute("projects", projectRepository.findAllByLanguage(lang));

@@ -2,13 +2,14 @@ package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.BasePerson;
-import org.agingpuzzle.model.Image;
 import org.agingpuzzle.model.Person;
 import org.agingpuzzle.model.ToValidate;
 import org.agingpuzzle.repo.BasePersonRepository;
 import org.agingpuzzle.repo.PersonRepository;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.PersonForm;
+import org.agingpuzzle.web.mapper.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -34,6 +34,9 @@ public class AdminPersonController extends AbstractController {
     @Autowired
     private ImageService imageServce;
 
+    @Autowired
+    private PersonMapper personMapper;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("persons", personRepository.findAllByLanguage(lang));
@@ -44,14 +47,9 @@ public class AdminPersonController extends AbstractController {
 
     @GetMapping("/new")
     public String newPage(@RequestParam(required = false) Long baseId, Model model) {
-        model.addAttribute("baseId", baseId);
-        model.addAttribute("person", new Person());
 
-        Optional<BasePerson> basePerson = Optional.ofNullable(baseId)
-                .flatMap(basePersonRepository::findById);
-
-        model.addAttribute("image", basePerson.map(BasePerson::getImage).orElse(new Image()));
-        model.addAttribute("links", basePerson.map(BasePerson::getLinks).orElse(null));
+        BasePerson basePerson = basePersonRepository.safeFindById(baseId);
+        model.addAttribute("person", personMapper.basePersonToForm(basePerson));
 
         return "admin/person";
     }
@@ -61,52 +59,36 @@ public class AdminPersonController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute("person", person);
-        model.addAttribute("image", Optional.ofNullable(person.getImage()).orElse(new Image()));
-        model.addAttribute("links", person.getLinks());
+        model.addAttribute("person", personMapper.personToForm(person));
+
         return "admin/person";
     }
 
     @PostMapping("/save")
     public String savePerson(@PathVariable String lang,
-                             @RequestParam(required = false) Long baseId,
                              @RequestParam MultipartFile file,
-                             @RequestParam(required = false) String personLinks,
-                             @Validated(ToValidate.class) Person person,
-                             BindingResult personResult,
-                             @Validated(ToValidate.class) Image image,
-                             BindingResult imageResult) throws IOException {
-        if (personResult.hasErrors() || imageResult.hasErrors()) {
+                             @Validated(ToValidate.class) @ModelAttribute("person") PersonForm personForm,
+                             BindingResult result) throws IOException {
+        if (result.hasErrors()) {
             return "admin/person";
         }
 
-        if (person.isNew()) {
-            BasePerson baseEntity = baseId == null
+        Person person;
+        if (personForm.isNew()) {
+            BasePerson baseEntity = personForm.getBaseId() == null
                     ? basePersonRepository.save(new BasePerson())
-                    : basePersonRepository.findById(baseId).get();
+                    : basePersonRepository.findById(personForm.getBaseId()).get();
 
+            person = new Person();
             person.setBaseEntity(baseEntity);
             person.setLanguage(lang);
         } else {
-            Person updated = person;
-            person = personRepository.findById(person.getId()).get();
-            person.setName(updated.getName());
-            person.setDescription(updated.getDescription());
-            person.setResidence(updated.getResidence());
+            person = personRepository.findById(personForm.getId()).get();
         }
 
-        Image updated = image;
-        image = Optional.ofNullable(person.getImage()).orElse(new Image());
-        image.setSource(updated.getSource());
+        personMapper.formToPerson(personForm, person);
 
-        if (!file.isEmpty()) {
-            imageServce.saveImage(file, image);
-        }
-        if (image.getPath() != null) {
-            person.setImage(image);
-        }
-
-        person.setLinks(personLinks);
+        imageServce.saveImage(person, file, personForm.getImageSource());
 
         basePersonRepository.save(person.getBaseEntity());
         personRepository.save(person);

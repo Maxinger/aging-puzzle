@@ -1,10 +1,7 @@
 package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.agingpuzzle.model.BaseOrganization;
-import org.agingpuzzle.model.Member;
-import org.agingpuzzle.model.Organization;
-import org.agingpuzzle.model.ToValidate;
+import org.agingpuzzle.model.*;
 import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.ImageService;
@@ -59,9 +56,9 @@ public class AdminOrganizationController extends AbstractController {
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
-        OrganizationForm orgForm = new OrganizationForm();
-        orgForm.setBaseId(baseId);
-        model.addAttribute("organization", orgForm);
+
+        BaseOrganization baseOrganization = baseOrganizationRepository.safeFindById(baseId);
+        model.addAttribute("organization", organizationMapper.baseOrganizationToForm(baseOrganization));
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
         return "admin/organization";

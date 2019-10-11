@@ -6,6 +6,7 @@ import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.ProjectForm;
 import org.agingpuzzle.web.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -36,13 +36,7 @@ public class AdminProjectController extends AbstractController {
     private AreaRepository areaRepository;
 
     @Autowired
-    private BaseAreaRepository baseAreaRepository;
-
-    @Autowired
     private OrganizationRepository organizationRepository;
-
-    @Autowired
-    private BaseOrganizationRepository baseOrganizationRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -90,9 +84,9 @@ public class AdminProjectController extends AbstractController {
                            @PathVariable Long id, Model model) {
 
         Project project = projectRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
-        model.addAttribute("project", project);
-        model.addAttribute("image", Optional.ofNullable(project.getImage()).orElse(new Image()));
-        model.addAttribute("links", project.getLinks());
+
+        model.addAttribute("project", projectMapper.projectToForm(project));
+
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
 
@@ -113,55 +107,29 @@ public class AdminProjectController extends AbstractController {
 
     @PostMapping("/save")
     public String saveProject(@PathVariable String lang,
-                              @RequestParam(required = false) Long baseId,
                               @RequestParam MultipartFile file,
-                              @RequestParam(required = false) String projectLinks,
-                              @RequestParam(required = false) Long baseAreaId,
-                              @RequestParam(required = false) Long baseOrganizationId,
-                              @Validated(ToValidate.class) Project project,
-                              BindingResult projectResult,
-                              @Validated(ToValidate.class) Image image,
-                              BindingResult imageResult) throws IOException {
-        if (projectResult.hasErrors() || imageResult.hasErrors()) {
+                              @Validated(ToValidate.class) @ModelAttribute("project") ProjectForm projectForm,
+                              BindingResult result) throws IOException {
+        if (result.hasErrors()) {
             return "admin/project";
         }
 
-        if (project.isNew()) {
-            BaseProject baseEntity = baseId == null
+        Project project;
+        if (projectForm.isNew()) {
+            BaseProject baseEntity = projectForm.getBaseId() == null
                     ? baseProjectRepository.save(new BaseProject())
-                    : baseProjectRepository.findById(baseId).get();
+                    : baseProjectRepository.findById(projectForm.getBaseId()).get();
 
+            project = new Project();
             project.setBaseEntity(baseEntity);
             project.setLanguage(lang);
         } else {
-            Project updated = project;
-            project = projectRepository.findById(project.getId()).get();
-            project.setName(updated.getName());
-            project.setDescription(updated.getDescription());
+            project = projectRepository.findById(projectForm.getId()).get();
         }
 
-        Image updated = image;
-        image = Optional.ofNullable(project.getImage()).orElse(new Image());
-        image.setSource(updated.getSource());
+        projectMapper.formToProject(projectForm, project);
 
-        if (!file.isEmpty()) {
-            imageServce.saveImage(file, image);
-        }
-        if (image.getPath() != null) {
-            project.setImage(image);
-        }
-
-        project.setLinks(projectLinks);
-
-        BaseArea baseArea = Optional.ofNullable(baseAreaId)
-                .flatMap(baseAreaRepository::findById)
-                .orElse(null);
-        project.getBaseEntity().setBaseArea(baseArea);
-
-        BaseOrganization baseOrganization = Optional.ofNullable(baseOrganizationId)
-                .flatMap(baseOrganizationRepository::findById)
-                .orElse(null);
-        project.getBaseEntity().setBaseOrganization(baseOrganization);
+        imageServce.saveImage(project, file, projectForm.getImageSource());
 
         baseProjectRepository.save(project.getBaseEntity());
         projectRepository.save(project);

@@ -20,7 +20,7 @@
                 <select th:field="*{baseOrganizationId}">
                     <option th:value="${null}">-- Select --</option>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
-                            th:selected="${baseOrganizationId == org.baseId}"/>/>
+                            th:selected="${update.baseOrganizationId == org.baseId}"/>/>
                 </select>
             </label>
 
@@ -28,7 +28,7 @@
                 <select th:field="*{baseProjectId}">
                     <option th:value="${null}">-- Select --</option>
                     <option th:each="p : ${projects}" th:value="${p.baseId}" th:text="${p.name}"
-                            th:selected="${baseProjectId == p.baseId}"/>/>
+                            th:selected="${update.baseProjectId == p.baseId}"/>/>
                 </select>
             </label>
 

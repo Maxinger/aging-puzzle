@@ -2,6 +2,7 @@ package org.agingpuzzle.web.mapper;
 
 import org.agingpuzzle.model.BaseOrganization;
 import org.agingpuzzle.model.BaseProject;
+import org.agingpuzzle.model.BaseUpdate;
 import org.agingpuzzle.model.Update;
 import org.agingpuzzle.repo.BaseOrganizationRepository;
 import org.agingpuzzle.repo.BaseProjectRepository;
@@ -27,6 +28,14 @@ public abstract class UpdateMapper {
             @Mapping(source = "baseEntity.baseProject.id", target = "baseProjectId"),
     })
     public abstract UpdateForm updateToForm(Update update);
+
+    @Mappings({
+            @Mapping(ignore = true, target = "id"),
+            @Mapping(source = "id", target = "baseId"),
+            @Mapping(source = "baseOrganization.id", target = "baseOrganizationId"),
+            @Mapping(source = "baseProject.id", target = "baseProjectId"),
+    })
+    public abstract UpdateForm baseUpdateToForm(BaseUpdate baseUpdate);
 
     @Mappings({
             @Mapping(source = "date", target = "baseEntity.date"),
