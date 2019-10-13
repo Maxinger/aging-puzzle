@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body layout:fragment="deleteModal(action)">
+<th:block layout:fragment="deleteModal(action)">
     <script type="text/javascript">
         function openDeleteModal(trigger) {
             $('#deleteModal strong').text(trigger.getAttribute('data-name'));
@@ -20,21 +20,21 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-</body>
-<body layout:fragment="translations(baseEntityId, controller)">
+</th:block>
+<th:block layout:fragment="translations(baseEntityId, controller)">
     <a th:each="t : ${translations}"
        th:href="${t.value.contains(baseEntityId)} ? @{|/${t.key}/admin/${controller}/${baseEntityId}/edit|} : @{|/${t.key}/admin/${controller}/new?baseId=${baseEntityId}|}"
        th:text="|${t.key} |" target="_blank"/>
-</body>
-<body layout:fragment="links(links)">
+</th:block>
+<th:block layout:fragment="links(links)">
     <div th:if="${links != null}">
         <a th:each="url : ${links.split('\n')}" th:with="link=${@linkVisualizer.getLink(url)}"
            th:href="${link.url}" target="_blank" class="external-link">
             <img th:src="@{|/img/icons/${link.image}|}"/>
         </a>
     </div>
-</body>
-<body layout:fragment="pagination">
+</th:block>
+<th:block layout:fragment="pagination">
     <nav th:if="${pagination.totalPages > 1}" aria-label="Pagination">
         <ul class="pagination text-center">
             <li th:if="${pagination.firstPage}" class="pagination-previous disabled">Previous</li>
@@ -57,8 +57,8 @@
             </li>
         </ul>
     </nav>
-</body>
-<body layout:fragment="updates(updates)">
+</th:block>
+<th:block layout:fragment="updates(updates)">
     <div th:each="u : ${updates}" th:object="${u}" class="card update">
         <div class="card-section">
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
@@ -73,27 +73,27 @@
             <a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a>
         </div>
     </div>
-</body>
-<body layout:fragment="editLink(path, id)">
+</th:block>
+<th:block layout:fragment="editLink(path, id)">
     <th:block sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
     </th:block>
-</body>
-<body layout:fragment="uploadScript">
+</th:block>
+<th:block layout:fragment="uploadScript">
     <script type="text/javascript">
         $('input[type=file]').change(function() {
             this.previousSibling.data = this.files[0].name;
         });
     </script>
-</body>
-<body layout:fragment="image(img, class)">
+</th:block>
+<th:block layout:fragment="image(img, class)">
     <div th:if="${img != null}" class="text-center" th:with="sourceUrl=${img.sourceUrl}">
         <img th:src="@{|/images/${img.path}|}" th:class="${class + '-image'}"/>
         <a th:if="${sourceUrl != null}" th:href="${sourceUrl}" target="_blank">Source</a>
         <span th:if="${img.source != null and sourceUrl == null}"
               th:text="#{image.source(${img.source})}"/>
     </div>
-</body>
+</th:block>
 <th:block layout:fragment="markdown-preview">
     <span>Preview:</span>
     <div class="markdown-preview"></div>
