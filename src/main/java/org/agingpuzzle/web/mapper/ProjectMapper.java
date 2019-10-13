@@ -3,12 +3,10 @@ package org.agingpuzzle.web.mapper;
 import org.agingpuzzle.model.BaseProject;
 import org.agingpuzzle.model.Project;
 import org.agingpuzzle.web.form.ProjectForm;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", uses = EntityMapper.class)
+@Mapper(componentModel = "spring", uses = EntityMapper.class,
+        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public abstract class ProjectMapper {
 
     @Mappings({
