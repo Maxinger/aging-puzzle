@@ -146,3 +146,14 @@ input.button, label.button {
 input.button:hover, label.button:hover {
     background-color: #25621f;
 }
+
+.markdown-preview {
+    background-color: #f2f2e9;
+    border: 1px solid #cacaca;
+    min-height: 16px;
+    margin-bottom: 16px;
+}
+
+.markdown-preview p {
+    margin: 5px;
+}

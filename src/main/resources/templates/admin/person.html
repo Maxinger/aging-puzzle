@@ -20,6 +20,7 @@
             <label>Description
                 <textarea rows="5" name="description" th:field="*{description}"/>
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
+                <div layout:insert="~{fragments::markdown-preview}"></div>
             </label>
 
             <label>Residence

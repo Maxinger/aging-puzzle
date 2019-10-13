@@ -35,44 +35,44 @@
     </div>
 </body>
 <body layout:fragment="pagination">
-<nav th:if="${pagination.totalPages > 1}" aria-label="Pagination">
-    <ul class="pagination text-center">
-        <li th:if="${pagination.firstPage}" class="pagination-previous disabled">Previous</li>
-        <li th:unless="${pagination.firstPage}" class="pagination-previous">
-            <a th:href="${pagination.getUrl(pagination.currentPage - 1)}">Previous</a>
-        </li>
-
-        <th:block th:each="p : ${pagination.getPageNumbers()}" th:with="current=${pagination.currentPage == p}">
-            <li th:if="${current}" class="current">
-                <span th:text="${p}"/>
+    <nav th:if="${pagination.totalPages > 1}" aria-label="Pagination">
+        <ul class="pagination text-center">
+            <li th:if="${pagination.firstPage}" class="pagination-previous disabled">Previous</li>
+            <li th:unless="${pagination.firstPage}" class="pagination-previous">
+                <a th:href="${pagination.getUrl(pagination.currentPage - 1)}">Previous</a>
             </li>
-            <li th:unless="${current}">
-                <a th:href="${pagination.getUrl(p)}" th:text="${p}"/>
-            </li>
-        </th:block>
 
-        <li th:if="${pagination.lastPage}" class="pagination-next disabled">Next</li>
-        <li th:unless="${pagination.lastPage}" class="pagination-next">
-            <a th:href="${pagination.getUrl(pagination.currentPage + 1)}">Next</a>
-        </li>
-    </ul>
-</nav>
+            <th:block th:each="p : ${pagination.getPageNumbers()}" th:with="current=${pagination.currentPage == p}">
+                <li th:if="${current}" class="current">
+                    <span th:text="${p}"/>
+                </li>
+                <li th:unless="${current}">
+                    <a th:href="${pagination.getUrl(p)}" th:text="${p}"/>
+                </li>
+            </th:block>
+
+            <li th:if="${pagination.lastPage}" class="pagination-next disabled">Next</li>
+            <li th:unless="${pagination.lastPage}" class="pagination-next">
+                <a th:href="${pagination.getUrl(pagination.currentPage + 1)}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </body>
 <body layout:fragment="updates(updates)">
-<div th:each="u : ${updates}" th:object="${u}" class="card update">
-    <div class="card-section">
-        <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
-        <p th:if="*{organization != null}">
-            Organization: <a th:href="@{|/${lang}/organizations/*{organization.baseId}|}" th:text="*{organization.name}"/>
-        </p>
-        <p th:if="*{project != null}">
-            Project: <a th:href="@{|/${lang}/projects/*{project.baseId}|}" th:text="*{project.name}"/>
-        </p>
-        <p><strong th:text="*{update.title}"/></p>
-        <p th:text="*{update.preview}"/>
-        <a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a>
+    <div th:each="u : ${updates}" th:object="${u}" class="card update">
+        <div class="card-section">
+            <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
+            <p th:if="*{organization != null}">
+                Organization: <a th:href="@{|/${lang}/organizations/*{organization.baseId}|}" th:text="*{organization.name}"/>
+            </p>
+            <p th:if="*{project != null}">
+                Project: <a th:href="@{|/${lang}/projects/*{project.baseId}|}" th:text="*{project.name}"/>
+            </p>
+            <p><strong th:text="*{update.title}"/></p>
+            <p th:text="*{update.preview}"/>
+            <a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a>
+        </div>
     </div>
-</div>
 </body>
 <body layout:fragment="editLink(path, id)">
     <th:block sec:authorize="hasRole('ROLE_ADMIN')">
@@ -94,4 +94,22 @@
               th:text="#{image.source(${img.source})}"/>
     </div>
 </body>
+<th:block layout:fragment="markdown-preview">
+    <span>Preview:</span>
+    <div class="markdown-preview"></div>
+    <script>
+        $(function(){
+            var parent = $('script').last().parent();
+            var editor = parent.find('textarea');
+            var preview = parent.find('.markdown-preview');
+
+            editor.markdownEditor();
+            editor.keyup(function() {
+                preview.html(marked(editor[0].value));
+            })
+
+            preview.html(marked(editor[0].value));
+        });
+    </script>
+</th:block>
 </html>
