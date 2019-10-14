@@ -9,7 +9,7 @@
         <div layout:insert="~{fragments::editLink('areas', ${area.baseId})}" th:remove="tag"/>
 
         <h4 th:text="${area.name}"/>
-        <p th:text="${area.description}"/>
+        <p th:text="${area.description}" class="markdown-content"/>
     </div>
 </body>
 </html>

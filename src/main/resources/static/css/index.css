@@ -157,3 +157,7 @@ input.button:hover, label.button:hover {
 .markdown-preview p {
     margin: 5px;
 }
+
+.markdown-content {
+    display: none;
+}

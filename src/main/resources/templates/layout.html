@@ -10,6 +10,11 @@
     <script type="text/javascript" th:src="@{/js/foundation.js}"></script>
     <script type="text/javascript" th:src="@{/js/marked.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery.textarea-markdown-editor.js}"></script>
+    <script type="text/javascript">
+        function transformMarkdown(index, html) {
+            return marked(html);
+        }
+    </script>
 </head>
 <body>
     <!--https://foundation.zurb.com/sites/docs/xy-grid.html-->
@@ -66,6 +71,8 @@
     </div>
     <script type="text/javascript">
         $(document).foundation();
+
+        $('.markdown-content').html(transformMarkdown).show();
     </script>
 </body>
 </html>

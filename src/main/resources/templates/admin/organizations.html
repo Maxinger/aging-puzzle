@@ -27,7 +27,7 @@
                 <a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/>
                 <img th:if="${org.image != null}" th:src="@{|/images/${org.image.path}|}" class="org-image-small"/>
             </td>
-            <td th:text="*{description}"/>
+            <td th:text="*{description}" class="markdown-content"/>
             <td th:text="*{location}"/>
             <td layout:insert="~{fragments::translations(*{baseId}, 'organizations')}" />
             <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>

@@ -30,7 +30,7 @@
         <div th:each="tile : ${tiles}" th:with="area=${tile.area},count=${projectCounts.getOrDefault(area.id, 0)}"
              th:id="@{|modal${area.id}|}" class="reveal tiny" data-reveal>
             <h4 th:text="${area.name}"/>
-            <p th:text="${area.description}"/>
+            <p th:text="${area.description}" class="markdown-content"/>
             <a th:if="${count > 0}"
                th:href="@{|/${lang}/projects?area=${area.baseId}|}"
                th:text="@{|View ${count} project(s)|}"/>

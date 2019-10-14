@@ -15,7 +15,7 @@
                 <div layout:insert="~{fragments::image(${project.image}, 'project')}" th:remove="tag"/>
             </div>
             <div class="cell auto">
-                <p th:utext="${#strings.replace(project.description,'&#10;','&lt;br&gt;')}"/>
+                <div th:text="${project.description}" class="markdown-content"/>
                 <p th:if="${area != null}">
                     Area: <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
                 </p>
