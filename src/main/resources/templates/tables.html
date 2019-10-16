@@ -14,7 +14,7 @@
                 <a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/>
                 <img th:if="${org.image != null}" th:src="@{|/images/${org.image.path}|}" class="org-image-small"/>
             </td>
-            <td th:text="*{description}"/>
+            <td th:text="*{description}" class="markdown-content"/>
             <td th:text="*{location}"/>
         </tr>
         </tbody>
@@ -34,7 +34,7 @@
                 <a th:href="@{|/${lang}/projects/*{baseId}|}" th:text="*{name}"/>
                 <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="project-image-small"/>
             </td>
-            <td th:text="*{description}"/>
+            <td th:text="*{description}" class="markdown-content"/>
             <td th:with="area=*{baseEntity.baseArea}">
                 <a th:if="${area != null}"
                    th:href="@{|/${lang}/areas/${area.id}|}" th:text="${areas.get(area.id).name}"/>

@@ -98,18 +98,25 @@
     <span>Preview:</span>
     <div class="markdown-preview"></div>
     <script>
-        $(function(){
-            var parent = $('script').last().parent();
-            var editor = parent.find('textarea');
-            var preview = parent.find('.markdown-preview');
+        var script = $('script').last();
+        var editor = script.parent().prev('textarea');
+        var preview = script.prev('.markdown-preview');
 
-            editor.markdownEditor();
-            editor.keyup(function() {
-                preview.html(marked(editor[0].value));
-            })
-
+        editor.markdownEditor();
+        editor.keyup(function() {
             preview.html(marked(editor[0].value));
-        });
+        })
+
+        preview.html(marked(editor[0].value));
     </script>
+</th:block>
+<th:block layout:fragment="markdown-content(text)">
+    <div class="markdown-content" th:text="${text}"></div>
+<!--    <script>
+        $('script').last()
+            .prev('.markdown-content')
+            .html(transformMarkdown)
+            .show();
+    </script>-->
 </th:block>
 </html>

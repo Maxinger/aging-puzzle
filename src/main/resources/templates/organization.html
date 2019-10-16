@@ -15,7 +15,7 @@
                 <div layout:insert="~{fragments::image(${organization.image}, 'org')}" th:remove="tag"/>
             </div>
             <div class="cell auto">
-                <p th:utext="${#strings.replace(organization.description,'&#10;','&lt;br&gt;')}"/>
+                <div th:text="${organization.description}" class="markdown-content"/>
                 <p th:if="${organization.location != null}">
                     <strong>Location: </strong>
                     <span th:text="${organization.location}"/>

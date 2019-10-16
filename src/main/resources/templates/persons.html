@@ -19,7 +19,7 @@
                     <a th:href="@{|/${lang}/persons/*{baseId}|}" th:text="*{name}"/>
                     <img th:if="${p.image != null}" th:src="@{|/images/${p.image.path}|}" class="person-image-small"/>
                 </td>
-                <td th:text="*{description}"/>
+                <td th:text="*{description}" class="markdown-content"/>
             </tr>
         </tbody>
     </table>
