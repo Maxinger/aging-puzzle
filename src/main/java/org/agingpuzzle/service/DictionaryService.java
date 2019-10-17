@@ -7,6 +7,7 @@ import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,28 +23,32 @@ public class DictionaryService {
     // type -> key -> lang -> message
     private Map<String, Map<String, Map<String, Message>>> dictionaries;
 
+    @PostConstruct
     private void loadDictionary() {
-        messages = messageRepository.findAllOrderByTypeAscKeyAscLanguageAsc();
+        messages = messageRepository.findAllByOrderByTypeAscKeyAscLanguageAsc();
         dictionaries = new TreeMap<>();
         messages.forEach(msg -> {
-            dictionaries
-                    .putIfAbsent(msg.getType(), new TreeMap<>())
-                    .putIfAbsent(msg.getKey(), new TreeMap<>())
-                    .putIfAbsent(msg.getLanguage(), msg);
+            dictionaries.putIfAbsent(msg.getType(), new TreeMap<>());
+            var byType = dictionaries.get(msg.getType());
+
+            byType.putIfAbsent(msg.getKey(), new TreeMap<>());
+            var byKey = byType.get(msg.getKey());
+
+            byKey.put(msg.getLanguage(), msg);
         });
     }
 
-    public String getValue(String type, String lang, String keys) {
+    public String getText(String type, String lang, String keys) {
         var dict = dictionaries.get(type);
         return Arrays.stream(keys.split(","))
-                .map(key -> dict.get(key).get(lang).getValue())
+                .map(key -> dict.get(key).get(lang).getText())
                 .collect(Collectors.joining(", "));
     }
 
     public Map<String, String> getDictionaryForType(String type, String lang) {
         return dictionaries.get(type).entrySet().stream()
                 .filter(e -> e.getValue().containsKey(lang))
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().get(lang).getValue()));
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().get(lang).getText()));
     }
 
     public String getCSV() {
@@ -61,7 +66,7 @@ public class DictionaryService {
                 for (String lang : langs) {
                     csv.append(',');
                     if (values.containsKey(lang)) {
-                        csv.append(values.get(lang).getValue());
+                        csv.append(values.get(lang).getText());
                     }
                 }
                 csv.append('\n');
@@ -72,8 +77,8 @@ public class DictionaryService {
     }
 
     public void updateFromCSV(String csv) {
-        var rows = csv.split("\n");
-        var langs = Arrays.stream(rows[0].split(",")).skip(2).collect(Collectors.toList());
+        var rows = csv.trim().split("\n");
+        var langs = Arrays.stream(rows[0].split(",")).skip(2).map(String::trim).collect(Collectors.toList());
 
         var toSave = new ArrayList<Message>();
         var toDelete = new ArrayList<>(messages);
@@ -83,18 +88,18 @@ public class DictionaryService {
             String key = row[1];
             for (int i = 2; i < row.length; i++) {
                 String lang = langs.get(i - 2);
-                String value = row[i];
+                String text = row[i];
 
-                if (!value.isBlank()) {
+                if (!text.isBlank()) {
                     var found = find(type, key, lang);
                     found.ifPresentOrElse(msg -> {
                         toDelete.remove(msg);
-                        if (!value.equals(msg.getValue())) {
-                            msg.setValue(value);
+                        if (!text.equals(msg.getText())) {
+                            msg.setText(text);
                             toSave.add(msg);
                         }
                     }, () -> {
-                        toSave.add(new Message(type, key, lang, value));
+                        toSave.add(new Message(type, key, lang, text));
                     });
                 }
             }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MessageRepository extends AbstractRepository<Message> {
 
-    List<Message> findAllOrderByTypeAscKeyAscLanguageAsc();
+    List<Message> findAllByOrderByTypeAscKeyAscLanguageAsc();
 
     @Transactional
     default void batchUpdate(List<Message> toSave, List<Message> toDelete) {

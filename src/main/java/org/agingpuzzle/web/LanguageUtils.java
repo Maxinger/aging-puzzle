@@ -8,8 +8,12 @@ public final class LanguageUtils {
 
     public static final String DEFAULT_LANGUAGE = "en";
 
-    private static final Map<String, Locale> SUPPORTED_LANGUAGES =
-            Map.of("en", Locale.US, "ru", new Locale("ru", "RU"));
+    private static final Map<String, Locale> SUPPORTED_LANGUAGES = new TreeMap<>();
+
+    static {
+        SUPPORTED_LANGUAGES.put("en", Locale.US);
+        SUPPORTED_LANGUAGES.put("ru", new Locale("ru", "RU"));
+    }
 
     private static List<String> LANG_URLS = LanguageUtils.getSupportedLanguages().stream()
             .map(s -> "/" + s)

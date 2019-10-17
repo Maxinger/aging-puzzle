@@ -7,24 +7,14 @@
 <body>
     <div layout:fragment="content">
         <h4 th:text="Dictionaries"/>
-        <form action="#" th:action="@{|/${lang}/admin/dictionaries/save|}" method="post">
-            <label>Description
-                <textarea rows="15" name="csv" th:field="${csv}"/>
-                <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
-            </label>
-
-            <label class="button">Upload Image
-                <input type="file" name="file" class="show-for-sr">
-            </label>
-
-            <label>Image Source
-                <input type="text" th:field="*{imageSource}"/>
-                <span th:if="${#fields.hasErrors('imageSource')}" class="form-error is-visible" th:errors="*{imageSource}"/>
+        <form action="#" th:action="@{|/${lang}/admin/dictionaries/save|}" th:object="${dictionaries}" method="post">
+            <label>
+                <textarea rows="15" name="csv" th:field="*{csv}"/>
+                <span th:if="${#fields.hasErrors('csv')}" class="form-error is-visible" th:errors="*{csv}"/>
             </label>
 
             <input type="submit" class="button" value="Save">
         </form>
-        <div layout:insert="~{fragments::uploadScript}" th:remove="tag"/>
     </div>
 </body>
 </html>
