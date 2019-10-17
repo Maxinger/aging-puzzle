@@ -1,11 +1,17 @@
 package org.agingpuzzle.repo;
 
 import org.agingpuzzle.model.Message;
-import org.agingpuzzle.model.PuzzleConfig;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface MessageRepository extends AbstractRepository<PuzzleConfig> {
+public interface MessageRepository extends AbstractRepository<Message> {
 
-    List<Message> findAllOrderByType();
+    List<Message> findAllOrderByTypeAscKeyAscLanguageAsc();
+
+    @Transactional
+    default void batchUpdate(List<Message> toSave, List<Message> toDelete) {
+        saveAll(toSave);
+        deleteAll(toDelete);
+    }
 }
