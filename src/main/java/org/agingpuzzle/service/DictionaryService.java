@@ -15,6 +15,9 @@ import java.util.stream.Collectors;
 @Service
 public class DictionaryService {
 
+    public static final String ROLE_TYPE = "role";
+    public static final String STATUS_TYPE = "status";
+
     @Autowired
     private MessageRepository messageRepository;
 

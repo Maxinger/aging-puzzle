@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
 import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
+import org.agingpuzzle.service.DictionaryService;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.MemberForm;
 import org.agingpuzzle.web.form.ProjectForm;
 import org.agingpuzzle.web.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -52,6 +55,9 @@ public class AdminProjectController extends AbstractController {
 
     @Autowired
     private ProjectMapper projectMapper;
+
+    @Autowired
+    private DictionaryService dictionaryService;
 
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
@@ -148,20 +154,27 @@ public class AdminProjectController extends AbstractController {
 
     @PostMapping("/{baseProjectId}/member")
     public String addMember(@PathVariable String lang,
-                            @PathVariable Long baseProjectId,
-                            @RequestParam(required = false) Long basePersonId,
-                            @RequestParam(required = false) String role) {
+                            @Validated(ToValidate.class) MemberForm memberForm,
+                            BindingResult result) {
 
-        if (basePersonId != null && role != null) {
-            Member member = new Member();
-            member.setBaseProject(baseProjectRepository.getOne(baseProjectId));
-            member.setBasePerson(basePersonRepository.getOne(basePersonId));
-            member.setRole(Member.Role.valueOf(role));
-            memberRepository.save(member);
-            log.info("Added member with id={}", member.getId());
+        if (result.hasErrors()) {
+            return "admin/project";
         }
 
-        return String.format("redirect:/%s/admin/projects/%d/edit", lang, baseProjectId);
+        Member member = new Member();
+        member.setBaseProject(baseProjectRepository.getOne(memberForm.getEntityId()));
+        member.setBasePerson(basePersonRepository.getOne(memberForm.getPersonId()));
+
+        String role = Arrays.stream(memberForm.getRolesSelected())
+                .map(key -> dictionaryService.getText(DictionaryService.ROLE_TYPE, lang, key))
+                .collect(Collectors.joining(","));
+
+        member.setRole(role);
+
+        memberRepository.save(member);
+        log.info("Added member with id={}", member.getId());
+
+        return String.format("redirect:/%s/admin/projects/%d/edit", lang, memberForm.getEntityId());
     }
 
     @PostMapping("/{baseProjectId}/member/delete")
