@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Project</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h4 th:if="${member.new}" th:text="${'Add Member to ' + entityName}"/>
+        <h4 th:unless="${member.new}" th:text="${'Edit Member of ' + entityName}"/>
+
+        <form action="#" th:action="@{|/${lang}/admin/${entityPath}/${member.baseEntityId}/members/save|}" th:object="${member}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{baseEntityId}"/>
+
+            <th:block th:unless="${member.new}">
+                <h5 th:text="${memberName}"/>
+                <input type="hidden" th:field="*{basePersonId}"/>
+            </th:block>
+
+            <label th:if="${member.new}">Person
+                <select name="basePersonId">
+                    <option th:value="${null}">-- Select --</option>
+                    <option th:each="person : ${candidates}" th:value="${person.baseId}" th:text="${person.name}"
+                            th:selected="${member.basePersonId == person.baseId}"/>
+                </select>
+                <span th:if="${#fields.hasErrors('basePersonId')}" class="form-error is-visible" th:errors="*{basePersonId}"/>
+            </label>
+
+            <fieldset>
+                <legend>Roles</legend>
+                <th:block th:each="role, it : ${roles}" th:with="checkboxId=${'role' + it.index}">
+                    <input type="checkbox" th:id="${checkboxId}"
+                           th:name="rolesSelected" th:value="${role.getKey()}"
+                           th:checked="${member.rolesSelected != null && #arrays.contains(member.rolesSelected, role.getKey())}"/>
+                    <label th:text="${role.getValue()}" th:for="${checkboxId}" />
+                </th:block>
+                <span th:if="${#fields.hasErrors('rolesSelected')}" class="form-error is-visible" th:errors="*{rolesSelected}"/>
+            </fieldset>
+
+            <input type="submit" class="button" value="Save Member">
+        </form>
+    </div>
+</body>
+</html>

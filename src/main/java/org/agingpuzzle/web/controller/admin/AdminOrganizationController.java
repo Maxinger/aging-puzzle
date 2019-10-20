@@ -85,7 +85,7 @@ public class AdminOrganizationController extends AbstractController {
 
         model.addAttribute("members", members);
         model.addAttribute("candidates", candidates);
-        model.addAttribute("roles", Member.Role.getValues());
+//        model.addAttribute("roles", Member.Role.getValues());
         return "admin/organization";
     }
 
@@ -140,7 +140,7 @@ public class AdminOrganizationController extends AbstractController {
             Member member = new Member();
             member.setBaseOrganization(baseOrganizationRepository.getOne(baseOrganizationId));
             member.setBasePerson(basePersonRepository.getOne(basePersonId));
-            member.setRole(Member.Role.valueOf(role));
+//            member.setRole(Member.Role.valueOf(role));
             memberRepository.save(member);
             log.info("Added member with id={}", member.getId());
         }

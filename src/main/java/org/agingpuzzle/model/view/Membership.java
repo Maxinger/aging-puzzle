@@ -11,5 +11,5 @@ public class Membership<T extends TranslatableEntity> {
 
     private Long id;
     private T entity;
-    private Member.Role role;
+    private String role;
 }

@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 public class MemberForm extends AbstractForm {
 
     @NotNull
-    private Long entityId;
+    private Long baseEntityId;
 
     @NotNull
-    private Long personId;
+    private Long basePersonId;
 
     @NotEmpty
     private String[] rolesSelected;

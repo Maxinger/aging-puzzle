@@ -9,6 +9,7 @@ import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
 import org.agingpuzzle.web.form.MemberForm;
 import org.agingpuzzle.web.form.ProjectForm;
+import org.agingpuzzle.web.mapper.MemberMapper;
 import org.agingpuzzle.web.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -48,13 +48,13 @@ public class AdminProjectController extends AbstractController {
     private PersonRepository personRepository;
 
     @Autowired
-    private BasePersonRepository basePersonRepository;
-
-    @Autowired
     private ImageService imageServce;
 
     @Autowired
     private ProjectMapper projectMapper;
+
+    @Autowired
+    private MemberMapper memberMapper;
 
     @Autowired
     private DictionaryService dictionaryService;
@@ -106,7 +106,11 @@ public class AdminProjectController extends AbstractController {
 
         model.addAttribute("members", members);
         model.addAttribute("candidates", candidates);
-        model.addAttribute("roles", Member.Role.getValues());
+
+        MemberForm form = new MemberForm();
+        form.setBaseEntityId(project.getBaseId());
+        model.addAttribute("member", form);
+        model.addAttribute("roles", dictionaryService.getDictionaryForType(DictionaryService.ROLE_TYPE, lang));
 
         return "admin/project";
     }
@@ -114,7 +118,7 @@ public class AdminProjectController extends AbstractController {
     @PostMapping("/save")
     public String saveProject(@PathVariable String lang,
                               @RequestParam MultipartFile file,
-                              @Validated(ToValidate.class) @ModelAttribute("project") ProjectForm projectForm,
+                              @Validated @ModelAttribute("project") ProjectForm projectForm,
                               BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "admin/project";
@@ -152,29 +156,68 @@ public class AdminProjectController extends AbstractController {
         return String.format("redirect:/%s/admin/projects", lang);
     }
 
-    @PostMapping("/{baseProjectId}/member")
-    public String addMember(@PathVariable String lang,
-                            @Validated(ToValidate.class) MemberForm memberForm,
-                            BindingResult result) {
+    private void initEditMemberPage(Model model, String lang, Long baseProjectId, Long basePersonId) {
+        model.addAttribute("roles", dictionaryService.getDictionaryForType(DictionaryService.ROLE_TYPE, lang));
+        model.addAttribute("candidates", personRepository.findCandidatesForProject(baseProjectId, lang));
+
+        model.addAttribute("entityPath", "projects");
+        model.addAttribute("entityName", projectRepository.findByBaseEntity_IdAndLanguage(baseProjectId, lang).get().getName());
+
+        if (basePersonId != null) {
+            Person person = personRepository.findByBaseEntity_IdAndLanguage(basePersonId, lang).get();
+            model.addAttribute("memberName", person.getName());
+        }
+    }
+
+    @GetMapping("/{baseProjectId}/members/new")
+    public String newMemberPage(@PathVariable String lang,
+                                @PathVariable Long baseProjectId, Model model) {
+
+        MemberForm form = new MemberForm();
+        form.setBaseEntityId(baseProjectId);
+        model.addAttribute("member", form);
+
+        initEditMemberPage(model, lang, baseProjectId, null);
+
+        return "admin/member";
+    }
+
+    @GetMapping("/{baseProjectId}/members/{memberId}/edit")
+    public String editMemberPage(@PathVariable String lang,
+                                 @PathVariable Long baseProjectId, @PathVariable Long memberId, Model model) {
+
+        Member member = memberRepository.findById(memberId).get();
+        model.addAttribute("member", memberMapper.projectMemberToForm(member));
+
+        initEditMemberPage(model, lang, baseProjectId, member.getBasePerson().getId());
+
+        return "admin/member";
+    }
+
+
+    @PostMapping("/{baseProjectId}/members/save")
+    public String saveMember(@PathVariable String lang,
+                            @Validated @ModelAttribute("member") MemberForm memberForm,
+                            BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            return "admin/project";
+            initEditMemberPage(model, lang, memberForm.getBaseEntityId(), memberForm.getBasePersonId());
+            return "admin/member";
         }
 
-        Member member = new Member();
-        member.setBaseProject(baseProjectRepository.getOne(memberForm.getEntityId()));
-        member.setBasePerson(basePersonRepository.getOne(memberForm.getPersonId()));
+        Member member;
+        if (memberForm.isNew()) {
+            member = new Member();
+        } else {
+            member = memberRepository.findById(memberForm.getId()).get();
+        }
 
-        String role = Arrays.stream(memberForm.getRolesSelected())
-                .map(key -> dictionaryService.getText(DictionaryService.ROLE_TYPE, lang, key))
-                .collect(Collectors.joining(","));
-
-        member.setRole(role);
+        memberMapper.formToProjectMember(memberForm, member);
 
         memberRepository.save(member);
-        log.info("Added member with id={}", member.getId());
+        log.info("Saved member with id={}", member.getId());
 
-        return String.format("redirect:/%s/admin/projects/%d/edit", lang, memberForm.getEntityId());
+        return String.format("redirect:/%s/admin/projects/%d/edit", lang, memberForm.getBaseEntityId());
     }
 
     @PostMapping("/{baseProjectId}/member/delete")

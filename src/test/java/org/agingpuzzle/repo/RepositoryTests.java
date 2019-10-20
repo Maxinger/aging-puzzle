@@ -99,13 +99,13 @@ public class RepositoryTests {
         Member member = new Member();
         member.setBaseOrganization(baseOrganization);
         member.setBasePerson(basePerson);
-        member.setRole(Member.Role.FOUNDER);
+        member.setRole("founder");
         memberRepository.save(member);
 
         var members = memberRepository.findPersonsByOrganization(baseOrganization.getId(), "en");
         assertEquals(1, members.size());
         assertEquals("Max", members.get(0).getEntity().getName());
-        assertEquals(Member.Role.FOUNDER, members.get(0).getRole());
+        assertEquals("founder", members.get(0).getRole());
 
         memberRepository.delete(member);
 

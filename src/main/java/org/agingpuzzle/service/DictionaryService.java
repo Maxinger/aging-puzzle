@@ -42,9 +42,11 @@ public class DictionaryService {
     }
 
     public String getText(String type, String lang, String keys) {
-        var dict = dictionaries.get(type);
         return Arrays.stream(keys.split(","))
-                .map(key -> dict.get(key).get(lang).getText())
+                .map(key -> find(type, key, lang))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Message::getText)
                 .collect(Collectors.joining(", "));
     }
 

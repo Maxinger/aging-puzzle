@@ -35,7 +35,7 @@
                 <select name="baseOrganizationId">
                     <option th:value="${null}">-- Select --</option>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
-                            th:selected="${project.baseOrganizationId == org.baseId}"/>/>
+                            th:selected="${project.baseOrganizationId == org.baseId}"/>
                 </select>
             </label>
 
@@ -65,6 +65,7 @@
             <div layout:insert="~{fragments::deleteModal('admin/projects/' + ${project.baseId} + '/member/delete')}" th:remove="tag"/>
 
             <h4>Members</h4>
+            <a th:href="@{|/${lang}/admin/projects/${project.baseId}/members/new|}">Add member</a>
             <table th:unless="${#lists.isEmpty(members)}">
                 <thead>
                 <th>ID</th>
@@ -74,32 +75,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="member : ${members}" th:with="person=${member.entity}">
-                    <td><a th:href="@{|/${lang}/admin/persons/${person.baseId}/edit|}" th:text="${person.baseId}"/></td>
+                    <td><a th:href="@{|/${lang}/admin/projects/${project.baseId}/members/${member.id}/edit|}" th:text="${member.id}"/></td>
                     <td><a th:href="@{|/${lang}/persons/${person.baseId}|}" th:text="*{person.name}"/></td>
-                    <td th:text="${member.role}"/>
+                    <td th:text="${@dictionaryService.getText('role', lang, member.getRole())}"/>
                     <td><a href="#" th:data-id="${member.id}" th:data-name="${person.name}" th:onclick="openDeleteModal(this)">Delete</a></td>
                 </tr>
                 </tbody>
             </table>
-
-            <h5>Add Member</h5>
-            <form action="#" th:action="@{|/${lang}/admin/projects/${project.baseId}/member|}" method="post">
-                <label>Person
-                    <select name="basePersonId">
-                        <option th:value="${null}">-- Select --</option>
-                        <option th:each="person : ${candidates}" th:value="${person.baseId}" th:text="${person.name}"/>
-                    </select>
-                </label>
-
-                <label>Role
-                    <select name="role">
-                        <option th:value="${null}">-- Select --</option>
-                        <option th:each="role: ${roles}" th:value="${role}" th:text="${role}"/>
-                    </select>
-                </label>
-
-                <input type="submit" class="button" value="Save Member">
-            </form>
         </div>
     </div>
 </body>
