@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PersonRepository extends TranslatableRepository<Person> {
+public interface PersonRepository extends NamedRepository<Person> {
 
     @Query("select p from Person p" +
             " where p.baseEntity not in (select m.basePerson from Member m where m.baseProject.id = ?1)" +

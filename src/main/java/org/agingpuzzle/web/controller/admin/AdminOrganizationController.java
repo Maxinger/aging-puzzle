@@ -154,11 +154,10 @@ public class AdminOrganizationController extends AbstractController {
         model.addAttribute("candidates", personRepository.findCandidatesForOrganization(baseOrganizationId, lang));
 
         model.addAttribute("entityPath", "organizations");
-        model.addAttribute("entityName", organizationRepository.findByBaseEntity_IdAndLanguage(baseOrganizationId, lang).get().getName());
+        model.addAttribute("entityName", organizationRepository.getName(baseOrganizationId, lang).orElseThrow(notFound()));
 
         if (basePersonId != null) {
-            Person person = personRepository.findByBaseEntity_IdAndLanguage(basePersonId, lang).get();
-            model.addAttribute("memberName", person.getName());
+            model.addAttribute("memberName", personRepository.getName(basePersonId, lang).orElseThrow(notFound()));
         }
     }
 

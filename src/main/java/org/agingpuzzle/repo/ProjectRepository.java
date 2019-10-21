@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ProjectRepository extends TranslatableRepository<Project> {
+public interface ProjectRepository extends NamedRepository<Project> {
 
     @Query("select p from Project p" +
             " where p.baseEntity.baseOrganization.id = ?1" +

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface OrganizationRepository extends TranslatableRepository<Organization> {
+public interface OrganizationRepository extends NamedRepository<Organization> {
 
     List<Organization> findAllByLanguageAndIdNot(String language, Long id);
 

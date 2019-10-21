@@ -148,11 +148,10 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("candidates", personRepository.findCandidatesForProject(baseProjectId, lang));
 
         model.addAttribute("entityPath", "projects");
-        model.addAttribute("entityName", projectRepository.findByBaseEntity_IdAndLanguage(baseProjectId, lang).get().getName());
+        model.addAttribute("entityName", projectRepository.getName(baseProjectId, lang).orElseThrow(notFound()));
 
         if (basePersonId != null) {
-            Person person = personRepository.findByBaseEntity_IdAndLanguage(basePersonId, lang).get();
-            model.addAttribute("memberName", person.getName());
+            model.addAttribute("memberName", personRepository.getName(basePersonId, lang).orElseThrow(notFound()));
         }
     }
 
