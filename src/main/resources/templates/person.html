@@ -33,8 +33,24 @@
                 <tbody>
                     <tr th:each="member : ${organizations}">
                         <td><a th:href="@{|/${lang}/organizations/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
-                        <td th:text="${member.role}"/>
+                        <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(projects)}">
+            <h4>Projects</h4>
+            <table>
+                <thead>
+                    <th>Name</th>
+                    <th>Role</th>
+                </thead>
+                <tbody>
+                <tr th:each="member : ${projects}">
+                    <td><a th:href="@{|/${lang}/projects/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
+                    <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
+                </tr>
                 </tbody>
             </table>
         </div>

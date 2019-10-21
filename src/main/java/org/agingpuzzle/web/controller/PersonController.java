@@ -35,6 +35,7 @@ public class PersonController extends AbstractController {
         Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("person", person);
         model.addAttribute("organizations", memberRepository.findOrganizationsByPerson(person.getBaseId(), lang));
+        model.addAttribute("projects", memberRepository.findProjectsByPerson(person.getBaseId(), lang));
         return "person";
     }
 }
