@@ -36,7 +36,7 @@
                 <tbody>
                     <tr th:each="member : ${members}">
                         <td><a th:href="@{|/${lang}/persons/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
-                        <td th:text="${member.role}"/>
+                        <td th:text="${@dictionaryService.getText('role', lang, member.getRole())}"/>
                     </tr>
                 </tbody>
             </table>

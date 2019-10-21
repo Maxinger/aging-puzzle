@@ -11,4 +11,9 @@ public interface PersonRepository extends TranslatableRepository<Person> {
             " where p.baseEntity not in (select m.basePerson from Member m where m.baseProject.id = ?1)" +
             " and p.language = ?2")
     List<Person> findCandidatesForProject(Long baseProjectId, String lang);
+
+    @Query("select p from Person p" +
+            " where p.baseEntity not in (select m.basePerson from Member m where m.baseOrganization.id = ?1)" +
+            " and p.language = ?2")
+    List<Person> findCandidatesForOrganization(Long baseOrganizationId, String lang);
 }

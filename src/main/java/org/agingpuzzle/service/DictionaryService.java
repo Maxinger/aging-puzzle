@@ -93,7 +93,7 @@ public class DictionaryService {
             String key = row[1];
             for (int i = 2; i < row.length; i++) {
                 String lang = langs.get(i - 2);
-                String text = row[i];
+                String text = row[i].trim();
 
                 if (!text.isBlank()) {
                     var found = find(type, key, lang);

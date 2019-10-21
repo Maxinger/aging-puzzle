@@ -68,10 +68,10 @@
             <a th:href="@{|/${lang}/admin/projects/${project.baseId}/members/new|}">Add member</a>
             <table th:unless="${#lists.isEmpty(members)}">
                 <thead>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Role</th>
-                <th>&nbsp;</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>&nbsp;</th>
                 </thead>
                 <tbody>
                 <tr th:each="member : ${members}" th:with="person=${member.entity}">

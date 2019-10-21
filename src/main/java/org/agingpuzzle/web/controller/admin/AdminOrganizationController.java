@@ -4,9 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
 import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
+import org.agingpuzzle.service.DictionaryService;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.form.MemberForm;
 import org.agingpuzzle.web.form.OrganizationForm;
+import org.agingpuzzle.web.mapper.MemberMapper;
 import org.agingpuzzle.web.mapper.OrganizationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +48,12 @@ public class AdminOrganizationController extends AbstractController {
     @Autowired
     private OrganizationMapper organizationMapper;
 
+    @Autowired
+    private MemberMapper memberMapper;
+
+    @Autowired
+    private DictionaryService dictionaryService;
+
     @GetMapping
     public String listPage(@PathVariable String lang, Model model) {
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
@@ -76,16 +85,8 @@ public class AdminOrganizationController extends AbstractController {
                 organizationRepository.findAllByLanguageAndIdNot(lang, organization.getId()));
 
         var members = memberRepository.findPersonsByOrganization(organization.getBaseEntity().getId(), lang);
-        var persons = members.stream()
-                .map(Membership::getEntity)
-                .collect(Collectors.toSet());
-        var candidates = personRepository.findAllByLanguage(lang).stream()
-                .filter(person -> !persons.contains(person))
-                .collect(Collectors.toList());
-
         model.addAttribute("members", members);
-        model.addAttribute("candidates", candidates);
-//        model.addAttribute("roles", Member.Role.getValues());
+
         return "admin/organization";
     }
 
@@ -146,6 +147,70 @@ public class AdminOrganizationController extends AbstractController {
         }
 
         return String.format("redirect:/%s/admin/organizations/%d/edit", lang, baseOrganizationId);
+    }
+
+    private void initEditMemberPage(Model model, String lang, Long baseOrganizationId, Long basePersonId) {
+        model.addAttribute("roles", dictionaryService.getDictionaryForType(DictionaryService.ROLE_TYPE, lang));
+        model.addAttribute("candidates", personRepository.findCandidatesForOrganization(baseOrganizationId, lang));
+
+        model.addAttribute("entityPath", "organizations");
+        model.addAttribute("entityName", organizationRepository.findByBaseEntity_IdAndLanguage(baseOrganizationId, lang).get().getName());
+
+        if (basePersonId != null) {
+            Person person = personRepository.findByBaseEntity_IdAndLanguage(basePersonId, lang).get();
+            model.addAttribute("memberName", person.getName());
+        }
+    }
+
+    @GetMapping("/{baseOrganizationId}/members/new")
+    public String newMemberPage(@PathVariable String lang,
+                                @PathVariable Long baseOrganizationId, Model model) {
+
+        MemberForm form = new MemberForm();
+        form.setBaseEntityId(baseOrganizationId);
+        model.addAttribute("member", form);
+
+        initEditMemberPage(model, lang, baseOrganizationId, null);
+
+        return "admin/member";
+    }
+
+    @GetMapping("/{baseOrganizationId}/members/{memberId}/edit")
+    public String editMemberPage(@PathVariable String lang,
+                                 @PathVariable Long baseOrganizationId, @PathVariable Long memberId, Model model) {
+
+        Member member = memberRepository.findById(memberId).get();
+        model.addAttribute("member", memberMapper.organizationMemberToForm(member));
+
+        initEditMemberPage(model, lang, baseOrganizationId, member.getBasePerson().getId());
+
+        return "admin/member";
+    }
+
+
+    @PostMapping("/{baseOrganizationId}/members/save")
+    public String saveMember(@PathVariable String lang,
+                             @Validated @ModelAttribute("member") MemberForm memberForm,
+                             BindingResult result, Model model) {
+
+        if (result.hasErrors()) {
+            initEditMemberPage(model, lang, memberForm.getBaseEntityId(), memberForm.getBasePersonId());
+            return "admin/member";
+        }
+
+        Member member;
+        if (memberForm.isNew()) {
+            member = new Member();
+        } else {
+            member = memberRepository.findById(memberForm.getId()).get();
+        }
+
+        memberMapper.formToOrganizationMember(memberForm, member);
+
+        memberRepository.save(member);
+        log.info("Saved member with id={}", member.getId());
+
+        return String.format("redirect:/%s/admin/organizations/%d/edit", lang, memberForm.getBaseEntityId());
     }
 
     @PostMapping("/{baseOrganizationId}/member/delete")

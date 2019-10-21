@@ -97,20 +97,7 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
 
         var members = memberRepository.findPersonsByProject(project.getBaseEntity().getId(), lang);
-        var persons = members.stream()
-                .map(Membership::getEntity)
-                .collect(Collectors.toSet());
-        var candidates = personRepository.findAllByLanguage(lang).stream()
-                .filter(person -> !persons.contains(person))
-                .collect(Collectors.toList());
-
         model.addAttribute("members", members);
-        model.addAttribute("candidates", candidates);
-
-        MemberForm form = new MemberForm();
-        form.setBaseEntityId(project.getBaseId());
-        model.addAttribute("member", form);
-        model.addAttribute("roles", dictionaryService.getDictionaryForType(DictionaryService.ROLE_TYPE, lang));
 
         return "admin/project";
     }
