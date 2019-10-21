@@ -43,17 +43,22 @@
                         <a th:href="@{|/${lang}/persons|}">Persons</a>
                         <a th:href="@{|/${lang}/projects|}">Projects</a>
                         <a th:href="@{|/${lang}/updates|}">Updates</a>
-                        <a th:href="@{|/${lang}/login|}">Sign In</a>
                     </th:block>
+
+                    <a th:each="t : ${switchLinks}"
+                       th:href="@{|${t.value}|}"
+                       th:text="|#{'lang.' + ${t.key}} |"/>
+
                     <th:block th:if="${#authorization.expression('isAuthenticated()')}">
                         <form id="logout" th:action="@{/logout}" method="post">
                             <input type="hidden" name="lang" th:value="${lang}"/>
                         </form>
                         <a href="#" onclick="$('#logout').submit()">Sing Out</a>
                     </th:block>
-                    <a th:each="t : ${switchLinks}"
-                       th:href="@{|${t.value}|}"
-                       th:text="|${t.key} |"/>
+
+                    <th:block th:if="${#authorization.expression('isAnonymous()')}">
+                        <a th:href="@{|/${lang}/login|}">Sign In</a>
+                    </th:block>
                 </div>
                 <div class="cell medium-6 medium-cell-block-y content" layout:fragment="content">
                     Main content is here
