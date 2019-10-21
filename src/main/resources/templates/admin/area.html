@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <a th:unless="${area.new}" th:href="@{|/${lang}/areas/${area.baseId}|}" class="float-right">View</a>
+
         <h4 th:text="${area.new ? 'Add Area' : 'Edit Area'}"/>
         <img th:if="${area.imagePath != null}" th:src="@{|/images/${area.imagePath}|}" class="area-image"/>
         <form action="#" th:action="@{|/${lang}/admin/areas/save|}" th:object="${area}" method="post" enctype="multipart/form-data">

@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <a th:unless="${organization.new}" th:href="@{|/${lang}/organizations/${organization.baseId}|}" class="float-right">View</a>
+
         <h4 th:text="${organization.new ? 'Add Organization' : 'Edit Organization'}"/>
         <img th:if="${organization.imagePath != null}" th:src="@{|/images/${organization.imagePath}|}" class="org-image"/>
         <form action="#" th:action="@{|/${lang}/admin/organizations/save|}" th:object="${organization}" method="post" enctype="multipart/form-data">

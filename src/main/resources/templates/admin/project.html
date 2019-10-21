@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <a th:unless="${project.new}" th:href="@{|/${lang}/projects/${project.baseId}|}" class="float-right">View</a>
+        
         <h4 th:text="${project.new ? 'Add Project' : 'Edit Project'}"/>
         <img th:if="${project.imagePath != null}" th:src="@{|/images/${project.imagePath}|}" class="project-image"/>
         <form action="#" th:action="@{|/${lang}/admin/projects/save|}" th:object="${project}" method="post" enctype="multipart/form-data">
