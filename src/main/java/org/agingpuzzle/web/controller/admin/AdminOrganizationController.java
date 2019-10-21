@@ -93,7 +93,7 @@ public class AdminOrganizationController extends AbstractController {
     @PostMapping("/save")
     public String saveOrganization(@PathVariable String lang,
                                    @RequestParam MultipartFile file,
-                                   @Validated(ToValidate.class) @ModelAttribute("organization") OrganizationForm orgForm,
+                                   @Validated @ModelAttribute("organization") OrganizationForm orgForm,
                                    BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "admin/organization";

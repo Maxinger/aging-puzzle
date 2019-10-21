@@ -17,13 +17,13 @@ import java.util.Optional;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Update extends TranslatableEntity<BaseUpdate> implements WithImage {
 
-    @NotNull(groups = ToValidate.class)
+    @NotNull
     private String title;
 
     private String preview;
 
-    @NotNull(groups = ToValidate.class)
-    @Size(min = 20, max = 200, groups = ToValidate.class)
+    @NotNull
+    @Size(min = 20, max = 200)
     private String fullText;
 
     public Image getImage() {

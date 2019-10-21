@@ -3,7 +3,6 @@ package org.agingpuzzle.web.controller.admin;
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.BasePerson;
 import org.agingpuzzle.model.Person;
-import org.agingpuzzle.model.ToValidate;
 import org.agingpuzzle.repo.BasePersonRepository;
 import org.agingpuzzle.repo.PersonRepository;
 import org.agingpuzzle.service.ImageService;
@@ -67,7 +66,7 @@ public class AdminPersonController extends AbstractController {
     @PostMapping("/save")
     public String savePerson(@PathVariable String lang,
                              @RequestParam MultipartFile file,
-                             @Validated(ToValidate.class) @ModelAttribute("person") PersonForm personForm,
+                             @Validated @ModelAttribute("person") PersonForm personForm,
                              BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "admin/person";

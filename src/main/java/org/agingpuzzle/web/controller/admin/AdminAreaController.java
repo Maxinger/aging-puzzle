@@ -69,7 +69,7 @@ public class AdminAreaController extends AbstractController {
     @PostMapping("/save")
     public String saveArea(@PathVariable String lang,
                            @RequestParam MultipartFile file,
-                           @Validated(ToValidate.class) @ModelAttribute("area") AreaForm areaForm,
+                           @Validated @ModelAttribute("area") AreaForm areaForm,
                            BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "admin/area";

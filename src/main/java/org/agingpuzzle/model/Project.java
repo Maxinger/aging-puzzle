@@ -13,11 +13,11 @@ import javax.validation.constraints.Size;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"base_entity_id", "language"}))
 public class Project extends TranslatableEntity<BaseProject> implements WithImage {
 
-    @NotNull(groups = ToValidate.class)
+    @NotNull
     private String name;
 
-    @NotNull(groups = ToValidate.class)
-    @Size(min = 20, max = 200, groups = ToValidate.class)
+    @NotNull
+    @Size(min = 20, max = 200)
     private String description;
 
     private String status;
