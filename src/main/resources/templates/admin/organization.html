@@ -69,7 +69,7 @@
                     <tr th:each="member : ${members}" th:with="person=${member.entity}">
                         <td><a th:href="@{|/${lang}/admin/organizations/${organization.baseId}/members/${member.id}/edit|}" th:text="${member.id}"/></td>
                         <td><a th:href="@{|/${lang}/persons/${person.baseId}|}" th:text="*{person.name}"/></td>
-                        <td th:text="${@dictionaryService.getText('role', lang, member.getRole())}"/>
+                        <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
                         <td><a href="#" th:data-id="${member.id}" th:data-name="${person.name}" th:onclick="openDeleteModal(this)">Delete</a></td>
                     </tr>
                 </tbody>
