@@ -19,9 +19,13 @@
                 <p th:if="${area != null}">
                     Area: <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
                 </p>
-                <td th:if="${organization != null}">
+                <p th:if="${organization != null}">
                     Organization: <a th:href="@{|/${lang}/organizations/${organization.baseId}|}" th:text="${organization.name}"/>
-                </td>
+                </p>
+                <p>
+                    <strong>Status: </strong>
+                    <span th:text="${@dictionaryService.getText('status', lang, project.baseEntity.status)}"/>
+                </p>
                 <div layout:insert="~{fragments::links(${organization.links})}" th:remove="tag"/>
             </div>
         </div>

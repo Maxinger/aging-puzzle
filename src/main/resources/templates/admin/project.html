@@ -42,7 +42,11 @@
             </label>
 
             <label>Status
-                <input type="text" th:field="*{status}"/>
+                <select name="status">
+                    <option th:value="${null}">-- Select --</option>
+                    <option th:each="status : ${statuses}" th:value="${status.key}" th:text="${status.value}"
+                            th:selected="${project.status == status.key}"/>
+                </select>
                 <span th:if="${#fields.hasErrors('status')}" class="form-error is-visible" th:errors="*{status}"/>
             </label>
 

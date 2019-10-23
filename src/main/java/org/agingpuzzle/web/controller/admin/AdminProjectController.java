@@ -82,6 +82,8 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
 
+        model.addAttribute("statuses", dictionaryService.getDictionaryForType(DictionaryService.STATUS_TYPE, lang));
+
         return "admin/project";
     }
 
@@ -95,6 +97,8 @@ public class AdminProjectController extends AbstractController {
 
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+
+        model.addAttribute("statuses", dictionaryService.getDictionaryForType(DictionaryService.STATUS_TYPE, lang));
 
         var members = memberRepository.findPersonsByProject(project.getBaseEntity().getId(), lang);
         model.addAttribute("members", members);

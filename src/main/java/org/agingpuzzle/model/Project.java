@@ -17,8 +17,6 @@ public class Project extends NamedEntity<BaseProject> implements WithImage {
     @Size(min = 20, max = 200)
     private String description;
 
-    private String status;
-
     public String getLinks() {
         return getBaseEntity().getLinks();
     }

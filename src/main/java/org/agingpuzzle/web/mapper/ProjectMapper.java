@@ -14,6 +14,7 @@ public abstract class ProjectMapper {
             @Mapping(source = "baseEntity.baseOrganization.id", target = "baseOrganizationId"),
             @Mapping(source = "image.path", target = "imagePath"),
             @Mapping(source = "image.source", target = "imageSource"),
+            @Mapping(source = "baseEntity.status", target = "status"),
     })
     public abstract ProjectForm projectToForm(Project project);
 
@@ -32,6 +33,7 @@ public abstract class ProjectMapper {
     @Mappings({
             @Mapping(source = "baseAreaId", target = "baseEntity.baseArea"),
             @Mapping(source = "baseOrganizationId", target = "baseEntity.baseOrganization"),
+            @Mapping(source = "status", target = "baseEntity.status"),
     })
     public abstract void formToProject(ProjectForm form, @MappingTarget Project project);
 }

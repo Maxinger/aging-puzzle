@@ -21,6 +21,7 @@ public class ProjectForm extends AbstractForm {
 
     private Long baseOrganizationId;
 
+    @NotNull
     private String status;
 
     private String imagePath;

@@ -27,4 +27,6 @@ public class BaseProject extends AbstractEntity implements WithImage {
     private Image image;
 
     private String links;
+
+    private String status;
 }

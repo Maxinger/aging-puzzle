@@ -31,9 +31,9 @@
                 <legend>Roles</legend>
                 <th:block th:each="role, it : ${roles}" th:with="checkboxId=${'role' + it.index}">
                     <input type="checkbox" th:id="${checkboxId}"
-                           th:name="rolesSelected" th:value="${role.getKey()}"
-                           th:checked="${member.rolesSelected != null && #arrays.contains(member.rolesSelected, role.getKey())}"/>
-                    <label th:text="${role.getValue()}" th:for="${checkboxId}" />
+                           th:name="rolesSelected" th:value="${role.key}"
+                           th:checked="${member.rolesSelected != null && #arrays.contains(member.rolesSelected, role.key)}"/>
+                    <label th:text="${role.value}" th:for="${checkboxId}" />
                 </th:block>
                 <span th:if="${#fields.hasErrors('rolesSelected')}" class="form-error is-visible" th:errors="*{rolesSelected}"/>
             </fieldset>
