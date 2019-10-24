@@ -2,7 +2,6 @@ package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
-import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.DictionaryService;
 import org.agingpuzzle.service.ImageService;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -62,6 +60,15 @@ public class AdminOrganizationController extends AbstractController {
         return "admin/organizations";
     }
 
+    private void initEditPage(Model model, String lang, Long baseId) {
+        if (baseId == null) {
+            model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+        } else {
+            model.addAttribute("organizations", organizationRepository.findAllByLanguageAndBaseEntity_IdNot(lang, baseId));
+            model.addAttribute("members", memberRepository.findPersonsByOrganization(baseId, lang));
+        }
+    }
+
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
@@ -69,7 +76,7 @@ public class AdminOrganizationController extends AbstractController {
         BaseOrganization baseOrganization = baseOrganizationRepository.safeFindById(baseId);
         model.addAttribute("organization", organizationMapper.baseOrganizationToForm(baseOrganization));
 
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+        initEditPage(model, lang, baseId);
         return "admin/organization";
     }
 
@@ -81,12 +88,7 @@ public class AdminOrganizationController extends AbstractController {
 
         model.addAttribute("organization", organizationMapper.organizationToForm(organization));
 
-        model.addAttribute("organizations",
-                organizationRepository.findAllByLanguageAndIdNot(lang, organization.getId()));
-
-        var members = memberRepository.findPersonsByOrganization(organization.getBaseEntity().getId(), lang);
-        model.addAttribute("members", members);
-
+        initEditPage(model, lang, organization.getBaseId());
         return "admin/organization";
     }
 
@@ -94,8 +96,9 @@ public class AdminOrganizationController extends AbstractController {
     public String saveOrganization(@PathVariable String lang,
                                    @RequestParam MultipartFile file,
                                    @Validated @ModelAttribute("organization") OrganizationForm orgForm,
-                                   BindingResult result) throws IOException {
+                                   BindingResult result, Model model) throws IOException {
         if (result.hasErrors()) {
+            initEditPage(model, lang, orgForm.getBaseId());
             return "admin/organization";
         }
 
@@ -129,24 +132,6 @@ public class AdminOrganizationController extends AbstractController {
         log.info("Deleted organization with id={}", id);
 
         return String.format("redirect:/%s/admin/organizations", lang);
-    }
-
-    @PostMapping("/{baseOrganizationId}/member")
-    public String addMember(@PathVariable String lang,
-                            @PathVariable Long baseOrganizationId,
-                            @RequestParam(required = false) Long basePersonId,
-                            @RequestParam(required = false) String role) {
-
-        if (basePersonId != null && role != null) {
-            Member member = new Member();
-            member.setBaseOrganization(baseOrganizationRepository.getOne(baseOrganizationId));
-            member.setBasePerson(basePersonRepository.getOne(basePersonId));
-//            member.setRole(Member.Role.valueOf(role));
-            memberRepository.save(member);
-            log.info("Added member with id={}", member.getId());
-        }
-
-        return String.format("redirect:/%s/admin/organizations/%d/edit", lang, baseOrganizationId);
     }
 
     private void initEditMemberPage(Model model, String lang, Long baseOrganizationId, Long basePersonId) {

@@ -2,7 +2,6 @@ package org.agingpuzzle.web.controller.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import org.agingpuzzle.model.*;
-import org.agingpuzzle.model.view.Membership;
 import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.DictionaryService;
 import org.agingpuzzle.service.ImageService;
@@ -72,6 +71,16 @@ public class AdminProjectController extends AbstractController {
         return "admin/projects";
     }
 
+    private void initEditPage(Model model, String lang, Long baseId) {
+        model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+        model.addAttribute("statuses", dictionaryService.getDictionaryForType(DictionaryService.STATUS_TYPE, lang));
+
+        if (baseId != null) {
+            model.addAttribute("members", memberRepository.findPersonsByProject(baseId, lang));
+        }
+    }
+
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
@@ -79,11 +88,7 @@ public class AdminProjectController extends AbstractController {
         BaseProject baseProject = baseProjectRepository.safeFindById(baseId);
         model.addAttribute("project", projectMapper.baseProjectToForm(baseProject));
 
-        model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
-
-        model.addAttribute("statuses", dictionaryService.getDictionaryForType(DictionaryService.STATUS_TYPE, lang));
-
+        initEditPage(model, lang, baseId);
         return "admin/project";
     }
 
@@ -95,14 +100,7 @@ public class AdminProjectController extends AbstractController {
 
         model.addAttribute("project", projectMapper.projectToForm(project));
 
-        model.addAttribute("areas", areaRepository.findAllByLanguage(lang));
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
-
-        model.addAttribute("statuses", dictionaryService.getDictionaryForType(DictionaryService.STATUS_TYPE, lang));
-
-        var members = memberRepository.findPersonsByProject(project.getBaseEntity().getId(), lang);
-        model.addAttribute("members", members);
-
+        initEditPage(model, lang, project.getBaseId());
         return "admin/project";
     }
 
@@ -110,8 +108,9 @@ public class AdminProjectController extends AbstractController {
     public String saveProject(@PathVariable String lang,
                               @RequestParam MultipartFile file,
                               @Validated @ModelAttribute("project") ProjectForm projectForm,
-                              BindingResult result) throws IOException {
+                              BindingResult result, Model model) throws IOException {
         if (result.hasErrors()) {
+            initEditPage(model, lang, projectForm.getBaseId());
             return "admin/project";
         }
 
@@ -168,7 +167,6 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("member", form);
 
         initEditMemberPage(model, lang, baseProjectId, null);
-
         return "admin/member";
     }
 
@@ -180,7 +178,6 @@ public class AdminProjectController extends AbstractController {
         model.addAttribute("member", memberMapper.projectMemberToForm(member));
 
         initEditMemberPage(model, lang, baseProjectId, member.getBasePerson().getId());
-
         return "admin/member";
     }
 

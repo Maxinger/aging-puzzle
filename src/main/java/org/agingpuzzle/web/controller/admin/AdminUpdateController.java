@@ -57,6 +57,11 @@ public class AdminUpdateController extends AbstractController {
         return "admin/updates";
     }
 
+    private void initEditPage(Model model, String lang) {
+        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+        model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
+    }
+
     @GetMapping("/new")
     public String newPage(@PathVariable String lang,
                           @RequestParam(required = false) Long baseId, Model model) {
@@ -64,8 +69,7 @@ public class AdminUpdateController extends AbstractController {
         BaseUpdate baseUpdate = baseUpdateRepository.safeFindById(baseId);
         model.addAttribute("update", updateMapper.baseUpdateToForm(baseUpdate));
 
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
-        model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
+        initEditPage(model, lang);
         return "admin/update";
     }
 
@@ -76,16 +80,16 @@ public class AdminUpdateController extends AbstractController {
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("update", updateMapper.updateToForm(update));
 
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
-        model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
+        initEditPage(model, lang);
         return "admin/update";
     }
 
     @PostMapping("/save")
     public String saveUpdate(@PathVariable String lang,
                              @Validated @ModelAttribute("update") UpdateForm updateForm,
-                             BindingResult result) {
+                             BindingResult result, Model model) {
         if (result.hasErrors()) {
+            initEditPage(model, lang);
             return "admin/update";
         }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OrganizationRepository extends NamedRepository<Organization> {
 
-    List<Organization> findAllByLanguageAndIdNot(String language, Long id);
+    List<Organization> findAllByLanguageAndBaseEntity_IdNot(String language, Long id);
 
     List<Organization> findAllByLanguageAndBaseEntityParent(String language, BaseOrganization parent);
 
