@@ -1,6 +1,7 @@
 package org.agingpuzzle.repo;
 
 import org.agingpuzzle.model.TranslatableEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -19,6 +20,9 @@ public interface TranslatableRepository<T extends TranslatableEntity> extends Ab
 
     @QueryHints(@QueryHint(name = CACHEABLE, value = "true"))
     List<T> findAllByLanguage(String language);
+
+    @QueryHints(@QueryHint(name = CACHEABLE, value = "true"))
+    List<T> findAllByLanguage(String language, Pageable pageable);
 
     int countByLanguage(String language);
 
