@@ -42,16 +42,13 @@ public class AdminUpdateController extends AbstractController {
 
     @GetMapping
     public String listPage(@PathVariable String lang,
-                           @RequestParam(defaultValue = "1") int page,
                            HttpServletRequest request, Model model) {
         int count = updateRepository.countByLanguage(lang);
-        Pagination pagination = new Pagination(request, page, count);
+        Pagination pagination = new Pagination(request, count);
+        model.addAttribute("pagination", pagination);
 
         model.addAttribute("updates",
-                updateRepository.viewAllByLanguage(lang,
-                        updateRepository.page(page - 1, pagination.getItemsPerPage())));
-
-        model.addAttribute("pagination", pagination);
+                updateRepository.viewAllByLanguage(lang, pagination.toPageable(updateRepository.getDefaultSort())));
 
         addTranslations(lang, model, updateRepository);
         return "admin/updates";

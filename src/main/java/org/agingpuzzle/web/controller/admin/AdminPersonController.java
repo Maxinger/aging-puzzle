@@ -7,6 +7,7 @@ import org.agingpuzzle.repo.BasePersonRepository;
 import org.agingpuzzle.repo.PersonRepository;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.controller.Pagination;
 import org.agingpuzzle.web.form.PersonForm;
 import org.agingpuzzle.web.mapper.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
@@ -37,8 +39,13 @@ public class AdminPersonController extends AbstractController {
     private PersonMapper personMapper;
 
     @GetMapping
-    public String listPage(@PathVariable String lang, Model model) {
-        model.addAttribute("persons", personRepository.findAllByLanguage(lang));
+    public String listPage(@PathVariable String lang,
+                           HttpServletRequest request, Model model) {
+        int count = personRepository.countByLanguage(lang);
+        Pagination pagination = new Pagination(request, count);
+        model.addAttribute("pagination", pagination);
+
+        model.addAttribute("persons", personRepository.findAllByLanguage(lang, pagination.toPageable()));
 
         addTranslations(lang, model, personRepository);
         return "admin/persons";

@@ -6,6 +6,7 @@ import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.DictionaryService;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.controller.Pagination;
 import org.agingpuzzle.web.form.MemberForm;
 import org.agingpuzzle.web.form.ProjectForm;
 import org.agingpuzzle.web.mapper.MemberMapper;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -59,8 +61,15 @@ public class AdminProjectController extends AbstractController {
     private DictionaryService dictionaryService;
 
     @GetMapping
-    public String listPage(@PathVariable String lang, Model model) {
-        model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
+    public String listPage(@PathVariable String lang,
+                           HttpServletRequest request, Model model) {
+
+        int count = projectRepository.countByLanguage(lang);
+        Pagination pagination = new Pagination(request, count);
+        model.addAttribute("pagination", pagination);
+
+        model.addAttribute("projects",
+                projectRepository.findAllByLanguage(lang,  pagination.toPageable()));
 
         model.addAttribute("areas", areaRepository.findAllByLanguage(lang)
                 .stream().collect(Collectors.toMap(Area::getBaseId, identity())));

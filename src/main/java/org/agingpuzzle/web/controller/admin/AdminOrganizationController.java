@@ -6,6 +6,7 @@ import org.agingpuzzle.repo.*;
 import org.agingpuzzle.service.DictionaryService;
 import org.agingpuzzle.service.ImageService;
 import org.agingpuzzle.web.controller.AbstractController;
+import org.agingpuzzle.web.controller.Pagination;
 import org.agingpuzzle.web.form.MemberForm;
 import org.agingpuzzle.web.form.OrganizationForm;
 import org.agingpuzzle.web.mapper.MemberMapper;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
@@ -53,8 +55,15 @@ public class AdminOrganizationController extends AbstractController {
     private DictionaryService dictionaryService;
 
     @GetMapping
-    public String listPage(@PathVariable String lang, Model model) {
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+    public String listPage(@PathVariable String lang,
+                           HttpServletRequest request, Model model) {
+
+        int count = organizationRepository.countByLanguage(lang);
+        Pagination pagination = new Pagination(request, count);
+        model.addAttribute("pagination", pagination);
+
+        model.addAttribute("organizations",
+                organizationRepository.findAllByLanguage(lang, pagination.toPageable()));
 
         addTranslations(lang, model, organizationRepository);
         return "admin/organizations";

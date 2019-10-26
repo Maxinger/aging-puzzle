@@ -13,6 +13,7 @@
     <h4 th:if="${baseAreaId == null}">Projects List</h4>
 
     <div layout:insert="~{tables::projects(${projects}, true)}" th:remove="tag"/>
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
 </div>
 </body>
 </html>

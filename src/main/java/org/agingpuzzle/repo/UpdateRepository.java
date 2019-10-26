@@ -48,7 +48,7 @@ public interface UpdateRepository extends TranslatableRepository<Update> {
     @QueryHints(@QueryHint(name = CACHEABLE, value = "true"))
     int countAllByOrganization(Long baseOrganizationId, String lang);
 
-    default Pageable page(int page, int size) {
-        return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "baseEntity.date"));
+    default Sort getDefaultSort() {
+        return Sort.by(Sort.Direction.DESC, "baseEntity.date");
     }
 }

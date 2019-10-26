@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -38,8 +39,15 @@ public class OrganizationController extends AbstractController {
     private AreaRepository areaRepository;
 
     @GetMapping
-    public String listPage(@PathVariable String lang, Model model) {
-        model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang));
+    public String listPage(@PathVariable String lang,
+                           HttpServletRequest request, Model model) {
+
+        int count = organizationRepository.countByLanguage(lang);
+        Pagination pagination = new Pagination(request, count);
+        model.addAttribute("pagination", pagination);
+
+        model.addAttribute("organizations",
+                organizationRepository.findAllByLanguage(lang, pagination.toPageable()));
         return "organizations";
     }
 
