@@ -9,6 +9,7 @@ import org.agingpuzzle.repo.MemberRepository;
 import org.agingpuzzle.repo.OrganizationRepository;
 import org.agingpuzzle.repo.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -42,21 +46,32 @@ public class ProjectController extends AbstractController {
     @GetMapping
     public String listPage(@PathVariable String lang,
                            @RequestParam(name="area", required = false) Long baseAreaId,
-                           Model model) {
+                           HttpServletRequest request, Model model) {
+
+        List<Project> projects;
+        IntFunction<Pageable> pageable = count -> {
+            var pagination = new Pagination(request, count);
+            model.addAttribute("pagination", pagination);
+            return pagination.toPageable();
+        };
 
         if (baseAreaId != null) {
-            model.addAttribute("projects", projectRepository.findAllByArea(baseAreaId, lang));
+            int count = projectRepository.countByArea(baseAreaId, lang);
+            projects = projectRepository.findAllByArea(baseAreaId, lang, pageable.apply(count));
 
             Area area = areaRepository.findByBaseEntity_IdAndLanguage(baseAreaId, lang).orElseThrow(notFound());
             model.addAttribute("areas", Map.of(baseAreaId, area));
 
             model.addAttribute("baseAreaId", baseAreaId);
         } else {
-            model.addAttribute("projects", projectRepository.findAllByLanguage(lang));
+            int count = projectRepository.countByLanguage(lang);
+            projects = projectRepository.findAllByLanguage(lang, pageable.apply(count));
 
             model.addAttribute("areas", areaRepository.findAllByLanguage(lang)
                     .stream().collect(Collectors.toMap(Area::getBaseId, identity())));
         }
+
+        model.addAttribute("projects", projects);
 
         model.addAttribute("organizations", organizationRepository.findAllByLanguage(lang)
                 .stream().collect(Collectors.toMap(Organization::getBaseId, identity())));

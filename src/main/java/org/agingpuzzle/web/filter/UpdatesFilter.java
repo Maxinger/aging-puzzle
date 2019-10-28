@@ -3,6 +3,7 @@ package org.agingpuzzle.web.filter;
 import org.agingpuzzle.repo.UpdateRepository;
 import org.agingpuzzle.web.LanguageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
@@ -20,7 +21,8 @@ public class UpdatesFilter extends BaseFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         LanguageUtils.getLanguageFromUrl(request.getServletPath()).ifPresent(lang -> {
-            request.setAttribute("lastUpdates", updateRepository.viewAllByLanguage(lang, updateRepository.page(0, 3)));
+            request.setAttribute("lastUpdates",
+                    updateRepository.viewAllByLanguage(lang, PageRequest.of(0, 3, updateRepository.getDefaultSort())));
         });
         filterChain.doFilter(request, response);
     }

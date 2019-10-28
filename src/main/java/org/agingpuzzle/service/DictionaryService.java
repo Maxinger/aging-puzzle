@@ -42,6 +42,9 @@ public class DictionaryService {
     }
 
     public String getText(String type, String lang, String keys) {
+        if (keys == null) {
+            return "";
+        }
         return Arrays.stream(keys.split(","))
                 .map(key -> find(type, key, lang))
                 .filter(Optional::isPresent)

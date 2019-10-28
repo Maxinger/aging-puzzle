@@ -8,6 +8,7 @@
     <div layout:fragment="content">
         <h4>Organizations List</h4>
         <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
+        <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     </div>
 </body>
 </html>
