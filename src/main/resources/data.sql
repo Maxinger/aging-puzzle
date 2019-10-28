@@ -28,7 +28,7 @@ from (
             count(distinct r.id) as reviews_count, max(r.date) as last_review_date
      from organization o
           join base_organization bo on o.base_entity_id = bo.id
-          left outer join review r on o.base_entity_id = r.base_project_id
+          left outer join review r on o.base_entity_id = r.base_organization_id
      group by o.base_entity_id
 ) t
 order by days_waiting desc;
