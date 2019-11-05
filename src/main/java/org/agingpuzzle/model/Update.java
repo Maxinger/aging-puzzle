@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -23,7 +24,8 @@ public class Update extends TranslatableEntity<BaseUpdate> implements WithImage 
     private String preview;
 
     @NotNull
-    @Size(min = 20, max = 200)
+    @Size(min = 20)
+    @Lob
     private String fullText;
 
     public Image getImage() {

@@ -13,6 +13,7 @@ public class Organization extends NamedEntity<BaseOrganization> implements WithI
 
     @NotNull
     @Size(min = 20)
+    @Lob
     private String description;
 
     private String location;
