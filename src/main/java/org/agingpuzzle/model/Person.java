@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 public class Person extends NamedEntity<BasePerson> implements WithImage {
 
     @NotNull
-    @Size(min = 20, max = 500)
+    @Size(min = 20)
+    @Lob
     private String description;
 
     private String residence;
