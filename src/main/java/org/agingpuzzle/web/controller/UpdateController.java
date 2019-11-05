@@ -61,8 +61,6 @@ public class UpdateController extends AbstractController {
         }
 
         model.addAttribute("updates", updates);
-
-        addTranslations(lang, model, updateRepository);
         return "updates";
     }
 

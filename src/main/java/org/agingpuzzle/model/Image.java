@@ -1,6 +1,8 @@
 package org.agingpuzzle.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -8,6 +10,7 @@ import java.util.Optional;
 
 @Data
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Image extends AbstractEntity {
 
     @NotNull

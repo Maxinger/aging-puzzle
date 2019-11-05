@@ -8,8 +8,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
@@ -30,7 +30,7 @@ public class Review extends AbstractEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private BaseProject baseProject;
 
-//    @NotNull
-    @Size(min = 20, max = 500)
+    @Size(min = 20)
+    @Lob
     private String text;
 }

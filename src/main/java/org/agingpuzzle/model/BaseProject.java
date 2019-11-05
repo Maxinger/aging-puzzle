@@ -1,6 +1,8 @@
 package org.agingpuzzle.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -10,6 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class BaseProject extends AbstractEntity implements WithImage {
 
     private LocalDate dateCreated = LocalDate.now();
