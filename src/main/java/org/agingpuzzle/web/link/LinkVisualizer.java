@@ -1,14 +1,10 @@
 package org.agingpuzzle.web.link;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -24,7 +20,7 @@ public class LinkVisualizer {
      * key#url
      * key_lang#url
      */
-    private static final Pattern LINK_PATTERN = Pattern.compile("((\\w+?)(_(\\w+))?#)?(.+)");
+    private static final Pattern LINK_PATTERN = Pattern.compile("((\\w+?)(_(\\w+))?#)?(\\[(.+)\\])?(.+)");
 
     private String defaultImage;
     private String homeImage;
@@ -57,12 +53,16 @@ public class LinkVisualizer {
         scanner.close();
     }
 
-
-    @Getter
-    @AllArgsConstructor
-    public class Link {
-        private String url;
-        private String image;
+    public LinksHolder getLinksHolder(String links, String language) {
+        LinksHolder holder = new LinksHolder();
+        if (links != null) {
+            Arrays.stream(links.split("\n"))
+                    .map(String::trim)
+                    .map(link -> getLink(link, language))
+                    .filter(Objects::nonNull)
+                    .forEach(holder::add);
+        }
+        return holder;
     }
 
     public Link getLink(String link, String language) {
@@ -70,7 +70,8 @@ public class LinkVisualizer {
         if (matcher.find()) {
             String key = matcher.group(2);
             String lang = matcher.group(4);
-            String url = matcher.group(5);
+            String text = matcher.group(6);
+            String url = matcher.group(7);
 
             if (key == null) {
                 String image = imagesByPattern.keySet().stream()
@@ -78,13 +79,13 @@ public class LinkVisualizer {
                         .findFirst()
                         .map(imagesByPattern::get)
                         .orElse(defaultImage);
-                return new Link(link, image);
+                return new Link(url, image, text);
             } else {
                 if (lang != null && !lang.equals(language)) {
                     return null;
                 }
                 String image = imagesByKey.getOrDefault(key, defaultImage);
-                return new Link(link, image);
+                return new Link(url, image, text);
             }
         } else {
             log.error("Invalid link: " + link);

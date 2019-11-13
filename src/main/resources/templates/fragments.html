@@ -26,11 +26,18 @@
        th:href="${t.value.contains(baseEntityId)} ? @{|/${t.key}/admin/${controller}/${baseEntityId}/edit|} : @{|/${t.key}/admin/${controller}/new?baseId=${baseEntityId}|}"
        th:text="|${t.key} |" target="_blank"/>
 </th:block>
-<th:block layout:fragment="links(links)">
-    <div th:if="${links != null}">
-        <a th:each="url : ${links.split('\n')}" th:with="link=${@linkVisualizer.getLink(url)}"
+<th:block layout:fragment="links(links)" th:with="holder=${@linkVisualizer.getLinksHolder(links, lang)}">
+    <div>
+        <a th:each="link : ${holder.noText}"
            th:href="${link.url}" target="_blank" class="external-link">
             <img th:src="@{|/img/icons/${link.image}|}"/>
+        </a>
+    </div>
+    <div>
+        <a th:each="link : ${holder.withText}"
+           th:href="${link.url}" target="_blank" class="external-link display-block">
+            <img th:src="@{|/img/icons/${link.image}|}"/>
+            <span th:text="${link.text}"/>
         </a>
     </div>
 </th:block>

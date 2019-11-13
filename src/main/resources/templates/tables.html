@@ -23,10 +23,10 @@
 <body layout:fragment="projects(list, showOrganization)">
     <table>
         <thead>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Area</th>
-        <th th:if="${showOrganization}">Organization</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Area</th>
+            <th th:if="${showOrganization}">Organization</th>
         </thead>
         <tbody>
         <tr th:each="p : ${list}" th:object="${p}">
