@@ -69,15 +69,15 @@
     <div th:each="u : ${updates}" th:object="${u}" class="card update">
         <div class="card-section">
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
-            <p th:if="*{organization != null}">
-                Organization: <a th:href="@{|/${lang}/organizations/*{organization.baseId}|}" th:text="*{organization.name}"/>
-            </p>
-            <p th:if="*{project != null}">
-                Project: <a th:href="@{|/${lang}/projects/*{project.baseId}|}" th:text="*{project.name}"/>
-            </p>
             <p><strong th:text="*{update.title}"/></p>
+            <a th:if="*{organization != null}" th:href="@{|/${lang}/organizations/*{organization.baseId}|}">
+                <img th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+            </a>
+            <a th:if="*{project != null}" th:href="@{|/${lang}/projects/*{project.baseId}|}">
+                <img th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+            </a>
             <p th:text="*{update.preview}"/>
-            <a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a>
+            <p><a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a></p>
         </div>
     </div>
 </th:block>

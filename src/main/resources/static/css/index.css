@@ -76,6 +76,10 @@ area {
     border: 1px solid #6b7a53;
 }
 
+.card.update p {
+    margin-bottom: 3px;
+}
+
 th {
     background-color: #f1ecc2;
 }
