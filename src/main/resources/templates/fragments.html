@@ -71,12 +71,14 @@
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
             <p><strong th:text="*{update.title}"/></p>
             <a th:if="*{organization != null}" th:href="@{|/${lang}/organizations/*{organization.baseId}|}">
-                <img th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+                <span th:if="*{update.image == null}" th:text="*{organization.name}"/>
             </a>
             <a th:if="*{project != null}" th:href="@{|/${lang}/projects/*{project.baseId}|}">
-                <img th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+                <span th:if="*{update.image == null}" th:text="*{project.name}"/>
             </a>
-            <p th:text="*{update.preview}"/>
+            <p th:text="*{update.preview}" class="markdown-content"/>
             <p><a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a></p>
         </div>
     </div>
@@ -101,11 +103,11 @@
               th:text="#{image.source(${img.source})}"/>
     </div>
 </th:block>
-<th:block layout:fragment="markdown-preview">
+<th:block layout:fragment="markdown-preview(field)" th:with="scriptId=${'script-for-' + (field ?: 'field') }">
     <span>Preview:</span>
     <div class="markdown-preview"></div>
-    <script>
-        var script = $('script').last();
+    <script th:id="${'' + scriptId}" th:inline="javascript">
+        var script = $('script[id=[[${scriptId}]]]');
         var editor = script.parent().prev('textarea');
         var preview = script.prev('.markdown-preview');
 

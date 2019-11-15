@@ -68,7 +68,7 @@ public class UpdateController extends AbstractController {
     public String viewPage(@PathVariable String lang,
                            @PathVariable Long id, Model model) {
 
-        Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
+        UpdateView update = updateRepository.viewByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("update", update);
         return "update";
     }

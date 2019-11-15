@@ -10,10 +10,18 @@ import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.persistence.QueryHint;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hibernate.annotations.QueryHints.CACHEABLE;
 
 public interface UpdateRepository extends TranslatableRepository<Update> {
+
+    @Query("select new org.agingpuzzle.model.view.UpdateView(u, o, p) from Update u" +
+            " left join Organization o on o.baseEntity = u.baseEntity.baseOrganization and o.language = u.language" +
+            " left join Project p on p.baseEntity = u.baseEntity.baseProject and p.language = u.language" +
+            " where u.baseEntity.id = ?1 and u.language = ?2")
+    @QueryHints(@QueryHint(name = CACHEABLE, value = "true"))
+    Optional<UpdateView> viewByBaseEntity_IdAndLanguage(Long id, String language);
 
     @Query("select new org.agingpuzzle.model.view.UpdateView(u, o, p) from Update u" +
             " left join Organization o on o.baseEntity = u.baseEntity.baseOrganization and o.language = u.language" +

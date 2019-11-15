@@ -23,7 +23,6 @@ public class LinkVisualizer {
     private static final Pattern LINK_PATTERN = Pattern.compile("((\\w+?)(_(\\w+))?#)?(\\[(.+)\\])?(.+)");
 
     private String defaultImage;
-    private String homeImage;
     private Map<String, String> imagesByPattern = new HashMap<>();
     private Map<String, String> imagesByKey = new HashMap<>();
 
@@ -45,11 +44,6 @@ public class LinkVisualizer {
             }
         }
         defaultImage = imagesByKey.get(DEFAULT_KEY);
-
-        getLink("https://agingpuzzle.org", "en");
-        getLink("home#https://agingpuzzle.org", "ru");
-        getLink("interview#https://agingpuzzle.org/interview?someParam=3&anotherParam=4", "en");
-        getLink("interview_en#https://agingpuzzle.org", "ru");
         scanner.close();
     }
 
