@@ -85,7 +85,7 @@
 </th:block>
 <th:block layout:fragment="editLink(path, id)">
     <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-        <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right">Edit</a>
+        <a th:href="@{|/${lang}/admin/${path}/${id}/edit|}" class="float-right" th:text="#{admin.edit}"/>
     </th:block>
 </th:block>
 <th:block layout:fragment="uploadScript">

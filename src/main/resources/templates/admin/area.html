@@ -2,33 +2,34 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Area</title>
+    <title th:text="#{area.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <a th:unless="${area.new}" th:href="@{|/${lang}/areas/${area.baseId}|}" class="float-right">View</a>
+        <a th:unless="${area.new}" th:href="@{|/${lang}/areas/${area.baseId}|}" class="float-right" th:text="#{admin.view}"/>
 
-        <h4 th:text="${area.new ? 'Add Area' : 'Edit Area'}"/>
+        <h4 th:if="${area.new}" th:text="#{admin.area.add}"/>
+        <h4 th:unless="${area.new}" th:text="${area.name}"/>
         <img th:if="${area.imagePath != null}" th:src="@{|/images/${area.imagePath}|}" class="area-image"/>
         <form action="#" th:action="@{|/${lang}/admin/areas/save|}" th:object="${area}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
-            <label>Name
+            <label><span th:text="#{admin.area.name}"/>
                 <input type="text" name="name" th:field="*{name}"/>
                 <span th:if="${#fields.hasErrors('name')}" class="form-error is-visible" th:errors="*{name}"/>
             </label>
 
-            <label>Description
+            <label><span th:text="#{admin.area.description}"/>
                 <textarea rows="5" name="description" th:field="*{description}"/>
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
             </label>
 
-            <label class="button">Upload Image
+            <label class="button"><span th:text="#{admin.image.upload}"/>
                 <input type="file" name="file" class="show-for-sr">
             </label>
 
-            <label>Image Source
+            <label><span th:text="#{admin.image.source}"/>
                 <input type="text" th:field="*{imageSource}"/>
                 <span th:if="${#fields.hasErrors('imageSource')}" class="form-error is-visible" th:errors="*{imageSource}"/>
             </label>

@@ -30,11 +30,11 @@
                 <span th:if="${#fields.hasErrors('residence')}" class="form-error is-visible" th:errors="*{residence}"/>
             </label>
 
-            <label class="button">Upload Image
+            <label class="button"><span th:text="#{admin.image.upload}"/>
                 <input type="file" name="file" class="show-for-sr">
             </label>
 
-            <label>Image Source
+            <label><span th:text="#{admin.image.source}"/>
                 <input type="text" th:field="*{imageSource}"/>
                 <span th:if="${#fields.hasErrors('imageSource')}" class="form-error is-visible" th:errors="*{imageSource}"/>
             </label>
