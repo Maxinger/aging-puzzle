@@ -84,7 +84,7 @@
                     <td><a th:href="@{|/${lang}/admin/projects/${project.baseId}/members/${member.id}/edit|}" th:text="${member.id}"/></td>
                     <td><a th:href="@{|/${lang}/persons/${person.baseId}|}" th:text="*{person.name}"/></td>
                     <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
-                    <td><a href="#" th:data-id="${member.id}" th:data-name="${person.name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+                    <td><a href="#" th:data-id="${member.id}" th:data-name="${person.name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
                 </tr>
                 </tbody>
             </table>

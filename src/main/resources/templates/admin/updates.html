@@ -35,7 +35,7 @@
                 </td>
                 <td th:text="*{update.title}"/>
                 <td layout:insert="~{fragments::translations(*{update.baseId}, 'updates')}" />
-                <td><a href="#" th:data-id="*{update.id}" th:data-name="*{update.title}" th:onclick="openDeleteModal(this)">Delete</a></td>
+                <td><a href="#" th:data-id="*{update.id}" th:data-name="*{update.title}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
             </tr>
         </tbody>
     </table>

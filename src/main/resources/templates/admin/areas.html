@@ -2,21 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Areas</title>
+    <title th:text="#{areas.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
 
         <div layout:insert="~{fragments::deleteModal('admin/areas/delete')}" th:remove="tag"/>
 
-        <h4>Areas List</h4>
-        <a th:href="@{|/${lang}/admin/areas/new|}">New Area</a><br/>
+        <h4 th:text="#{areas.title}"/>
+        <a th:href="@{|/${lang}/admin/areas/new|}" th:text="#{admin.area.add}"/>
         <table>
             <thead>
-                <th>ID</th>
-                <th>Area</th>
-                <th>Description</th>
-                <th>Translations</th>
+                <th text="#{admin.id}"/>
+                <th text="#{admin.area.name}"/>
+                <th text="#{admin.area.description}"/>
+                <th text="#{admin.translations}"/>
                 <th>&nbsp;</th>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
                     <td><a th:href="@{|/${lang}/areas/*{baseId}|}" th:text="*{name}"/></td>
                     <td th:text="*{description}" class="markdown-content"/>
                     <td layout:insert="~{fragments::translations(*{baseId}, 'areas')}" />
-                    <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+                    <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
                 </tr>
             </tbody>
         </table>

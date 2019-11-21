@@ -30,7 +30,7 @@
             <td th:text="*{description}" class="markdown-content"/>
             <td th:text="*{location}"/>
             <td layout:insert="~{fragments::translations(*{baseId}, 'organizations')}" />
-            <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+            <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
         </tr>
         </tbody>
     </table>

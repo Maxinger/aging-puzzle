@@ -36,7 +36,7 @@
                        th:href="@{|/${lang}/organizations/${org.id}|}" th:text="${organizations.get(org.id).name}"/>
                 </td>
                 <td layout:insert="~{fragments::translations(*{baseId}, 'projects')}" />
-                <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)">Delete</a></td>
+                <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
             </tr>
         </tbody>
     </table>
