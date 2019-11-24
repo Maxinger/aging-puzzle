@@ -36,7 +36,7 @@
                 <textarea rows="5" name="description" th:field="*{layout}"/>
                 <span th:if="${#fields.hasErrors('layout')}" class="form-error is-visible" th:errors="*{layout}"/>
             </label>
-            <input type="submit" class="button" value="Save">
+            <input type="submit" class="button"  th:value="#{admin.save}"/>
         </form>
     </div>
 </body>

@@ -34,7 +34,7 @@
                 <span th:if="${#fields.hasErrors('imageSource')}" class="form-error is-visible" th:errors="*{imageSource}"/>
             </label>
 
-            <input type="submit" class="button" th:value="#{admin.save}">
+            <input type="submit" class="button" th:value="#{admin.save}"/>
         </form>
         <div layout:insert="~{fragments::uploadScript}" th:remove="tag"/>
     </div>

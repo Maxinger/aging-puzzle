@@ -27,22 +27,22 @@
                 <div class="cell medium-1 medium-cell-block-y"></div>
                 <div class="cell medium-2 medium-cell-block-y left-menu">
                     <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a th:href="@{|/${lang}/|}">Home</a>
-                        <a th:href="@{|/${lang}/admin/areas|}">Areas</a>
-                        <a th:href="@{|/${lang}/admin/organizations|}">Organizations</a>
-                        <a th:href="@{|/${lang}/admin/projects|}">Projects</a>
-                        <a th:href="@{|/${lang}/admin/persons|}">Persons</a>
-                        <a th:href="@{|/${lang}/admin/updates|}">Updates</a>
-                        <a th:href="@{|/${lang}/admin/dictionaries|}">Dictionaries</a>
-                        <a th:href="@{|/${lang}/admin/reviews|}">Reviews</a>
+                        <a th:href="@{|/${lang}/|}" th:text="#{menu.home}"/>
+                        <a th:href="@{|/${lang}/admin/areas|}" th:text="#{menu.areas}"/>
+                        <a th:href="@{|/${lang}/admin/organizations|}" th:text="#{menu.organizations}"/>
+                        <a th:href="@{|/${lang}/admin/projects|}" th:text="#{menu.proejcts}"/>
+                        <a th:href="@{|/${lang}/admin/persons|}" th:text="#{menu.persons}"/>
+                        <a th:href="@{|/${lang}/admin/updates|}" th:text="#{menu.updates}"/>
+                        <a th:href="@{|/${lang}/admin/dictionaries|}" th:text="#{menu.dictionaries}"/>
+                        <a th:href="@{|/${lang}/admin/reviews|}" th:text="#{menu.review}"/>
                     </th:block>
                     <th:block th:if="${#authorization.expression('isAnonymous()')}">
-                        <a th:href="@{|/${lang}/|}">Home</a>
-                        <a th:href="@{|/${lang}/areas|}">Areas</a>
-                        <a th:href="@{|/${lang}/organizations|}">Organizations</a>
-                        <a th:href="@{|/${lang}/persons|}">Persons</a>
-                        <a th:href="@{|/${lang}/projects|}">Projects</a>
-                        <a th:href="@{|/${lang}/updates|}">Updates</a>
+                        <a th:href="@{|/${lang}/|}" th:text="#{menu.home}"/>
+                        <a th:href="@{|/${lang}/areas|}" th:text="#{menu.areas}"/>
+                        <a th:href="@{|/${lang}/organizations|}" th:text="#{menu.organizations}"/>
+                        <a th:href="@{|/${lang}/persons|}" th:text="#{menu.persons}"/>
+                        <a th:href="@{|/${lang}/projects|}" th:text="#{menu.projects}"/>
+                        <a th:href="@{|/${lang}/updates|}" th:text="#{menu.updates}"/>
                     </th:block>
 
                     <a th:each="t : ${switchLinks}"
@@ -53,11 +53,11 @@
                         <form id="logout" th:action="@{/logout}" method="post">
                             <input type="hidden" name="lang" th:value="${lang}"/>
                         </form>
-                        <a href="#" onclick="$('#logout').submit()">Sing Out</a>
+                        <a href="#" onclick="$('#logout').submit()" th:text="#{menu.sign.out}"/>
                     </th:block>
 
                     <th:block th:if="${#authorization.expression('isAnonymous()')}">
-                        <a th:href="@{|/${lang}/login|}">Sign In</a>
+                        <a th:href="@{|/${lang}/login|}" th:text="#{menu.sign.in}"/>
                     </th:block>
                 </div>
                 <div class="cell medium-6 medium-cell-block-y content" layout:fragment="content">
