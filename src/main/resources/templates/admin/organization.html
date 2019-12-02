@@ -27,7 +27,7 @@
 
             <label>Parent Organization
                 <select name="parentId">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
                             th:selected="${organization.parentId == org.baseId}"/>
                 </select>
@@ -51,7 +51,7 @@
                 <textarea rows="5" th:field="*{links}"></textarea>
             </label>
 
-            <input type="submit" class="button" value="Save">
+            <input type="submit" class="button" th:value="#{admin.save}"/>
         </form>
         <div layout:insert="~{fragments::uploadScript}" th:remove="tag"/>
 

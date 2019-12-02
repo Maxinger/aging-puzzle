@@ -27,7 +27,7 @@
 
             <label>Area
                 <select name="baseAreaId">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="area : ${areas}" th:value="${area.baseId}" th:text="${area.name}"
                             th:selected="${project.baseAreaId == area.baseId}"/>
                 </select>
@@ -35,7 +35,7 @@
 
             <label>Organization
                 <select name="baseOrganizationId">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
                             th:selected="${project.baseOrganizationId == org.baseId}"/>
                 </select>
@@ -43,7 +43,7 @@
 
             <label>Status
                 <select name="status">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="status : ${statuses}" th:value="${status.key}" th:text="${status.value}"
                             th:selected="${project.status == status.key}"/>
                 </select>
@@ -63,7 +63,7 @@
                 <textarea rows="5" th:field="*{links}"></textarea>
             </label>
 
-            <input type="submit" class="button" value="Save">
+            <input type="submit" class="button" th:value="#{admin.save}"/>
         </form>
         <div layout:insert="~{fragments::uploadScript}" th:remove="tag"/>
 

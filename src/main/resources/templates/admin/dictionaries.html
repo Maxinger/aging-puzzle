@@ -2,18 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Area</title>
+    <title th:text="#{dictionaries.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <h4 th:text="Dictionaries"/>
+        <h4 th:text="#{dictionaries.title}"/>
         <form action="#" th:action="@{|/${lang}/admin/dictionaries/save|}" th:object="${dictionaries}" method="post">
             <label>
                 <textarea rows="15" name="csv" th:field="*{csv}"/>
                 <span th:if="${#fields.hasErrors('csv')}" class="form-error is-visible" th:errors="*{csv}"/>
             </label>
 
-            <input type="submit" class="button" value="Save">
+            <input type="submit" class="button" th:value="#{admin.save}"/>
         </form>
     </div>
 </body>

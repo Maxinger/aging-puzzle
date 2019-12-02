@@ -18,7 +18,7 @@
 
             <label>Organization
                 <select th:field="*{baseOrganizationId}">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
                             th:selected="${update.baseOrganizationId == org.baseId}"/>/>
                 </select>
@@ -26,7 +26,7 @@
 
             <label>Project
                 <select th:field="*{baseProjectId}">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="p : ${projects}" th:value="${p.baseId}" th:text="${p.name}"
                             th:selected="${update.baseProjectId == p.baseId}"/>/>
                 </select>
@@ -48,7 +48,7 @@
                 <span th:if="${#fields.hasErrors('fullText')}" class="form-error is-visible" th:errors="*{fullText}"/>
                 <div layout:insert="~{fragments::markdown-preview('text')}"></div>
             </label>
-            <input type="submit" class="button" value="Save">
+            <input type="submit" class="button" th:value="#{admin.save}"/>
         </form>
     </div>
 </body>

@@ -2,12 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Project</title>
+    <title th:text="#{member.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <h4 th:if="${member.new}" th:text="${'Add Member to ' + entityName}"/>
-        <h4 th:unless="${member.new}" th:text="${'Edit Member of ' + entityName}"/>
+        <h4 th:if="${member.new}" th:text="#{member.title.new(${entityName})}"/>
+        <h4 th:unless="${member.new}" th:text="#{member.title.edit(${entityName})}"/>
 
         <form action="#" th:action="@{|/${lang}/admin/${entityPath}/${member.baseEntityId}/members/save|}" th:object="${member}" method="post">
             <input type="hidden" th:field="*{id}"/>
@@ -18,9 +18,10 @@
                 <input type="hidden" th:field="*{basePersonId}"/>
             </th:block>
 
-            <label th:if="${member.new}">Person
+            <label th:if="${member.new}">
+                <span th:text="#{admin.member.person}"/>
                 <select name="basePersonId">
-                    <option th:value="${null}">-- Select --</option>
+                    <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="person : ${candidates}" th:value="${person.baseId}" th:text="${person.name}"
                             th:selected="${member.basePersonId == person.baseId}"/>
                 </select>
@@ -28,7 +29,7 @@
             </label>
 
             <fieldset>
-                <legend>Roles</legend>
+                <legend th:text="#{admin.member.roles}"/>
                 <th:block th:each="role, it : ${roles}" th:with="checkboxId=${'role' + it.index}">
                     <input type="checkbox" th:id="${checkboxId}"
                            th:name="rolesSelected" th:value="${role.key}"
@@ -38,7 +39,7 @@
                 <span th:if="${#fields.hasErrors('rolesSelected')}" class="form-error is-visible" th:errors="*{rolesSelected}"/>
             </fieldset>
 
-            <input type="submit" class="button" value="Save Member">
+            <input type="submit" class="button" th:value="#{admin.save}">
         </form>
     </div>
 </body>
