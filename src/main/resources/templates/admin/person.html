@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <a th:unless="${person.new}" th:href="@{|/${lang}/persons/${person.baseId}|}" class="float-right">View</a>
+        <a th:unless="${person.new}" th:href="@{|/${lang}/persons/${person.baseId}|}" class="float-right" th:text="#{admin.view}"/>
 
         <h4 th:text="${person.new ? 'Add Person' : 'Edit Person'}"/>
         <img th:if="${person.imagePath != null}" th:src="@{|/images/${person.imagePath}|}" class="person-image"/>

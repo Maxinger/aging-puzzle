@@ -6,7 +6,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <a th:unless="${project.new}" th:href="@{|/${lang}/projects/${project.baseId}|}" class="float-right">View</a>
+        <a th:unless="${project.new}" th:href="@{|/${lang}/projects/${project.baseId}|}" class="float-right" th:text="#{admin.view}"/>
         
         <h4 th:text="${project.new ? 'Add Project' : 'Edit Project'}"/>
         <img th:if="${project.imagePath != null}" th:src="@{|/images/${project.imagePath}|}" class="project-image"/>

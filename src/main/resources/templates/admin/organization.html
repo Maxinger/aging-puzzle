@@ -2,30 +2,31 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Organization</title>
+    <title th:text="#{organization.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <a th:unless="${organization.new}" th:href="@{|/${lang}/organizations/${organization.baseId}|}" class="float-right">View</a>
+        <a th:unless="${organization.new}" th:href="@{|/${lang}/organizations/${organization.baseId}|}" class="float-right" th:text="#{admin.view}"/>
 
-        <h4 th:text="${organization.new ? 'Add Organization' : 'Edit Organization'}"/>
+        <h4 th:if="${organization.new}" th:text="#{admin.organization.add}"/>
+        <h4 th:unless="${organization.new}" th:text="${organization.name}"/>
         <img th:if="${organization.imagePath != null}" th:src="@{|/images/${organization.imagePath}|}" class="org-image"/>
         <form action="#" th:action="@{|/${lang}/admin/organizations/save|}" th:object="${organization}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
-            <label>Name
+            <label><span th:text="#{admin.organization.name}"/>
                 <input type="text" name="name" th:field="*{name}"/>
                 <span th:if="${#fields.hasErrors('name')}" class="form-error is-visible" th:errors="*{name}"/>
             </label>
 
-            <label>Description
+            <label><span th:text="#{admin.organization.description}"/>
                 <textarea rows="5" name="description" th:field="*{description}"/>
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
                 <div layout:insert="~{fragments::markdown-preview}"></div>
             </label>
 
-            <label>Parent Organization
+            <label><span th:text="#{admin.organization.parent}"/>
                 <select name="parentId">
                     <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
@@ -33,7 +34,7 @@
                 </select>
             </label>
 
-            <label>Location
+            <label><span th:text="#{admin.organization.location}"/>
                 <input type="text" name="location" th:field="*{location}"/>
                 <span th:if="${#fields.hasErrors('location')}" class="form-error is-visible" th:errors="*{location}"/>
             </label>
@@ -47,7 +48,7 @@
                 <span th:if="${#fields.hasErrors('imageSource')}" class="form-error is-visible" th:errors="*{imageSource}"/>
             </label>
 
-            <label>Links
+            <label><span th:text="#{admin.links}"/>
                 <textarea rows="5" th:field="*{links}"></textarea>
             </label>
 
@@ -58,7 +59,7 @@
         <div th:if="${not organization.new}">
             <div layout:insert="~{fragments::deleteModal('admin/organizations/' + ${organization.baseId} + '/member/delete')}" th:remove="tag"/>
 
-            <h4>Members</h4>
+            <h4 th:text="#{members.title}"/>
             <a th:href="@{|/${lang}/admin/organizations/${organization.baseId}/members/new|}">Add member</a>
             <table th:unless="${#lists.isEmpty(members)}">
                 <thead>
