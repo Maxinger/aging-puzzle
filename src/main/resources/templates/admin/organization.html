@@ -60,12 +60,12 @@
             <div layout:insert="~{fragments::deleteModal('admin/organizations/' + ${organization.baseId} + '/member/delete')}" th:remove="tag"/>
 
             <h4 th:text="#{members.title}"/>
-            <a th:href="@{|/${lang}/admin/organizations/${organization.baseId}/members/new|}">Add member</a>
+            <a th:href="@{|/${lang}/admin/organizations/${organization.baseId}/members/new|}" th:text="#{admin.member.add}"/>
             <table th:unless="${#lists.isEmpty(members)}">
                 <thead>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Role</th>
+                    <th th:text="#{admin.id}"/>
+                    <th th:text="#{admin.member.person}"/>
+                    <th th:text="#{admin.member.roles}"/>
                     <th>&nbsp;</th>
                 </thead>
                 <tbody>

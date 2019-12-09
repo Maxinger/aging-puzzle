@@ -2,36 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Organizations</title>
+    <title th:text="#{organizations.title}"/>
 </head>
 <body>
 <div layout:fragment="content">
 
     <div layout:insert="~{fragments::deleteModal('admin/organizations/delete')}" th:remove="tag"/>
 
-    <h4>Organizations List</h4>
-    <a th:href="@{|/${lang}/admin/organizations/new|}">New Organization</a><br/>
+    <h4 th:text="#{organizations.title}"/>
+    <a th:href="@{|/${lang}/admin/organizations/new|}" th:text="#{admin.organization.add}"/>
     <table>
         <thead>
-        <th>ID</th>
-        <th>Organization</th>
-        <th>Description</th>
-        <th>Location</th>
-        <th>Translations</th>
-        <th>&nbsp;</th>
+            <th th:text="#{admin.id}"/>
+            <th th:text="#{admin.organization.name}"/>
+            <th th:text="#{admin.organization.description}"/>
+            <th th:text="#{admin.organization.location}"/>
+            <th th:text="#{admin.translations}"/>
+            <th>&nbsp;</th>
         </thead>
         <tbody>
-        <tr th:each="org : ${organizations}" th:object="${org}">
-            <td><a th:href="@{|/${lang}/admin/organizations/*{baseId}/edit|}" th:text="*{baseId}"/></td>
-            <td>
-                <a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/>
-                <img th:if="${org.image != null}" th:src="@{|/images/${org.image.path}|}" class="org-image-small"/>
-            </td>
-            <td th:text="*{description}" class="markdown-content"/>
-            <td th:text="*{location}"/>
-            <td layout:insert="~{fragments::translations(*{baseId}, 'organizations')}" />
-            <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
-        </tr>
+            <tr th:each="org : ${organizations}" th:object="${org}">
+                <td><a th:href="@{|/${lang}/admin/organizations/*{baseId}/edit|}" th:text="*{baseId}"/></td>
+                <td>
+                    <a th:href="@{|/${lang}/organizations/*{baseId}|}" th:text="*{name}"/>
+                    <img th:if="${org.image != null}" th:src="@{|/images/${org.image.path}|}" class="org-image-small"/>
+                </td>
+                <td th:text="*{description}" class="markdown-content"/>
+                <td th:text="*{location}"/>
+                <td layout:insert="~{fragments::translations(*{baseId}, 'organizations')}" />
+                <td><a href="#" th:data-id="*{id}" th:data-name="*{name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
+            </tr>
         </tbody>
     </table>
     <div layout:insert="~{fragments::pagination}" th:remove="tag"/>

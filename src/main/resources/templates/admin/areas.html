@@ -13,10 +13,10 @@
         <a th:href="@{|/${lang}/admin/areas/new|}" th:text="#{admin.area.add}"/>
         <table>
             <thead>
-                <th text="#{admin.id}"/>
-                <th text="#{admin.area.name}"/>
-                <th text="#{admin.area.description}"/>
-                <th text="#{admin.translations}"/>
+                <th th:text="#{admin.id}"/>
+                <th th:text="#{admin.area.name}"/>
+                <th th:text="#{admin.area.description}"/>
+                <th th:text="#{admin.translations}"/>
                 <th>&nbsp;</th>
             </thead>
             <tbody>
