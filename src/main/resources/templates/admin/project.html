@@ -2,30 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Project</title>
+    <title th:if="${project.new}" th:text="#{admin.project.add}"/>
+    <title th:unless="${project.new}" th:text="#{project.title(${project.name})}"/>
 </head>
 <body>
     <div layout:fragment="content">
         <a th:unless="${project.new}" th:href="@{|/${lang}/projects/${project.baseId}|}" class="float-right" th:text="#{admin.view}"/>
         
-        <h4 th:text="${project.new ? 'Add Project' : 'Edit Project'}"/>
+        <h4 th:if="${project.new}" th:text="#{admin.project.add}"/>
+        <h4 th:unless="${project.new}" th:text="#{project.title(${project.name})}"/>
         <img th:if="${project.imagePath != null}" th:src="@{|/images/${project.imagePath}|}" class="project-image"/>
         <form action="#" th:action="@{|/${lang}/admin/projects/save|}" th:object="${project}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
-            <label>Name
+            <label><span th:text="#{admin.project.name}"/>
                 <input type="text" th:field="*{name}"/>
                 <span th:if="${#fields.hasErrors('name')}" class="form-error is-visible" th:errors="*{name}"/>
             </label>
 
-            <label>Description
+            <label><span th:text="#{admin.project.description}"/>
                 <textarea rows="5" name="description" th:field="*{description}"/>
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
                 <div layout:insert="~{fragments::markdown-preview}"></div>
             </label>
 
-            <label>Area
+            <label><span th:text="#{admin.project.area}"/>
                 <select name="baseAreaId">
                     <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="area : ${areas}" th:value="${area.baseId}" th:text="${area.name}"
@@ -33,7 +35,7 @@
                 </select>
             </label>
 
-            <label>Organization
+            <label><span th:text="#{admin.project.organization}"/>
                 <select name="baseOrganizationId">
                     <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
@@ -41,7 +43,7 @@
                 </select>
             </label>
 
-            <label>Status
+            <label><span th:text="#{admin.project.status}"/>
                 <select name="status">
                     <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="status : ${statuses}" th:value="${status.key}" th:text="${status.value}"
@@ -80,12 +82,12 @@
                     <th>&nbsp;</th>
                 </thead>
                 <tbody>
-                <tr th:each="member : ${members}" th:with="person=${member.entity}">
-                    <td><a th:href="@{|/${lang}/admin/projects/${project.baseId}/members/${member.id}/edit|}" th:text="${member.id}"/></td>
-                    <td><a th:href="@{|/${lang}/persons/${person.baseId}|}" th:text="*{person.name}"/></td>
-                    <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
-                    <td><a href="#" th:data-id="${member.id}" th:data-name="${person.name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
-                </tr>
+                    <tr th:each="member : ${members}" th:with="person=${member.entity}">
+                        <td><a th:href="@{|/${lang}/admin/projects/${project.baseId}/members/${member.id}/edit|}" th:text="${member.id}"/></td>
+                        <td><a th:href="@{|/${lang}/persons/${person.baseId}|}" th:text="*{person.name}"/></td>
+                        <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
+                        <td><a href="#" th:data-id="${member.id}" th:data-name="${person.name}" th:onclick="openDeleteModal(this)" th:text="#{admin.delete}"/></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -2,14 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title th:text="#{organization.title}"/>
+    <title th:if="${organization.new}" th:text="#{admin.organization.add}"/>
+    <title th:unless="${organization.new}" th:text="#{organization.title(${organization.name})}"/>
 </head>
 <body>
     <div layout:fragment="content">
         <a th:unless="${organization.new}" th:href="@{|/${lang}/organizations/${organization.baseId}|}" class="float-right" th:text="#{admin.view}"/>
 
         <h4 th:if="${organization.new}" th:text="#{admin.organization.add}"/>
-        <h4 th:unless="${organization.new}" th:text="${organization.name}"/>
+        <h4 th:unless="${organization.new}" th:text="#{organization.title(${organization.name})}"/>
         <img th:if="${organization.imagePath != null}" th:src="@{|/images/${organization.imagePath}|}" class="org-image"/>
         <form action="#" th:action="@{|/${lang}/admin/organizations/save|}" th:object="${organization}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>

@@ -2,24 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Projects</title>
+    <title th:text="#{projects.title}"/>
 </head>
 <body>
 <div layout:fragment="content">
 
     <div layout:insert="~{fragments::deleteModal('admin/projects/delete')}" th:remove="tag"/>
 
-    <h4>Projects List</h4>
-    <a th:href="@{|/${lang}/admin/projects/new|}">New Project</a><br/>
+    <h4 th:text="#{projects.title}"/>
+    <a th:href="@{|/${lang}/admin/projects/new|}" th:text="#{admin.project.add}"/>
     <table>
         <thead>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Area</th>
-            <th>Organization</th>
+            <th th:text="#{admin.id}"/>
+            <th th:text="#{admin.project.name}"/>
+            <th th:text="#{admin.project.area}"/>
+            <th th:text="#{admin.project.organization}"/>
             <th th:text="#{admin.translations}"/>
             <th>&nbsp;</th>
-            </thead>
+        </thead>
         <tbody>
             <tr th:each="p : ${projects}" th:object="${p}">
                 <td><a th:href="@{|/${lang}/admin/projects/*{baseId}/edit|}" th:text="*{baseId}"/></td>
