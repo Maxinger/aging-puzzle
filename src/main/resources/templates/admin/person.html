@@ -2,30 +2,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Person</title>
+    <title th:if="${person.new}" th:text="#{admin.person.add}"/>
+    <title th:unless="${person.new}" th:text="#{person.title(${person.name})}"/>
 </head>
 <body>
     <div layout:fragment="content">
         <a th:unless="${person.new}" th:href="@{|/${lang}/persons/${person.baseId}|}" class="float-right" th:text="#{admin.view}"/>
 
-        <h4 th:text="${person.new ? 'Add Person' : 'Edit Person'}"/>
+        <h4 th:if="${person.new}" th:text="#{admin.person.add}"/>
+        <h4 th:unless="${person.new}" th:text="#{person.title(${person.name})}"/>
         <img th:if="${person.imagePath != null}" th:src="@{|/images/${person.imagePath}|}" class="person-image"/>
         <form action="#" th:action="@{|/${lang}/admin/persons/save|}" th:object="${person}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
-            <label>Name
+            <label><span th:text="#{admin.person.name}"/>
                 <input type="text" name="name" th:field="*{name}"/>
                 <span th:if="${#fields.hasErrors('name')}" class="form-error is-visible" th:errors="*{name}"/>
             </label>
 
-            <label>Description
+            <label><span th:text="#{admin.person.description}"/>
                 <textarea rows="5" name="description" th:field="*{description}"/>
                 <span th:if="${#fields.hasErrors('description')}" class="form-error is-visible" th:errors="*{description}"/>
                 <div layout:insert="~{fragments::markdown-preview}"></div>
             </label>
 
-            <label>Residence
+            <label><span th:text="#{admin.person.residence}"/>
                 <input type="text" th:field="*{residence}"/>
                 <span th:if="${#fields.hasErrors('residence')}" class="form-error is-visible" th:errors="*{residence}"/>
             </label>
