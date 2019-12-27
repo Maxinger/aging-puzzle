@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Areas</title>
+    <title th:text="#{areas.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <h4>Areas List</h4>
+        <h4 th:text="#{areas.title}"/>
         <table>
             <thead>
-                <th>Area</th>
-                <th>Description</th>
+                <th th:text="#{areas.name}"/>
+                <th th:text="#{areas.description}"/>
             </thead>
             <tbody>
                 <tr th:each="area : ${areas}" th:object="${area}">

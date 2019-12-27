@@ -2,22 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Updates</title>
+    <title th:text="#{updates.title}"/>
 </head>
 <body>
 <div layout:fragment="content">
 
     <div layout:insert="~{fragments::deleteModal('admin/updates/delete')}" th:remove="tag"/>
 
-    <h4>Updates List</h4>
-    <a th:href="@{|/${lang}/admin/updates/new|}">New Update</a><br/>
+    <h4 th:text="#{updates.title}"/>
+    <a th:href="@{|/${lang}/admin/updates/new|}" th:text="#{admin.update.add}"/>
     <table>
         <thead>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Organization</th>
-            <th>Project</th>
-            <th>Title</th>
+            <th th:text="#{admin.id}"/>
+            <th th:text="#{admin.update.date}"/>
+            <th th:text="#{admin.update.entity}"/>
+            <th th:text="#{admin.update.title}"/>
             <th th:text="#{admin.translations}"/>
             <th>&nbsp;</th>
             </thead>
@@ -28,8 +27,6 @@
                 <td>
                     <a th:if="*{organization != null}"
                        th:href="@{|/${lang}/organizations/*{organization.baseId}|}" th:text="*{organization.name}"/>
-                </td>
-                <td>
                     <a th:if="*{project != null}"
                        th:href="@{|/${lang}/projects/*{project.baseId}|}" th:text="*{project.name}"/>
                 </td>

@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Review</title>
+    <title th:text="#{reviews.title}"/>
 </head>
 <body>
 <div layout:fragment="content">
-    <h4>Next to review</h4>
+    <title th:text="#{reviews.title}"/>
     <form id="saveReview" th:action="@{|/${lang}/admin/reviews/save|}" method="post">
         <input type="hidden" name="lang" th:value="${lang}"/>
         <input type="hidden" name="entityId"/>
@@ -21,12 +21,12 @@
     </script>
     <table>
         <thead>
-            <th>ID</th>
-            <th>Entity</th>
-            <th>Name</th>
+            <th th:text="#{admin.id}"/>
+            <th th:text="#{admin.reviews.entity}"/>
+            <th th:text="#{admin.reviews.name}"/>
             <th th:text="#{admin.translations}"/>
-            <th>Total reviews</th>
-            <th>Days waiting</th>
+            <th th:text="#{admin.reviews.total}"/>
+            <th th:text="#{admin.reviews.days}"/>
             <th>&nbsp;</th>
         </thead>
         <tbody>

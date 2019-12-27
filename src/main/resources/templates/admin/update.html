@@ -2,21 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Update</title>
+    <title th:if="${update.new}" th:text="#{admin.update.add}"/>
+    <title th:unless="${update.new}" th:text="${update.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <h4 th:text="${update.new ? 'Add Update' : 'Edit Update'}"/>
+        <h4 th:if="${update.new}" th:text="#{admin.update.add}"/>
+        <h4 th:unless="${update.new}" th:text="${update.title}"/>
         <form action="#" th:action="@{|/${lang}/admin/updates/save|}" th:object="${update}" method="post">
             <input type="hidden" th:field="*{baseId}"/>
             <input type="hidden" th:field="*{id}"/>
 
-            <label>Date
+            <label><span th:text="#{admin.update.date}"/>
                 <input type="text" name="date" th:field="*{date}"/>
                 <span th:if="${#fields.hasErrors('date')}" class="form-error is-visible" th:errors="*{date}"/>
             </label>
 
-            <label>Organization
+            <label><span th:text="#{admin.update.organization}"/>
                 <select th:field="*{baseOrganizationId}">
                     <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="org : ${organizations}" th:value="${org.baseId}" th:text="${org.name}"
@@ -24,7 +26,7 @@
                 </select>
             </label>
 
-            <label>Project
+            <label><span th:text="#{admin.update.project}"/>
                 <select th:field="*{baseProjectId}">
                     <option th:value="${null}" th:text="#{admin.option.select}"/>
                     <option th:each="p : ${projects}" th:value="${p.baseId}" th:text="${p.name}"
@@ -32,18 +34,18 @@
                 </select>
             </label>
 
-            <label>Title
+            <label><span th:text="#{admin.update.title}"/>
                 <input type="text" name="title" th:field="*{title}"/>
                 <span th:if="${#fields.hasErrors('title')}" class="form-error is-visible" th:errors="*{title}"/>
             </label>
 
-            <label>Preview
+            <label><span th:text="#{admin.update.preview}"/>
                 <textarea rows="3" name="preview" th:field="*{preview}"/>
                 <span th:if="${#fields.hasErrors('preview')}" class="form-error is-visible" th:errors="*{preview}"/>
                 <div layout:insert="~{fragments::markdown-preview('preview')}"></div>
             </label>
 
-            <label>Full Text
+            <label><span th:text="#{admin.update.fullText}"/>
                 <textarea rows="5" name="fullText" th:field="*{fullText}"/>
                 <span th:if="${#fields.hasErrors('fullText')}" class="form-error is-visible" th:errors="*{fullText}"/>
                 <div layout:insert="~{fragments::markdown-preview('text')}"></div>

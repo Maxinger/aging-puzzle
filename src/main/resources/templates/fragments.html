@@ -12,11 +12,11 @@
     </script>
     <div class="reveal tiny" id="deleteModal" data-reveal>
         <form action="#" th:action="@{|/${lang}/${action}|}" method="post">
-            Do you want to delete <strong></strong>?
+            <span th:text="#{admin.delete.confirm}"/> <strong></strong>?
             <input type="hidden" name="id"/>
-            <input type="submit" class="button alert float-center" value="Delete">
+            <input type="submit" class="button alert float-center" th:value="#{admin.delete}">
         </form>
-        <button class="close-button" data-close aria-label="Close modal" type="button">
+        <button class="close-button" data-close type="button">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -44,9 +44,9 @@
 <th:block layout:fragment="pagination">
     <nav th:if="${pagination.totalPages > 1}" aria-label="Pagination">
         <ul class="pagination text-center">
-            <li th:if="${pagination.firstPage}" class="pagination-previous disabled">Previous</li>
+            <li th:if="${pagination.firstPage}" class="pagination-previous disabled" th:text="#{pagination.previous}"/>
             <li th:unless="${pagination.firstPage}" class="pagination-previous">
-                <a th:href="${pagination.getUrl(pagination.currentPage - 1)}">Previous</a>
+                <a th:href="${pagination.getUrl(pagination.currentPage - 1)}" th:text="#{pagination.previous}"/>
             </li>
 
             <th:block th:each="p : ${pagination.getPageNumbers()}" th:with="current=${pagination.currentPage == p}">
@@ -58,9 +58,9 @@
                 </li>
             </th:block>
 
-            <li th:if="${pagination.lastPage}" class="pagination-next disabled">Next</li>
+            <li th:if="${pagination.lastPage}" class="pagination-next disabled" th:text="#{pagination.next}"/>
             <li th:unless="${pagination.lastPage}" class="pagination-next">
-                <a th:href="${pagination.getUrl(pagination.currentPage + 1)}">Next</a>
+                <a th:href="${pagination.getUrl(pagination.currentPage + 1)}" th:text="#{pagination.next}"/>
             </li>
         </ul>
     </nav>
@@ -79,7 +79,7 @@
                 <span th:if="*{update.image == null}" th:text="*{project.name}"/>
             </a>
             <p th:text="*{update.preview}" class="markdown-content"/>
-            <p><a th:href="@{|/${lang}/updates/*{update.baseId}|}">Read more</a></p>
+            <p><a th:href="@{|/${lang}/updates/*{update.baseId}|}" th:text="#{update.readMore}"/></p>
         </div>
     </div>
 </th:block>

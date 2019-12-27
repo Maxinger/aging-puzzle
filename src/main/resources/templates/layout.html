@@ -34,7 +34,7 @@
                         <a th:href="@{|/${lang}/admin/persons|}" th:text="#{menu.persons}"/>
                         <a th:href="@{|/${lang}/admin/updates|}" th:text="#{menu.updates}"/>
                         <a th:href="@{|/${lang}/admin/dictionaries|}" th:text="#{menu.dictionaries}"/>
-                        <a th:href="@{|/${lang}/admin/reviews|}" th:text="#{menu.review}"/>
+                        <a th:href="@{|/${lang}/admin/reviews|}" th:text="#{menu.reviews}"/>
                     </th:block>
                     <th:block th:if="${#authorization.expression('isAnonymous()')}">
                         <a th:href="@{|/${lang}/|}" th:text="#{menu.home}"/>

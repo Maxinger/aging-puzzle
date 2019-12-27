@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title th:text="#{area.title}"/>
+    <title th:if="${area.new}" th:text="#{admin.area.add}"/>
+    <title th:unless="${area.new}" th:text="${area.name}"/>
 </head>
 <body>
     <div layout:fragment="content">
