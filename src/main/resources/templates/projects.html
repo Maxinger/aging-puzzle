@@ -2,15 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Projects</title>
+    <title th:text="#{projects.title}"/>
 </head>
 <body>
 <div layout:fragment="content">
 
     <h4 th:unless="${baseAreaId == null}" th:text="${areas.get(baseAreaId).name}"/>
-    <h4 th:unless="${baseAreaId == null}">Projects List</h4>
-
-    <h4 th:if="${baseAreaId == null}">Projects List</h4>
+    <h4 th:text="#{projects.title}"/>
 
     <div layout:insert="~{tables::projects(${projects}, true)}" th:remove="tag"/>
     <div layout:insert="~{fragments::pagination}" th:remove="tag"/>

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Organization</title>
+    <title th:text="${organization.name}"/>
 </head>
 <body>
     <div layout:fragment="content">
@@ -17,39 +17,37 @@
             <div class="cell auto">
                 <div th:text="${organization.description}" class="markdown-content"/>
                 <p th:if="${organization.location != null}">
-                    <strong>Location: </strong>
-                    <span th:text="${organization.location}"/>
+                    <strong th:text="#{organization.location}"/> <span th:text="${organization.location}"/>
                 </p>
                 <p th:if="${parent != null}">
-                    <strong>Parent organization: </strong>
-                    <a th:href="@{|/${lang}/organizations/${parent.baseId}|}" th:text="${parent.name}"/>
+                    <strong th:text="#{organization.parent}"/> <a th:href="@{|/${lang}/organizations/${parent.baseId}|}" th:text="${parent.name}"/>
                 </p>
                 <div layout:insert="~{fragments::links(${organization.links})}" th:remove="tag"/>
             </div>
         </div>
 
         <div th:if="${not #lists.isEmpty(organizations)}">
-            <h4>Organizations</h4>
+            <h4 th:text="#{organization.organizations}"/>
             <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
         </div>
 
         <div th:if="${not #lists.isEmpty(projects)}">
-            <h4>Projects</h4>
+            <h4 th:text="#{organization.projects}"/>
             <div layout:insert="~{tables::projects(${projects}, false)}" th:remove="tag"/>
         </div>
 
         <div th:if="${not #lists.isEmpty(members)}">
-            <h4>Members</h4>
+            <h4 th:text="#{members.title}"/>
             <table>
                 <thead>
-                <th>Name</th>
-                <th>Role</th>
+                    <th th:text="#{members.name}"/>
+                    <th th:text="#{members.role}"/>
                 </thead>
                 <tbody>
-                <tr th:each="member : ${members}">
-                    <td><a th:href="@{|/${lang}/persons/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
-                    <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
-                </tr>
+                    <tr th:each="member : ${members}">
+                        <td><a th:href="@{|/${lang}/persons/${member.entity.baseId}|}" th:text="${member.entity.name}"/></td>
+                        <td th:text="${@dictionaryService.getText('role', lang, member.role)}"/>
+                    </tr>
                 </tbody>
             </table>
         </div>

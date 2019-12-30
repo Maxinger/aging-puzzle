@@ -2,22 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Sign In</title>
+    <title th:text="#{login.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <h4>Sing In</h4>
+        <h4 th:text="#{login.title}"/>
 
-        <span th:if="${param.error}" class="is-invalid-label">Invalid user name or password</span>
+        <span th:if="${param.error}" class="is-invalid-label" th:text="#{login.password}"/>
 
         <form th:action="@{|/${lang}/login|}" method="post">
-            <label>User Name
+            <label><span th:text="#{login.userName}"/>
                 <input type="text" name="username"/>
             </label>
-            <label>Password
+            <label><span th:text="#{login.password}"/>
                 <input type="password" name="password"/>
             </label>
-            <input type="submit" class="button" value="Sign In">
+            <input type="submit" class="button" th:value="#{login.signIn}">
         </form>
     </div>
 </body>

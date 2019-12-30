@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Organizations</title>
+    <title th:text="#{organizations.title}"/>
 </head>
 <body>
     <div layout:fragment="content">
-        <h4>Organizations List</h4>
+        <h4 th:text="#{organizations.title}"/>
         <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
         <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     </div>

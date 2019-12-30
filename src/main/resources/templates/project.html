@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Project</title>
+    <title th:text="${project.name}"/>
 </head>
 <body>
     <div layout:fragment="content">
@@ -31,11 +31,11 @@
         </div>
 
         <div th:if="${not #lists.isEmpty(members)}">
-            <h4>Members</h4>
+            <h4 th:text="#{members.title}"/>
             <table>
                 <thead>
-                    <th>Name</th>
-                    <th>Role</th>
+                    <th th:text="#{members.name}"/>
+                    <th th:text="#{members.role}"/>
                 </thead>
                 <tbody>
                     <tr th:each="member : ${members}">
