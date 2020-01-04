@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Person</title>
+    <title th:text="${person.name}"/>
 </head>
 <body>
     <div layout:fragment="content">
@@ -16,7 +16,7 @@
             <div class="cell auto">
                 <div th:text="${person.description}" class="markdown-content"/>
                 <p th:if="${person.residence != null}">
-                    <strong>Residence: </strong>
+                    <strong th:text="#{person.residence}"/>
                     <span th:text="${person.residence}"/>
                 </p>
                 <div layout:insert="~{fragments::links(${person.links})}" th:remove="tag"/>
@@ -24,11 +24,11 @@
         </div>
 
         <div th:if="${not #lists.isEmpty(organizations)}">
-            <h4>Organizations</h4>
+            <h4 th:text="#{person.organizations}"/>
             <table>
                 <thead>
-                    <th>Name</th>
-                    <th>Role</th>
+                    <th th:text="#{person.organizations.name}"/>
+                    <th th:text="#{person.organizations.role}"/>
                 </thead>
                 <tbody>
                     <tr th:each="member : ${organizations}">
@@ -40,11 +40,11 @@
         </div>
 
         <div th:if="${not #lists.isEmpty(projects)}">
-            <h4>Projects</h4>
+            <h4 th:text="#{person.projects}"/>
             <table>
                 <thead>
-                    <th>Name</th>
-                    <th>Role</th>
+                    <th th:text="#{person.projects.name}"/>
+                    <th th:text="#{person.projects.role}"/>
                 </thead>
                 <tbody>
                 <tr th:each="member : ${projects}">

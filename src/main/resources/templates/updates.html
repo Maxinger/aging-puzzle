@@ -2,7 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title>Updates</title>
+    <title th:if="${project != null}" th:text="#{updates.title.for.project(${project.name})}"/>
+    <title th:if="${organization != null}" th:text="#{updates.title.for.organization(${organization.name})}"/>
+    <title th:if="${project == null and organization == null}" th:text="#{updates.title}"/>
 </head>
 <body>
 <div layout:fragment="content">
