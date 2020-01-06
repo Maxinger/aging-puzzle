@@ -109,13 +109,13 @@ table tbody tr:nth-child(odd) {
     margin-bottom: 0px;
 }
 
-img.person-image, img.org-image, img.project-image {
+img.person-image, img.org-image, img.project-image, img.update-image {
     min-width: 200px;
     max-width: 400px;
     display: block;
 }
 
-img.person-image-small, img.org-image-small, img.project-image-small {
+img.person-image-small, img.org-image-small, img.project-image-small, img.update-image-small {
     max-width: 200px;
     display: block;
 }

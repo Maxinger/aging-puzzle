@@ -71,11 +71,11 @@
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
             <p><strong th:text="*{update.title}"/></p>
             <a th:if="*{organization != null}" th:href="@{|/${lang}/organizations/*{organization.baseId}|}">
-                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
                 <span th:if="*{update.image == null}" th:text="*{organization.name}"/>
             </a>
             <a th:if="*{project != null}" th:href="@{|/${lang}/projects/*{project.baseId}|}">
-                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image'}"/>
+                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
                 <span th:if="*{update.image == null}" th:text="*{project.name}"/>
             </a>
             <p th:text="*{update.preview}" class="markdown-content"/>
