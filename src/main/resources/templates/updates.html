@@ -2,15 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title th:if="${project != null}" th:text="#{updates.title.for.project(${project.name})}"/>
-    <title th:if="${organization != null}" th:text="#{updates.title.for.organization(${organization.name})}"/>
-    <title th:if="${project == null and organization == null}" th:text="#{updates.title}"/>
+    <title th:with="key=${project?.name}" th:text="#{${'updates.title'}}"/>
 </head>
 <body>
 <div layout:fragment="content">
 
-    <h4 th:if="${project != null}" th:text="#{updates.title.for.project(${project.name})}"/>
-    <h4 th:if="${organization != null}" th:text="#{updates.title.for.organization(${organization.name})}"/>
+    <h4 th:if="${project != null}" th:text="#{updates.title.for.project(${project?.name})}"/>
+    <h4 th:if="${organization != null}" th:text="#{updates.title.for.organization(${organization?.name})}"/>
     <h4 th:if="${project == null and organization == null}" th:text="#{updates.title}"/>
 
     <div layout:insert="~{fragments::updates(${updates})}">

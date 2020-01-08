@@ -52,10 +52,12 @@ public class AdminPersonController extends AbstractController {
     }
 
     @GetMapping("/new")
-    public String newPage(@RequestParam(required = false) Long baseId, Model model) {
+    public String newPage(@RequestParam(required = false) Long baseId,
+                          @PathVariable String lang, Model model) {
 
         BasePerson basePerson = basePersonRepository.safeFindById(baseId);
         model.addAttribute("person", personMapper.basePersonToForm(basePerson));
+        model.addAttribute("title", getMessage(lang, "admin.person.add"));
 
         return "admin/person";
     }
@@ -66,6 +68,7 @@ public class AdminPersonController extends AbstractController {
 
         Person person = personRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("person", personMapper.personToForm(person));
+        model.addAttribute("title", person.getName());
 
         return "admin/person";
     }

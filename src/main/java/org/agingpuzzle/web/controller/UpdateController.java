@@ -1,7 +1,8 @@
 package org.agingpuzzle.web.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.agingpuzzle.model.Update;
+import org.agingpuzzle.model.Organization;
+import org.agingpuzzle.model.Project;
 import org.agingpuzzle.model.view.UpdateView;
 import org.agingpuzzle.repo.OrganizationRepository;
 import org.agingpuzzle.repo.ProjectRepository;
@@ -50,14 +51,19 @@ public class UpdateController extends AbstractController {
         if (baseProjectId != null) {
             int count = updateRepository.countAllByProject(baseProjectId, lang);
             updates = updateRepository.viewAllByProject(baseProjectId, lang, pageable.apply(count));
-            model.addAttribute("project", projectRepository.findByBaseEntity_IdAndLanguage(baseProjectId, lang).orElseThrow(notFound()));
+            Project project = projectRepository.findByBaseEntity_IdAndLanguage(baseProjectId, lang).orElseThrow(notFound());
+            model.addAttribute("project", project);
+            model.addAttribute("title", getMessage(lang, "updates.title.for.project", project.getName()));
         } else if (baseOrganizationId != null) {
             int count = updateRepository.countAllByOrganization(baseOrganizationId, lang);
             updates = updateRepository.viewAllByOrganization(baseOrganizationId, lang, pageable.apply(count));
-            model.addAttribute("organization", organizationRepository.findByBaseEntity_IdAndLanguage(baseOrganizationId, lang).orElseThrow(notFound()));
+            Organization organization = organizationRepository.findByBaseEntity_IdAndLanguage(baseOrganizationId, lang).orElseThrow(notFound());
+            model.addAttribute("organization", organization);
+            model.addAttribute("title", getMessage(lang, "updates.title.for.organization", organization.getName()));
         } else {
             int count = updateRepository.countByLanguage(lang);
             updates = updateRepository.viewAllByLanguage(lang, pageable.apply(count));
+            model.addAttribute("title", getMessage(lang, "updates.title"));
         }
 
         model.addAttribute("updates", updates);

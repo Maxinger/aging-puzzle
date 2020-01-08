@@ -50,10 +50,12 @@ public class AdminAreaController extends AbstractController {
     }
 
     @GetMapping("/new")
-    public String newPage(@RequestParam(required = false) Long baseId, Model model) {
+    public String newPage(@RequestParam(required = false) Long baseId,
+                          @PathVariable String lang, Model model) {
         BaseArea baseArea = baseAreaRepository.safeFindById(baseId);
 
         model.addAttribute("area", areaMapper.baseAreaToForm(baseArea));
+        model.addAttribute("title", getMessage(lang, "admin.area.add"));
         return "admin/area";
     }
 
@@ -63,6 +65,7 @@ public class AdminAreaController extends AbstractController {
 
         Area area = areaRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("area", areaMapper.areaToForm(area));
+        model.addAttribute("title", area.getName());
         return "admin/area";
     }
 

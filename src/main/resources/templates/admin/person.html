@@ -2,8 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
-    <title th:if="${person.new}" th:text="#{admin.person.add}"/>
-    <title th:unless="${person.new}" th:text="#{person.title(${person.name})}"/>
+    <title th:text="${title}"/>
 </head>
 <body>
     <div layout:fragment="content">

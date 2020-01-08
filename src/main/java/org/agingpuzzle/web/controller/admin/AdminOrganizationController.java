@@ -84,6 +84,7 @@ public class AdminOrganizationController extends AbstractController {
 
         BaseOrganization baseOrganization = baseOrganizationRepository.safeFindById(baseId);
         model.addAttribute("organization", organizationMapper.baseOrganizationToForm(baseOrganization));
+        model.addAttribute("title", getMessage(lang, "admin.organization.add"));
 
         initEditPage(model, lang, baseId);
         return "admin/organization";
@@ -96,6 +97,7 @@ public class AdminOrganizationController extends AbstractController {
         Organization organization = organizationRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
 
         model.addAttribute("organization", organizationMapper.organizationToForm(organization));
+        model.addAttribute("title", organization.getName());
 
         initEditPage(model, lang, organization.getBaseId());
         return "admin/organization";

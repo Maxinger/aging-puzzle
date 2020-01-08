@@ -65,6 +65,7 @@ public class AdminUpdateController extends AbstractController {
 
         BaseUpdate baseUpdate = baseUpdateRepository.safeFindById(baseId);
         model.addAttribute("update", updateMapper.baseUpdateToForm(baseUpdate));
+        model.addAttribute("title", getMessage(lang, "admin.update.add"));
 
         initEditPage(model, lang);
         return "admin/update";
@@ -76,6 +77,7 @@ public class AdminUpdateController extends AbstractController {
 
         Update update = updateRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
         model.addAttribute("update", updateMapper.updateToForm(update));
+        model.addAttribute("title", update.getTitle());
 
         initEditPage(model, lang);
         return "admin/update";

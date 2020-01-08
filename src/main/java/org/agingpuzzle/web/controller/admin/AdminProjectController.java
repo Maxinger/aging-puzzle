@@ -96,6 +96,7 @@ public class AdminProjectController extends AbstractController {
 
         BaseProject baseProject = baseProjectRepository.safeFindById(baseId);
         model.addAttribute("project", projectMapper.baseProjectToForm(baseProject));
+        model.addAttribute("title", getMessage(lang, "admin.project.add"));
 
         initEditPage(model, lang, baseId);
         return "admin/project";
@@ -108,6 +109,7 @@ public class AdminProjectController extends AbstractController {
         Project project = projectRepository.findByBaseEntity_IdAndLanguage(id, lang).orElseThrow(notFound());
 
         model.addAttribute("project", projectMapper.projectToForm(project));
+        model.addAttribute("title", project.getName());
 
         initEditPage(model, lang, project.getBaseId());
         return "admin/project";
