@@ -20,7 +20,20 @@
     <!--https://foundation.zurb.com/sites/docs/xy-grid.html-->
     <div class="grid-y medium-grid-frame">
         <div class="cell shrink header">
-            <img th:src="@{|/img/logo.png|}" class="float-center logo"/>
+            <div class="grid-x grid-padding-x content-grid">
+                <div class="cell medium-2 medium-cell-block-y"></div>
+                <div class="cell medium-8 medium-cell-block-y">
+                    <img th:src="@{|/img/logo.png|}" style="width: 75%" class="float-center logo"/>
+                </div>
+                <div class="cell medium-1 medium-cell-block-y top-menu-container">
+                    <div class="top-menu">
+                        <a th:each="t : ${switchLinks}"
+                           th:href="@{|${t.value}|}"
+                           th:text="|#{'lang.' + ${t.key}} |"/>
+                    </div>
+                </div>
+                <div class="cell medium-1 medium-cell-block-y"></div>
+            </div>
         </div>
         <div class="cell medium-auto medium-cell-block-container">
             <div class="grid-x grid-padding-x content-grid">
@@ -43,21 +56,14 @@
                         <a th:href="@{|/${lang}/persons|}" th:text="#{menu.persons}"/>
                         <a th:href="@{|/${lang}/projects|}" th:text="#{menu.projects}"/>
                         <a th:href="@{|/${lang}/updates|}" th:text="#{menu.updates}"/>
+                        <a th:href="@{|/${lang}/login|}" th:text="#{menu.sign.in}"/>
                     </th:block>
-
-                    <a th:each="t : ${switchLinks}"
-                       th:href="@{|${t.value}|}"
-                       th:text="|#{'lang.' + ${t.key}} |"/>
 
                     <th:block th:if="${#authorization.expression('isAuthenticated()')}">
                         <form id="logout" th:action="@{/logout}" method="post">
                             <input type="hidden" name="lang" th:value="${lang}"/>
                         </form>
                         <a href="#" onclick="$('#logout').submit()" th:text="#{menu.sign.out}"/>
-                    </th:block>
-
-                    <th:block th:if="${#authorization.expression('isAnonymous()')}">
-                        <a th:href="@{|/${lang}/login|}" th:text="#{menu.sign.in}"/>
                     </th:block>
                 </div>
                 <div class="cell medium-6 medium-cell-block-y content" layout:fragment="content">

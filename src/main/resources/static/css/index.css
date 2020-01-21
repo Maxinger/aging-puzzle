@@ -6,7 +6,30 @@ body {
 }
 
 .logo {
-    width: 50%;
+    width: 75%;
+}
+
+.top-menu-container {
+    display: table;
+}
+
+.top-menu {
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: right;
+    padding-bottom: 5px;
+}
+
+.top-menu a {
+    padding-left: 33px;
+    font-size: 1.3em;
+    color: #6aae3f;
+    background: url(/img/lang.png) 0px -4px no-repeat;
+}
+
+.top-menu a:hover {
+    color: #f1ecc2;
+    background: url(/img/lang-hover.png) 0px -4px no-repeat;
 }
 
 .content-grid {
