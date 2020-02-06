@@ -59,7 +59,7 @@ public class RepositoryTests {
     public void testPerson() {
         Person person = new Person();
         person.setName("Max");
-        person.setDescription("Aging Puzzle creator");
+        person.setDescription("Puzzle of Aging creator");
         personRepository.save(person);
 
         Person found = personRepository.findById(person.getId()).get();
@@ -85,14 +85,14 @@ public class RepositoryTests {
         person1.setBaseEntity(basePerson);
         person1.setLanguage("en");
         person1.setName("Max");
-        person1.setDescription("Aging Puzzle creator");
+        person1.setDescription("Puzzle of Aging creator");
         personRepository.save(person1);
 
         Person person2 = new Person();
         person2.setBaseEntity(basePerson);
         person2.setLanguage("ru");
         person2.setName("Макс");
-        person2.setDescription("Создатель Aging Puzzle");
+        person2.setDescription("Создатель Puzzle of Aging");
         personRepository.save(person2);
 
 
