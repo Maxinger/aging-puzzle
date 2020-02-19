@@ -9,7 +9,7 @@
         <a th:unless="${person.new}" th:href="@{|/${lang}/persons/${person.baseId}|}" class="float-right" th:text="#{admin.view}"/>
 
         <h4 th:if="${person.new}" th:text="#{admin.person.add}"/>
-        <h4 th:unless="${person.new}" th:text="#{person.title(${person.name})}"/>
+        <h4 th:unless="${person.new}" th:text="${person.name}"/>
         <img th:if="${person.imagePath != null}" th:src="@{|/images/${person.imagePath}|}" class="person-image"/>
         <form action="#" th:action="@{|/${lang}/admin/persons/save|}" th:object="${person}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{baseId}"/>

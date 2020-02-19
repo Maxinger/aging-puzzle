@@ -17,14 +17,13 @@
             <div class="cell auto">
                 <div th:text="${project.description}" class="markdown-content"/>
                 <p th:if="${area != null}">
-                    Area: <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
+                    <strong th:text="#{project.area}"/> <a th:href="@{|/${lang}/areas/${area.baseId}|}" th:text="${area.name}"/>
                 </p>
                 <p th:if="${organization != null}">
-                    Organization: <a th:href="@{|/${lang}/organizations/${organization.baseId}|}" th:text="${organization.name}"/>
+                    <strong th:text="#{project.organization}"/> <a th:href="@{|/${lang}/organizations/${organization.baseId}|}" th:text="${organization.name}"/>
                 </p>
                 <p>
-                    <strong>Status: </strong>
-                    <span th:text="${@dictionaryService.getText('status', lang, project.baseEntity.status)}"/>
+                    <strong th:text="#{project.status}"/> <span th:text="${@dictionaryService.getText('status', lang, project.baseEntity.status)}"/>
                 </p>
                 <div layout:insert="~{fragments::links(${organization.links})}" th:remove="tag"/>
             </div>
