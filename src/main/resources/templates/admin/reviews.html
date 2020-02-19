@@ -42,7 +42,7 @@
                 <td th:text="*{reviewsCount}"/>
                 <td th:text="*{daysWaiting}"/>
                 <td>
-                    <a href="#" th:data-id="*{baseEntityId}" th:data-type="*{entityType}" th:onclick="saveReview(this)">Mark Reviewed</a>
+                    <a href="#" th:data-id="*{baseEntityId}" th:data-type="*{entityType}" th:onclick="saveReview(this)" th:text="#{admin.reviews.mark}"/>
                 </td>
             </tr>
         </tbody>
