@@ -33,7 +33,7 @@
             <p th:text="${area.description}" class="markdown-content"/>
             <a th:if="${count > 0}"
                th:href="@{|/${lang}/projects?area=${area.baseId}|}"
-               th:text="@{|View ${count} project(s)|}"/>
+               th:text="#{main.projects(${count})}"/>
             <button class="close-button" data-close type="button">
                 <span aria-hidden="true">&times;</span>
             </button>
