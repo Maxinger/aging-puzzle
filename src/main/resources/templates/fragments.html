@@ -70,14 +70,18 @@
         <div class="card-section">
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
             <p><strong th:text="*{update.title}"/></p>
-            <a th:if="*{organization != null}" th:href="@{|/${lang}/organizations/*{organization.baseId}|}">
-                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
-                <span th:if="*{update.image == null}" th:text="*{organization.name}"/>
-            </a>
-            <a th:if="*{project != null}" th:href="@{|/${lang}/projects/*{project.baseId}|}">
-                <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
-                <span th:if="*{update.image == null}" th:text="*{project.name}"/>
-            </a>
+            <p th:if="*{organization != null}">
+                <a th:href="@{|/${lang}/organizations/*{organization.baseId}|}">
+                    <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
+                    <span th:if="*{update.image == null}" th:text="*{organization.name}"/>
+                </a>
+            </p>
+            <p th:if="*{project != null}">
+                <a th:href="@{|/${lang}/projects/*{project.baseId}|}">
+                    <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
+                    <span th:if="*{update.image == null}" th:text="*{project.name}"/>
+                </a>
+            </p>
             <p th:text="*{update.preview}" class="markdown-content"/>
             <p><a th:href="@{|/${lang}/updates/*{update.baseId}|}" th:text="#{update.readMore}"/></p>
         </div>
@@ -107,16 +111,18 @@
     <span th:text="#{markdown.preview}"/>
     <div class="markdown-preview"></div>
     <script th:id="${'' + scriptId}" th:inline="javascript">
-        var script = $('script[id=[[${scriptId}]]]');
-        var editor = script.parent().prev('textarea');
-        var preview = script.prev('.markdown-preview');
+        (function() {
+            var script = $('script[id=[[${scriptId}]]]');
+            var editor = script.parent().prev('textarea');
+            var preview = script.prev('.markdown-preview');
 
-        editor.markdownEditor();
-        editor.keyup(function() {
+            editor.markdownEditor();
+            editor.keyup(function () {
+                preview.html(marked(editor[0].value));
+            })
+
             preview.html(marked(editor[0].value));
-        })
-
-        preview.html(marked(editor[0].value));
+        })();
     </script>
 </th:block>
 <th:block layout:fragment="markdown-content(text)">

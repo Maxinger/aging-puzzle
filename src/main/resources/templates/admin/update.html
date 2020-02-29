@@ -6,6 +6,8 @@
 </head>
 <body>
     <div layout:fragment="content">
+        <a th:unless="${update.new}" th:href="@{|/${lang}/updateы/${update.baseId}|}" class="float-right" th:text="#{admin.view}"/>
+
         <h4 th:if="${update.new}" th:text="#{admin.update.add}"/>
         <h4 th:unless="${update.new}" th:text="${update.title}"/>
         <form action="#" th:action="@{|/${lang}/admin/updates/save|}" th:object="${update}" method="post">

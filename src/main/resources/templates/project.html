@@ -25,7 +25,7 @@
                 <p>
                     <strong th:text="#{project.status}"/> <span th:text="${@dictionaryService.getText('status', lang, project.baseEntity.status)}"/>
                 </p>
-                <div layout:insert="~{fragments::links(${organization.links})}" th:remove="tag"/>
+                <div layout:insert="~{fragments::links(${project.links})}" th:remove="tag"/>
             </div>
         </div>
 

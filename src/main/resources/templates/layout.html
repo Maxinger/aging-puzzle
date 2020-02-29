@@ -70,7 +70,7 @@
                     Main content is here
                 </div>
                 <div class="cell medium-2 medium-cell-block-y content">
-                    <h4>Latest updates</h4>
+                    <h4 th:text="#{main.updates}"/>
                     <div class="updates-column" layout:insert="~{fragments::updates(${lastUpdates})}"></div>
                 </div>
                 <div class="cell medium-1 medium-cell-block-y"></div>
