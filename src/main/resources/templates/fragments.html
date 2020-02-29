@@ -98,7 +98,7 @@
 <th:block layout:fragment="image(img, class)">
     <div th:if="${img != null}" class="text-center" th:with="sourceUrl=${img.sourceUrl}">
         <img th:src="@{|/images/${img.path}|}" th:class="${class + '-image'}"/>
-        <a th:if="${sourceUrl != null}" th:href="${sourceUrl}" target="_blank" th:text="#{image.source(${img.source})}"/>
+        <a th:if="${sourceUrl != null}" th:href="${sourceUrl}" target="_blank" th:text="#{image.source.link}"/>
         <span th:if="${img.source != null and sourceUrl == null}"
               th:text="#{image.source(${img.source})}"/>
     </div>
