@@ -70,17 +70,14 @@
         <div class="card-section">
             <p th:text="*{#temporals.format(update.baseEntity.date, 'dd.MM.yyyy')}"/>
             <p><strong th:text="*{update.title}"/></p>
-            <p th:if="*{organization != null}">
+            <p th:if="*{organization != null}" th:with="image=*{organization.baseEntity.image}">
                 <a th:href="@{|/${lang}/organizations/*{organization.baseId}|}">
-                    <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
-                    <span th:if="*{update.image == null}" th:text="*{organization.name}"/>
+                    <img th:unless="${image == null}" th:src="@{|/images/${image.path}|}" th:class="${'update-image-small'}"/>
+                    <span th:if="${image == null}" th:text="*{organization.name}"/>
                 </a>
             </p>
             <p th:if="*{project != null}">
-                <a th:href="@{|/${lang}/projects/*{project.baseId}|}">
-                    <img th:unless="*{update.image == null}" th:src="@{|/images/*{update.image.path}|}" th:class="${'update-image-small'}"/>
-                    <span th:if="*{update.image == null}" th:text="*{project.name}"/>
-                </a>
+                <a th:href="@{|/${lang}/projects/*{project.baseId}|}" th:text="*{project.name}"/>
             </p>
             <p th:text="*{update.preview}" class="markdown-content"/>
             <p><a th:href="@{|/${lang}/updates/*{update.baseId}|}" th:text="#{update.readMore}"/></p>
