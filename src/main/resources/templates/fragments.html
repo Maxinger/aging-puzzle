@@ -92,7 +92,7 @@
 <th:block layout:fragment="uploadScript">
     <script type="text/javascript">
         $('input[type=file]').change(function() {
-            this.previousSibling.data = this.files[0].name;
+            $(this).prev().text(this.files[0].name);
         });
     </script>
 </th:block>
