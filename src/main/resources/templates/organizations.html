@@ -7,6 +7,7 @@
 <body>
     <div layout:fragment="content">
         <h4 th:text="#{organizations.title}"/>
+        <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
         <div layout:insert="~{tables::organizations(${organizations})}" th:remove="tag"/>
         <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     </div>

@@ -19,6 +19,7 @@
             $('#saveReview').submit();
         }
     </script>
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     <table>
         <thead>
             <th th:text="#{admin.id}"/>

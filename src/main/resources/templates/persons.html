@@ -8,6 +8,7 @@
 <div layout:fragment="content">
 
     <h4 th:text="#{persons.title}"/>
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     <table>
         <thead>
             <th th:text="#{persons.name}"/>

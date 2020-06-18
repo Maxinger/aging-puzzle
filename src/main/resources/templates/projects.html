@@ -10,6 +10,7 @@
     <h4 th:unless="${baseAreaId == null}" th:text="${areas.get(baseAreaId).name}"/>
     <h4 th:text="#{projects.title}"/>
 
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     <div layout:insert="~{tables::projects(${projects}, true)}" th:remove="tag"/>
     <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
 </div>

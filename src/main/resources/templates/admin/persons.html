@@ -11,6 +11,7 @@
 
     <h4 th:text="#{persons.title}"/>
     <a th:href="@{|/${lang}/admin/persons/new|}" th:text="#{admin.person.add}"/>
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     <table>
         <thead>
             <th th:text="#{admin.id}"/>

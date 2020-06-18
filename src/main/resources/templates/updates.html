@@ -11,6 +11,7 @@
     <h4 th:if="${organization != null}" th:text="#{updates.title.for.organization(${organization?.name})}"/>
     <h4 th:if="${project == null and organization == null}" th:text="#{updates.title}"/>
 
+    <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
     <div layout:insert="~{fragments::updates(${updates})}">
     </div>
     <div layout:insert="~{fragments::pagination}" th:remove="tag"/>
