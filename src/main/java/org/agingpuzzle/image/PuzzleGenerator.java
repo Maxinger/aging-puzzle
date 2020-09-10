@@ -1,6 +1,8 @@
 package org.agingpuzzle.image;
 
 import org.agingpuzzle.model.Area;
+import org.agingpuzzle.model.BaseArea;
+import org.agingpuzzle.model.Image;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +55,7 @@ public class PuzzleGenerator {
             Graphics2D g2d = bi.createGraphics();
             g2d.setFont(new Font("Arial", Font.PLAIN, 75));
 
-            GradientPaint paint = new GradientPaint(0f, 0f, new Color(59, 132, 55), bi.getWidth(), bi.getHeight(), new Color(241, 236, 194));
+            GradientPaint gradientPaint = new GradientPaint(0f, 0f, new Color(59, 132, 55), bi.getWidth(), bi.getHeight(), new Color(241, 236, 194));
             FontMetrics fontMetrics = g2d.getFontMetrics();
 
             Random rand = new Random();
@@ -108,8 +110,32 @@ public class PuzzleGenerator {
                                     x0 + tile.leftTab * coords[i][5], y0 - coords[i][4]);
                         }
 
-                        g2d.setPaint(paint);
-                        g2d.fill(path);
+                        TexturePaint texturePaint = null;
+
+                        if (tile.getImage() != null) {
+                            try {
+                                File file = Paths.get(imageDir, tile.getImage().getPath()).toFile();
+                                var image = ImageIO.read(file);
+                                texturePaint = new TexturePaint(image, new Rectangle(-100, -100, layout.tileSize + 100, layout.tileSize + 100));
+                            } catch (IOException e) {
+                                // no image found, continue
+                            }
+                        }
+                        if (texturePaint != null) {
+                            g2d.setPaint(texturePaint);
+                            g2d.fill(path);
+                        } else {
+                            // default paint
+                            g2d.setPaint(gradientPaint);
+                            g2d.fill(path);
+
+                            String text = tile.getCode();
+                            int textX = col * layout.tileSize + (layout.tileSize - fontMetrics.stringWidth(text)) / 2;
+                            int textY = row * layout.tileSize + ((layout.tileSize - fontMetrics.getHeight()) / 2) + fontMetrics.getAscent();
+
+                            g2d.setColor(Color.BLACK);
+                            g2d.drawString(text, textX, textY);
+                        }
 
                         g2d.setStroke(new BasicStroke(10f));
                         g2d.setColor(new Color(255, 255, 255, 50));
@@ -118,26 +144,6 @@ public class PuzzleGenerator {
                         g2d.setStroke(new BasicStroke(2f));
                         g2d.setColor(Color.DARK_GRAY);
                         g2d.draw(path);
-
-                        if (tile.getImage() != null) {
-                            File file = Paths.get(imageDir, tile.getImage().getPath()).toFile();
-                            BufferedImage icon = ImageIO.read(file);
-                            float iconBoxSize = layout.tileSize * (1 - 2 * ICON_PADDING);
-                            float iconScale = iconBoxSize / Math.max(icon.getWidth(), icon.getHeight());
-                            int iconWidth = (int) (icon.getWidth() * iconScale);
-                            int iconHeight = (int) (icon.getHeight() * iconScale);
-                            int iconX = (int) ((col + ICON_PADDING) * layout.tileSize + (iconBoxSize - iconWidth) / 2);
-                            int iconY = (int) ((row + ICON_PADDING) * layout.tileSize + (iconBoxSize - iconHeight) / 2);
-
-                            g2d.drawImage(icon, iconX, iconY, iconWidth, iconHeight, null);
-                        } else {
-                            String text = tile.getCode();
-                            int textX = col * layout.tileSize + (layout.tileSize - fontMetrics.stringWidth(text)) / 2;
-                            int textY = row * layout.tileSize + ((layout.tileSize - fontMetrics.getHeight()) / 2) + fontMetrics.getAscent();
-
-                            g2d.setColor(Color.BLACK);
-                            g2d.drawString(text, textX, textY);
-                        }
                     }
                 }
             }
@@ -161,6 +167,15 @@ public class PuzzleGenerator {
     private static void create(Optional<Area>[][] areas, int i, int j, String name) {
         Area a = new Area();
         a.setName(name);
+
+        Image image = new Image();
+        image.setPath(name + ".png");
+
+        BaseArea baseArea = new BaseArea();
+        baseArea.setImage(image);
+
+        a.setBaseEntity(baseArea);
+
         areas[i][j] = Optional.of(a);
     }
 
@@ -180,6 +195,8 @@ public class PuzzleGenerator {
         create(areas, 2, 5, "Six");
         create(areas, 3, 5, "Seven");
 
-        new PuzzleGenerator().render(new Layout(areas, 200), new File("puzzle.png"));
+        var generator = new PuzzleGenerator();
+        generator.imageDir = "images";
+        generator.render(new Layout(areas, 200), new File("puzzle.png"));
     }
 }
