@@ -34,7 +34,7 @@ public class PuzzleGenerator {
     };
 
     private static int BASE_SIZE = 100;
-    private float ICON_PADDING = 0.25f;
+    private float TILE_PADDING = 0.25f;
 
     private Random rand = new Random();
 
@@ -116,7 +116,13 @@ public class PuzzleGenerator {
                             try {
                                 File file = Paths.get(imageDir, tile.getImage().getPath()).toFile();
                                 var image = ImageIO.read(file);
-                                texturePaint = new TexturePaint(image, new Rectangle(-100, -100, layout.tileSize + 100, layout.tileSize + 100));
+
+                                int padding = (int) (TILE_PADDING * layout.tileSize);
+                                int anchorX = col * layout.tileSize - padding;
+                                int anchorY = row * layout.tileSize - padding;
+                                int anchorSize = layout.tileSize + 2 * padding;
+
+                                texturePaint = new TexturePaint(image, new Rectangle(anchorX, anchorY, anchorSize, anchorSize));
                             } catch (IOException e) {
                                 // no image found, continue
                             }
